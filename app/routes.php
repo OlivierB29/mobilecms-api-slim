@@ -3,6 +3,14 @@ declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ViewUserAction;
+
+
+use App\Application\Actions\Cms\IndexGetAction;
+use App\Application\Actions\Cms\IndexPostAction;
+
+
+
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -22,5 +30,10 @@ return function (App $app) {
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);
+    });
+
+    $app->group('/mobilecmsapi/v1/cmsapi/index', function (Group $group) {
+        $group->get('/{type}', IndexGetAction::class);
+        $group->post('/{type}', IndexPostAction::class);
     });
 };

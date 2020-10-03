@@ -10,6 +10,11 @@ class Properties
     */
     private $conf ;
 
+    private $rootDir;
+
+    private static $instance;
+
+
 
     /**
      * Constructor.
@@ -92,7 +97,7 @@ class Properties
         if (\file_exists($file)) {
             $this->setConf(json_decode(file_get_contents($file)));
         } else {
-            throw new \Exception('Empty conf file');
+            throw new \Exception('conf file not found ' . $file);
         }
     }
 
@@ -108,5 +113,40 @@ class Properties
     public function getConf(): \stdClass
     {
         return $this->conf;
+    }
+
+    public static function init(string $rootDir, string $file)
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new Properties();
+            self::$instance->rootDir = $rootDir;
+            self::$instance->loadConf($file);
+        }
+
+        return self::$instance;
+    }
+
+    public static function getInstance() {
+        return self::$instance;
+    }
+
+        /**
+     * Get main working directory.
+     *
+     * @return string rootDir main working directory
+     */
+    public function getRootDir(): string
+    {
+        return $this->rootDir;
+    }
+
+        /**
+     * Get public directory.
+     *
+     * @return string publicdir main public directory
+     */
+    public function getPublicDirPath(): string
+    {
+        return $this->getRootDir() . $this->getConf()->{'publicdir'};
     }
 }

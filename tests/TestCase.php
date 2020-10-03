@@ -14,6 +14,10 @@ use Slim\Psr7\Headers;
 use Slim\Psr7\Request as SlimRequest;
 use Slim\Psr7\Uri;
 
+use App\Infrastructure\Utils\Properties;
+use App\Application\Actions\ActionPayload;
+use Psr\Http\Message\ResponseInterface;
+
 class TestCase extends PHPUnit_TestCase
 {
     /**
@@ -22,6 +26,8 @@ class TestCase extends PHPUnit_TestCase
      */
     protected function getAppInstance(): App
     {
+        Properties::init(__DIR__ . '/../tests-data', __DIR__ .'/conf.json');
+
         // Instantiate PHP-DI ContainerBuilder
         $containerBuilder = new ContainerBuilder();
 
@@ -55,6 +61,7 @@ class TestCase extends PHPUnit_TestCase
         $routes($app);
 
         return $app;
+        
     }
 
     /**
@@ -82,5 +89,24 @@ class TestCase extends PHPUnit_TestCase
         }
 
         return new SlimRequest($method, $uri, $h, $cookies, $serverParams, $stream);
+    }
+
+    protected function getPublicFile(string $file) : string {
+        return file_get_contents(Properties::getInstance()->getPublicDirPath() . $file);
+    }
+
+    protected function assertResponse(ActionPayload $expected, ResponseInterface $actual){
+        if ($expected->getData() != null ) {
+            $jsonResponse = \json_decode((string) $actual->getBody());
+            $bodyStr = \json_encode($jsonResponse->{'data'});
+    
+            $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
+        }
+
+        if ($expected->getError()  != null) {
+            $this->assertEquals($expected->getError()->getDescription(), $actual->getReasonPhrase());
+        }
+
+        $this->assertEquals($expected->getStatusCode(), $actual->getStatusCode());
     }
 }

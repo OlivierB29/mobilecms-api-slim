@@ -4,7 +4,12 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 use Monolog\Logger;
 
+use App\Infrastructure\Utils\Properties;
+
 return function (ContainerBuilder $containerBuilder) {
+
+    Properties::init(__DIR__ . '/../sample-database', __DIR__ .'/../conf/conf.json');
+
     // Global Settings Object
     $containerBuilder->addDefinitions([
         'settings' => [
