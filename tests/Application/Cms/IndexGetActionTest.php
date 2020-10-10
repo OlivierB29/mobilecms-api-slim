@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Application\Actions\User;
+namespace Tests\Application\Actions\Cms;
 
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;

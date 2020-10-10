@@ -1,5 +1,6 @@
 <?php namespace App\Infrastructure\Rest;
-
+use Psr\Http\Message\ResponseInterface as PsrResponse;
+use Slim\Psr7\Response as ResponseImpl;
 /*
  * Response object for services
  */
@@ -87,4 +88,12 @@ class Response
         $json->{'error'} = $msg;
         $this->result = $json;
     }
+
+    public function toPsrResponse(): PsrResponse
+    {
+        $result = new ResponseImpl($this->getCode());
+        $result->getBody()->write($this->getEncodedResult());
+        return $result;
+    }
+
 }

@@ -92,7 +92,7 @@ class TestCase extends PHPUnit_TestCase
     }
 
     protected function getPublicFile(string $file) : string {
-        return file_get_contents(Properties::getInstance()->getPublicDirPath() . $file);
+        return file_get_contents(Properties::getInstance()->getPublicDirPath() . '/' . $file);
     }
 
     protected function assertResponse(ActionPayload $expected, ResponseInterface $actual){
@@ -108,5 +108,44 @@ class TestCase extends PHPUnit_TestCase
         }
 
         $this->assertEquals($expected->getStatusCode(), $actual->getStatusCode());
+    }
+
+        /**
+    * get JSON conf
+    * @return \stdClass JSON conf
+    */
+    public function getConf()
+    {
+        return Properties::getInstance()->getConf();
+    }
+
+    /**
+     * Get main working directory.
+     *
+     * @return string rootDir main working directory
+     */
+    public function getRootDir(): string
+    {
+        return Properties::getInstance()->getRootDir();
+    }
+
+    /**
+     * Get public directory.
+     *
+     * @return string publicdir main public directory
+     */
+    public function getPublicDirPath(): string
+    {
+        return $this->getRootDir() . $this->getConf()->{'publicdir'};
+    }
+
+    /**
+     * Get public directory.
+     *
+     * @return string publicdir main public directory
+     */
+    public function getMediaDirPath(): string
+    {
+        return $this->getRootDir() . $this->getConf()->{'media'};
     }
 }

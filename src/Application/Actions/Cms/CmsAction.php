@@ -8,11 +8,15 @@ use App\Domain\User\UserRepository;
 use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
-
+use App\Infrastructure\Rest\Response as RestResponse;
 
 abstract class CmsAction extends Action
 {
 
+    /*
+    * reserved id column
+    */
+    const ID = 'id';
 
 
     /**
@@ -95,5 +99,37 @@ abstract class CmsAction extends Action
         return Properties::getInstance()->getConf();
     }
 
+    /**
+     * replace it later
+     */
+    public function getParam(string $arg) : string {
+        return $this->resolveArg($arg);
+    }
+    
+  
+    /**
+     * replace it later
+     */  
+    /*
+    public function getRequestBody() : mixed {
+        return $this->getFormData();
+    }
+*/
+    public function getRequestBody() : string {
+        return $this->getFormData()->__toString();
+    }
 
+        /**
+     * Initialize a default Response object.
+     *
+     * @return Response object
+     */
+    protected function getDefaultResponse() : RestResponse
+    {
+        $response = new RestResponse();
+        $response->setCode(400);
+        $response->setResult(new \stdClass);
+
+        return $response;
+    }
 }

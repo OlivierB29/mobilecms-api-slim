@@ -1,5 +1,5 @@
 <?php namespace App\Infrastructure\Rest;
-
+use App\Infrastructure\Utils\StringUtils;
 class Request extends GenericRequest
 {
 
@@ -94,7 +94,7 @@ class Request extends GenericRequest
     {
         // return 1 === preg_match('(\{[-a-zA-Z0-9_]*\})', '{paramvalue}');
 
-        return App\Infrastructure\Utils\StringUtils::startsWith($value, '{') && App\Infrastructure\Utils\StringUtils::endsWith($value, '}');
+        return StringUtils::startsWith($value, '{') && StringUtils::endsWith($value, '}');
     }
 
     /**
@@ -106,7 +106,7 @@ class Request extends GenericRequest
     {
         $result = null;
 
-        if (App\Infrastructure\Utils\StringUtils::startsWith($value, '{') && App\Infrastructure\Utils\StringUtils::endsWith($value, '}')) {
+        if (StringUtils::startsWith($value, '{') && StringUtils::endsWith($value, '}')) {
             $result = \substr($value, 1, strlen($value) - 2);
         }
 

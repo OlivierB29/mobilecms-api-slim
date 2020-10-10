@@ -460,7 +460,7 @@ class ContentService
      */
     public function publishById(string $type, string $keyname, string $keyvalue): Response
     {
-        $this->logger->info('publishById' . $type . ',' . $keyname . ',' . $keyvalue);
+      //  $this->logger->info('publishById' . $type . ',' . $keyname . ',' . $keyvalue);
         
         $response = $this->getDefaultResponse();
 
@@ -670,7 +670,7 @@ class ContentService
         } else {
             usort($data, compareIndexReverse($sortby));
         }
-        echo 'zzz';
+
     }
 
     /**

@@ -72,7 +72,7 @@ abstract class Action
      * @return array|object
      * @throws HttpBadRequestException
      */
-    protected function getFormData()
+    protected function getFormDataOriginal()
     {
         $input = json_decode(file_get_contents('php://input'));
 
@@ -82,6 +82,7 @@ abstract class Action
 
         return $input;
     }
+
 
     /**
      * @param  string $name
@@ -121,4 +122,12 @@ abstract class Action
                     ->withHeader('Content-Type', 'application/json')
                     ->withStatus($payload->getStatusCode());
     }
+
+    //--------------------------------------------------------------------------------------
+        /** mobilecms patch */
+        protected function getFormData()
+        {
+            return $this->request->getBody();
+        }
+    
 }
