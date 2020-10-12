@@ -25,7 +25,7 @@ abstract class ApiTest extends TestCase
     protected function setUp(): void
     {
         $this->path='';
-        $this->headers=[];
+        $this->headers=['HTTP_ACCEPT' => 'application/json'];
         $this->REQUEST=[];
         $this->SERVER=[];
         $this->GET=[];
@@ -64,7 +64,9 @@ abstract class ApiTest extends TestCase
         }
 
         // request with verb and path
-        $request = $this->createRequest($verb, $path);
+       // $token = 'TEST';
+      //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
+        $request = $this->createRequest($verb, $path, $this->headers);
         // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
 
@@ -98,14 +100,15 @@ abstract class ApiTest extends TestCase
 
         $jsonResponse = \json_decode((string) $psrResponse->getBody());
         //$body = \json_encode($jsonResponse->{'data'});
-        $body = $jsonResponse->{'data'};
+        if (\array_key_exists('data', $jsonResponse)) {
+            $body = $jsonResponse->{'data'};
+            $result->setResult($body);
+        } else {
+            $result->setResult(\json_decode('{}'));
+        }
 
-        $result->setResult($body);
-        return $result;
-    }
-
-    protected function setGuest() {
         
+        return $result;
     }
 
 

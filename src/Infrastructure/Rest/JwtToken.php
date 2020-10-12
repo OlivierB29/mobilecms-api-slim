@@ -46,7 +46,7 @@ class JwtToken
 
     /**
      * Verify a token.
-     *
+     * compare to jwt.php @ line 255
      * @param string $token     token data
      * @param string $secretKey secret key
      *
@@ -97,7 +97,9 @@ class JwtToken
      */
     private function initHeader(): string
     {
-        return base64_encode('{ "alg": "' . $this->getAlgorithm() . '","typ": "JWT"}');
+        // cf firebase/php-jwt 
+        $algs = ['sha512' => 'HS512'];
+        return base64_encode('{ "alg": "' . $algs[$this->algorithm]  . '","typ": "JWT"}');
     }
 
     /**

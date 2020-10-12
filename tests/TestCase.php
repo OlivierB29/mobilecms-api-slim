@@ -98,9 +98,13 @@ class TestCase extends PHPUnit_TestCase
     protected function assertResponse(ActionPayload $expected, ResponseInterface $actual){
         if ($expected->getData() != null ) {
             $jsonResponse = \json_decode((string) $actual->getBody());
-            $bodyStr = \json_encode($jsonResponse->{'data'});
+
+            if (\array_key_exists('data', $jsonResponse)) {
+                $bodyStr = \json_encode($jsonResponse->{'data'});
     
-            $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
+                $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
+            }
+
         }
 
         if ($expected->getError()  != null) {

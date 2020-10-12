@@ -8,16 +8,21 @@ use App\Application\Handlers\HttpErrorHandler;
 
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
-use Tests\TestCase;
-use Tests\ApiTest;
+
+use Tests\AuthApiTest;
 use App\Infrastructure\Utils\Properties;
 
 use App\Infrastructure\Utils\FileUtils;
 
-final class CmsApiTest extends ApiTest
+final class CmsApiTest extends AuthApiTest
 {
     protected $requestparams = '?timestamp=1599654646';
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->setAdmin();
+    }
 
     public function testTypes()
     {
@@ -140,7 +145,7 @@ final class CmsApiTest extends ApiTest
     public function testEmptyToken()
     {
         $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
-        $this->headers=['Authorization' => ''];
+        $this->headers['Authorization']= '';
 
 
 
