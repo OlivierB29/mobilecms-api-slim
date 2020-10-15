@@ -71,6 +71,29 @@ class JwtToken
         return $result;
     }
 
+    public function decode(string $token, string $secretKey): array
+    {
+        $tokenArray = explode('.', $token);
+
+        if (\count($tokenArray) != 3) {
+            throw new Exception('Wrong number of segments!');
+        }
+
+            $header = $tokenArray[0];
+            $payload = $tokenArray[1];
+            $signatureFromToken = $tokenArray[2];
+
+            $computedSignature = $this->createSignature($header, $payload, $secretKey);
+
+            if (!hash_equals($signatureFromToken, $computedSignature)) {
+                throw new Exception('Signature verification failed!');
+            }
+
+
+
+        return $tokenArray;
+    }
+
     /**
      * Parse payload.
      *
@@ -111,7 +134,7 @@ class JwtToken
      *
      * @return string default payload
      */
-    private function initPayload(string $username, string $email, string $role): string
+    public function initPayload(string $username, string $email, string $role): string
     {
         return base64_encode('{ "sub": "' . $email . '", "name": "' . $username . '", "role": "' . $role . '"}');
     }
@@ -152,7 +175,7 @@ class JwtToken
      *
      * @return string secret and date
      */
-    private function createSecret(string $secret): string
+    public function createSecret(string $secret): string
     {
         return $secret . date('Yz');
     }
@@ -184,4 +207,35 @@ class JwtToken
         return json_decode(base64_decode($payload));
     }
     // @codeCoverageIgnoreEnd
+
+    public function getUserFromToken($token): string
+    {
+
+        if (!isset($token)) {
+            throw new \Exception('empty token');
+        }
+
+
+
+        // get payload and convert to JSON
+
+        $payload = $this->getPayload($token);
+
+        if (!isset($payload)) {
+            // @codeCoverageIgnoreStart
+            throw new \Exception('empty payload');
+            // @codeCoverageIgnoreEnd
+        }
+
+        $payloadJson = json_decode($payload);
+        if (!isset($payloadJson)) {
+            // @codeCoverageIgnoreStart
+            throw new \Exception('empty payload');
+            // @codeCoverageIgnoreEnd
+        }
+        // get the existing user
+
+        return $payloadJson->{'sub'};
+    }
+
 }

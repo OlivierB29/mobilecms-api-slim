@@ -1,6 +1,8 @@
 <?php
 namespace Tests;
 
+
+
 use App\Infrastructure\Services\AuthService;
 
 abstract class AuthApiTest extends ApiTest

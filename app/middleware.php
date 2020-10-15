@@ -25,16 +25,16 @@ $container = $app->getContainer();
         "secure" => true,
         "path" => "/",
         "ignore" => ["/token", "/info"],
-        "secret" => 'Sample#123456',
+        "secret" => 'UNUSED_HERE', // cf custom implementation
         //"logger" => $container["logger"],
         "attribute" => false,
         "relaxed" => ["192.168.1.10", "127.0.0.1", "localhost"],
         "error" => function ($response, $arguments) {
             return new UnauthorizedResponse($arguments["message"], 401);
         },
-        "before" => function ($request, $arguments) use ($container) {
-            $container["token"]->populate($arguments["decoded"]);
-        }
+        // "before" => function ($request, $arguments) use ($container) {
+        //     $container["token"]->populate($arguments["decoded"]);
+        // }
     ]));
     
 /*

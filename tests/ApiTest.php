@@ -46,7 +46,7 @@ abstract class ApiTest extends TestCase
     protected function printError(Response $response)
     {
         if ($response->getCode() != 200) {
-            echo 'ERROR ' . $response->getEncodedResult();
+            echo 'ERROR ' . $response->getCode() . ' : ' . $response->getEncodedResult();
         }
     }
 

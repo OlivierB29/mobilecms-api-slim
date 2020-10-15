@@ -52,6 +52,10 @@ use Tuupola\Middleware\JwtAuthentication\RequestMethodRule;
 use Tuupola\Middleware\JwtAuthentication\RequestPathRule;
 use Tuupola\Middleware\JwtAuthentication\RuleInterface;
 
+// CUSTOM
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Utils\Properties;
+use App\Infrastructure\Rest\JwtToken;
 
 class CustomJwtAuthentication implements MiddlewareInterface
 {
@@ -287,11 +291,33 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function decodeToken(string $token): array
     {
         try {
+            // CUSTOM : start
+            $decoded = null;
+            
+            $service = new AuthService(Properties::getInstance()->getRootDir() . Properties::getInstance()->getConf()->{'privatedir'} . '/users');
+            $jwtImpl  = Properties::getInstance()->getConf()->{'jwt'};
+
+            $secret = $service->getJsonUserFromToken($token)->{'salt'};            
+            if ('php-jwt' === $jwtImpl) {
+                $decoded = JWT::decode(
+                    $token,
+                    $secret,
+                    (array) $this->options["algorithm"]
+                );
+            } else {
+                $jwtUtil = new JwtToken();
+                $decoded = $jwtUtil->decode($token, $secret);
+            }
+            
+
+            // CUSTOM : end
+            /*
             $decoded = JWT::decode(
                 $token,
                 $this->options["secret"],
                 (array) $this->options["algorithm"]
             );
+            */
             return (array) $decoded;
         } catch (Exception $exception) {
             $this->log(LogLevel::WARNING, $exception->getMessage(), [$token]);

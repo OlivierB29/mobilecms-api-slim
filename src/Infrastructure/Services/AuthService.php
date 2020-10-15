@@ -2,6 +2,10 @@
 use  App\Infrastructure\Utils\JsonUtils;
 use  App\Infrastructure\Rest\Response;
 use  App\Infrastructure\Rest\JwtToken;
+use App\Infrastructure\Utils\Properties;
+use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
+
 /*
  * Inspired by http://fr.wikihow.com/cr%C3%A9er-un-script-de-connexion-s%C3%A9curis%C3%A9e-avec-PHP-et-MySQL
  * This fork uses JSON as storage data
@@ -29,6 +33,10 @@ class AuthService
      */
     private $algorithm = 'sha512';
 
+    private $phpJwtAlgorithm = 'HS512';
+
+    private $jwtImpl;
+
     /**
      * default salt length.
      */
@@ -48,6 +56,7 @@ class AuthService
     {
         $this->databasedir = $databasedir;
         $this->service = new UserService($databasedir);
+        $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
 
 
@@ -110,15 +119,28 @@ class AuthService
         // user found
 
         if (password_verify($password, $user->{'password'})) {
+            $token = null;
             $jwt = new JwtToken();
+            if ('php-jwt' === $this->jwtImpl) {
 
-            $token = $jwt->createTokenFromUser(
-                $user->{'name'},
-                $user->{'email'},
-                $user->{'role'},
-                $user->{'salt'}
-            );
-            unset($jwt);
+
+                $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
+                
+                $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
+
+            } else {
+                // old jwt impl
+  
+                $token = $jwt->createTokenFromUser(
+                    $user->{'name'},
+                    $user->{'email'},
+                    $user->{'role'},
+                    $user->{'salt'}
+                );
+                unset($jwt);
+            }
+
+
             if (isset($token)) {
                 $response->setCode(200);
                 $userResponse = json_decode('{}');
@@ -190,6 +212,16 @@ class AuthService
         }
 
         return $response;
+    }
+
+    public function getJsonUserFromToken($token): \stdClass
+    {
+
+
+        $jwt = new JwtToken();
+
+       
+        return $this->service->getJsonUser( $jwt->getUserFromToken($token));
     }
 
     /**
@@ -483,5 +515,9 @@ class AuthService
         }
 
         return $error_msg;
+    }
+
+    public function setJwtImpl(string $jwt) {
+        $this->jwtImpl = $jwt;
     }
 }
