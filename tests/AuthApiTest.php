@@ -47,7 +47,7 @@ abstract class AuthApiTest extends ApiTest
         $this->admintoken = 'Bearer ' . $this->user->{'token'};
 
         $this->memory();
-
+        $this->setEditor();
         
     }
 

@@ -56,6 +56,7 @@ use Tuupola\Middleware\JwtAuthentication\RuleInterface;
 use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\JwtToken;
+use Slim\Exception\HttpForbiddenException;
 
 class CustomJwtAuthentication implements MiddlewareInterface
 {
@@ -96,6 +97,13 @@ class CustomJwtAuthentication implements MiddlewareInterface
         "before" => null,
         "after" => null,
         "error" => null
+    ];
+
+    private $defaultAuthorizeOptions = [
+        "userrole" => "",
+        "editorpath" => ["/mobilecmsapi/v1/cmsapi"],
+        "adminpath" => ["/mobilecmsapi/v1/adminapi"],
+        "ignore" => ["/mobilecmsapi/v1/authapi", "/test-action-response-code", "/debugapi"]
     ];
 
     /**
@@ -151,7 +159,18 @@ class CustomJwtAuthentication implements MiddlewareInterface
         /* If token cannot be found or decoded return with 401 Unauthorized. */
         try {
             $token = $this->fetchToken($request);
-            $decoded = $this->decodeToken($token);
+            $jsonUser = $this->decodeToken($token);
+            $decoded = $jsonUser->{'decoded'};
+            // CUSTOM start
+            $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);
+            $authorizeOptions["userrole"] = $jsonUser->{'role'};           
+            $rule = new AuthorizeRule($authorizeOptions);
+
+            $permitted = $rule->__invoke($request);
+            if (!$permitted) {
+                throw new HttpForbiddenException($request, "operation not permitted");
+            }
+            // CUSTOM end
         } catch (RuntimeException | DomainException $exception) {
             $response = (new ResponseFactory)->createResponse(401);
             return $this->processError($response, [
@@ -159,6 +178,15 @@ class CustomJwtAuthentication implements MiddlewareInterface
                 "uri" => (string)$request->getUri()
             ]);
         }
+        // CUSTOM start
+        catch (HttpForbiddenException $exception) {
+            $response = (new ResponseFactory)->createResponse(403);
+            return $this->processError($response, [
+                "message" => $exception->getMessage(),
+                "uri" => (string)$request->getUri()
+            ]);
+        }
+        // CUSTOM end
 
         $params = [
             "decoded" => $decoded,
@@ -288,7 +316,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      *
      * @return mixed[]
      */
-    private function decodeToken(string $token): array
+    private function decodeToken(string $token): \stdClass
     {
         try {
             // CUSTOM : start
@@ -297,18 +325,19 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $service = new AuthService(Properties::getInstance()->getRootDir() . Properties::getInstance()->getConf()->{'privatedir'} . '/users');
             $jwtImpl  = Properties::getInstance()->getConf()->{'jwt'};
 
-            $secret = $service->getJsonUserFromToken($token)->{'salt'};            
+            $jsonUser = $service->getJsonUserFromToken($token);
+          
             if ('php-jwt' === $jwtImpl) {
                 $decoded = JWT::decode(
                     $token,
-                    $secret,
+                    $jsonUser->{'salt'},
                     (array) $this->options["algorithm"]
                 );
             } else {
                 $jwtUtil = new JwtToken();
-                $decoded = $jwtUtil->decode($token, $secret);
+                $decoded = $jwtUtil->decode($token, $jsonUser->{'salt'});
             }
-            
+            $jsonUser->{'decoded'} = (array) $decoded;
 
             // CUSTOM : end
             /*
@@ -318,7 +347,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
                 (array) $this->options["algorithm"]
             );
             */
-            return (array) $decoded;
+            return $jsonUser;
         } catch (Exception $exception) {
             $this->log(LogLevel::WARNING, $exception->getMessage(), [$token]);
             throw $exception;

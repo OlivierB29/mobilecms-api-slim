@@ -9,11 +9,11 @@ use App\Application\Handlers\HttpErrorHandler;
 
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
-use Tests\TestCase;
+use Tests\AuthApiTest;
 
 use App\Infrastructure\Utils\Properties;
 
-class ContentPostActionTest extends TestCase
+class ContentPostActionTest extends AuthApiTest
 {
 
 
@@ -26,7 +26,7 @@ class ContentPostActionTest extends TestCase
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('POST', '/mobilecmsapi/v1/cmsapi/content/calendar');
+        $request = $this->createRequest('POST', '/mobilecmsapi/v1/cmsapi/content/calendar', $this->headers);
 
         $contents = \json_decode(file_get_contents('tests-data/public/bbcode.json'));
         if (json_last_error() === JSON_ERROR_NONE) {

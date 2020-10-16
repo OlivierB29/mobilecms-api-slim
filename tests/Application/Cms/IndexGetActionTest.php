@@ -9,11 +9,11 @@ use App\Application\Handlers\HttpErrorHandler;
 
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
-use Tests\TestCase;
+use Tests\AuthApiTest;
 
 use App\Infrastructure\Utils\Properties;
 
-class IndexGetActionTest extends TestCase
+class IndexGetActionTest extends AuthApiTest
 {
 
 
@@ -26,7 +26,7 @@ class IndexGetActionTest extends TestCase
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendar');
+        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendar', $this->headers);
         $response = $app->handle($request);
         $payloadObject = $response->getBody();
         $payload = (string) $response->getBody();
@@ -55,7 +55,7 @@ class IndexGetActionTest extends TestCase
         $app->add($errorMiddleware);
 
         // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendarZZ');
+        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendarZZ', $this->headers);
         $response = $app->handle($request);
 
         // Assert
