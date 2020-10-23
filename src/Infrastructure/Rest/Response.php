@@ -11,6 +11,8 @@ class Response
      */
     private $result;
 
+    private $error = "";
+
     /**
      * http return code to return.
      */
@@ -87,6 +89,12 @@ class Response
         $json = json_decode('{}');
         $json->{'error'} = $msg;
         $this->result = $json;
+        $this->error = $msg;
+    }
+
+    public function getError() : string
+    {
+        return $this->error;
     }
 
     public function toPsrResponse(): PsrResponse

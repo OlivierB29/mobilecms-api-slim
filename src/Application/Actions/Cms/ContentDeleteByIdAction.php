@@ -35,6 +35,6 @@ class ContentDeleteByIdAction extends CmsAction
                 }
 
                 // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
-                return $this->respondWithData($response->getResult());
+                return $this->response($this->request, $response);
     }
 }

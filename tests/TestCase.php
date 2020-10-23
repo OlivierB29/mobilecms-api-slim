@@ -14,7 +14,7 @@ use Slim\Psr7\Headers;
 use Slim\Psr7\Request as SlimRequest;
 use Slim\Psr7\Uri;
 
-use App\Infrastructure\Utils\Properties;
+
 use App\Application\Actions\ActionPayload;
 use Psr\Http\Message\ResponseInterface;
 
@@ -26,7 +26,6 @@ class TestCase extends PHPUnit_TestCase
      */
     protected function getAppInstance(): App
     {
-        Properties::init(__DIR__ . '/../tests-data', __DIR__ .'/conf.json');
 
         // Instantiate PHP-DI ContainerBuilder
         $containerBuilder = new ContainerBuilder();
@@ -64,6 +63,7 @@ class TestCase extends PHPUnit_TestCase
         
     }
 
+
     /**
      * @param string $method
      * @param string $path
@@ -91,65 +91,4 @@ class TestCase extends PHPUnit_TestCase
         return new SlimRequest($method, $uri, $h, $cookies, $serverParams, $stream);
     }
 
-    protected function getPublicFile(string $file) : string {
-        return file_get_contents(Properties::getInstance()->getPublicDirPath() . '/' . $file);
-    }
-
-    protected function assertResponse(ActionPayload $expected, ResponseInterface $actual){
-        if ($expected->getData() != null ) {
-            $jsonResponse = \json_decode((string) $actual->getBody());
-
-            if (\array_key_exists('data', $jsonResponse)) {
-                $bodyStr = \json_encode($jsonResponse->{'data'});
-    
-                $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
-            }
-
-        }
-
-        if ($expected->getError()  != null) {
-            $this->assertEquals($expected->getError()->getDescription(), $actual->getReasonPhrase());
-        }
-
-        $this->assertEquals($expected->getStatusCode(), $actual->getStatusCode());
-    }
-
-        /**
-    * get JSON conf
-    * @return \stdClass JSON conf
-    */
-    public function getConf()
-    {
-        return Properties::getInstance()->getConf();
-    }
-
-    /**
-     * Get main working directory.
-     *
-     * @return string rootDir main working directory
-     */
-    public function getRootDir(): string
-    {
-        return Properties::getInstance()->getRootDir();
-    }
-
-    /**
-     * Get public directory.
-     *
-     * @return string publicdir main public directory
-     */
-    public function getPublicDirPath(): string
-    {
-        return $this->getRootDir() . $this->getConf()->{'publicdir'};
-    }
-
-    /**
-     * Get public directory.
-     *
-     * @return string publicdir main public directory
-     */
-    public function getMediaDirPath(): string
-    {
-        return $this->getRootDir() . $this->getConf()->{'media'};
-    }
 }

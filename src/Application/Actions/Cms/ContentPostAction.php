@@ -16,7 +16,7 @@ class ContentPostAction extends CmsAction
 
 
                 // step 1 : update Record
-              //  $body =  $this->getRequestBody();
+
                 $body = $this->request->getParsedBody();
                 $putResponse = $this->getService()->post($this->getParam('type'), self::ID, $body );
                 $myobjectJson = $putResponse->getResult();
@@ -30,6 +30,6 @@ class ContentPostAction extends CmsAction
                 $response = $this->getService()->publishById($this->getParam('type'), self::ID, $id);
                 // $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
 
-        return $this->respondWithData($response->getResult());
+        return $this->response($this->request, $response);
     }
 }

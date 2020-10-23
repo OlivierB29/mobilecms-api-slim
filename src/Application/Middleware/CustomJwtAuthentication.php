@@ -136,8 +136,18 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+
         $scheme = $request->getUri()->getScheme();
         $host = $request->getUri()->getHost();
+
+                    // CUSTOM start
+                    // TODO : with shouldAuthenticate
+                    $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);          
+                    $rule = new AuthorizeRule($authorizeOptions);
+                    if (false === $rule->isIgnore($request)) {
+                        return $handler->handle($request);
+                    }
+                    // CUSTOM end
 
         /* If rules say we should not authenticate call next and return. */
         if (false === $this->shouldAuthenticate($request)) {
@@ -162,9 +172,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $jsonUser = $this->decodeToken($token);
             $decoded = $jsonUser->{'decoded'};
             // CUSTOM start
-            $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);
-            $authorizeOptions["userrole"] = $jsonUser->{'role'};           
-            $rule = new AuthorizeRule($authorizeOptions);
+            $rule->setUserRole($jsonUser->{'role'});
+       
+
 
             $permitted = $rule->__invoke($request);
             if (!$permitted) {

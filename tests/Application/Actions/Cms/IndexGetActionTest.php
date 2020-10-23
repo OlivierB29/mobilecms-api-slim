@@ -41,7 +41,7 @@ class IndexGetActionTest extends AuthApiTest
         $this->assertResponse($expectedPayload, $response);
     }
 
-    public function testActionThrowsUserNotFoundException()
+    public function testIndexNotFound()
     {
         $app = $this->getAppInstance();
 

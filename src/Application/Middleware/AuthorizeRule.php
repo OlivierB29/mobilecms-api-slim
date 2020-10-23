@@ -20,6 +20,8 @@ class AuthorizeRule
     private static $EDITORROLE = "editor";
     private static $ADMINROLE = "admin";
 
+    private $userrole = null;
+
     /**
      * Stores all the options passed to the rule
      * @var mixed[]
@@ -59,7 +61,7 @@ class AuthorizeRule
         foreach ((array)$this->options["editorpath"] as $path) {
             $path = rtrim($path, "/");
             if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->options["userrole"], self::$EDITORROLE);
+                $result = $this->isPermitted($this->userrole, self::$EDITORROLE);
                 return $result;
             }
         }
@@ -67,7 +69,7 @@ class AuthorizeRule
         foreach ((array)$this->options["adminpath"] as $path) {
             $path = rtrim($path, "/");
                 if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->options["userrole"], self::$ADMINROLE);
+                $result = $this->isPermitted($this->userrole, self::$ADMINROLE);
                 return $result;
             }
         }
@@ -76,6 +78,19 @@ class AuthorizeRule
         return false;
     }
 
+    public function isIgnore(ServerRequestInterface $request): bool{
+        $uri = "/" . $request->getUri()->getPath();
+        $uri = preg_replace("#/+#", "/", $uri);
+
+        /* If request path is matches ignore should not authenticate. */
+        foreach ((array)$this->options["ignore"] as $ignore) {
+            $ignore = rtrim($ignore, "/");
+            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
+                return false;
+            }
+        }
+        return true;
+    }
     
 
       /**
@@ -140,6 +155,10 @@ class AuthorizeRule
         }
 
         return $result;
+    }
+
+    public function setUserRole(string $role) {
+        $this->userrole = $role;
     }
 
 }
