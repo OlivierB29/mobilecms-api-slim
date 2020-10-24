@@ -2,7 +2,7 @@
 use  App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\ImageUtils;
-use App\Infrastructure\Utils\PdfUtils;
+use App\Infrastructure\Utils\App\Infrastructure\Utils\PdfUtils;
 /**
  * File utility service.
  */
