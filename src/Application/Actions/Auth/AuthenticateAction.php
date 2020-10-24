@@ -46,6 +46,6 @@ class AuthenticateAction extends AuthAction
             // @codeCoverageIgnoreEnd
 
         }
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

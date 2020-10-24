@@ -35,6 +35,6 @@ class ThumbnailsAction extends FileAction
             );
 
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

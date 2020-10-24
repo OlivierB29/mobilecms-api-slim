@@ -24,7 +24,7 @@ final class FileApiTest extends AuthApiTest
         $this->setAdmin();
     }
 
-
+/*
     public function testDownload()
     {
         $this->path = '/mobilecmsapi/v1/fileapi/download/calendar/4';
@@ -106,7 +106,7 @@ final class FileApiTest extends AuthApiTest
         $response = $this->request('POST', $this->path);
         $this->assertEquals(500, $response->getCode());
     }
-
+*/
     public function testDelete()
     {
         $filename = 'testdelete.pdf';

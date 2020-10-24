@@ -47,6 +47,6 @@ class DeleteFilesAction extends FileAction
         $response->setCode(200);
 
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

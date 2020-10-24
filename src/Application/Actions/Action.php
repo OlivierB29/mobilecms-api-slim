@@ -110,6 +110,7 @@ abstract class Action
         return $this->respond($payload);
     }
 
+
   
     /**
      * @param ActionPayload $payload

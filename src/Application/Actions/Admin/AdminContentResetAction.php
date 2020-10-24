@@ -45,6 +45,6 @@ class AdminContentResetAction extends AdminAction
                     unset($myobjectJson);
                     $response = $service->publishById($this->getParam('type'), self::EMAIL, $id);
                 }
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

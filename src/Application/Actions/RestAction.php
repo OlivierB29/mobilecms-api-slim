@@ -135,13 +135,13 @@ abstract class RestAction extends Action
      * @param  array|object|null $data
      * @return Response
      */
-    protected function response(ServerRequestInterface $request, RestResponse $resp)
+    protected function withResponse(RestResponse $resp)
     {
-        $this->slimException($request, $resp);
-        return $this->respondWithData($resp->getResult());
+       // $this->slimException($request, $resp);
+        return $this->respondWithData($resp->getResult(), $resp->getCode());
     }
 
-
+/*
     protected function slimException(ServerRequestInterface $request, RestResponse $response) {
         switch ($response->getCode()) {
             case 200:                
@@ -162,4 +162,5 @@ abstract class RestAction extends Action
             throw new HttpUnauthorizedException($request, $response->getError());;
           } 
     }
+    */
 }

@@ -14,6 +14,6 @@ class IndexPostAction extends CmsAction
     protected function action(): Response
     {
         $oldResponse = $this->getService()->rebuildIndex($this->resolveArg('type'), self::ID);
-        return $this->respondWithData($users);
+        return $this->withResponse($oldResponse);
     }
 }

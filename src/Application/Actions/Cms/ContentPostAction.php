@@ -30,6 +30,6 @@ class ContentPostAction extends CmsAction
                 $response = $this->getService()->publishById($this->getParam('type'), self::ID, $id);
                 // $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
 
-        return $this->response($this->request, $response);
+        return $this->withResponse( $response);
     }
 }

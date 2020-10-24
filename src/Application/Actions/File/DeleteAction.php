@@ -30,6 +30,6 @@ class DeleteAction extends FileAction
 
                 $response->setResult(json_encode($deleteResult));
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

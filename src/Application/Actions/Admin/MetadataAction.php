@@ -26,6 +26,6 @@ class MetadataAction extends AdminAction
             $response->setResult(JsonUtils::readJsonFile($service->getMetadataFileName($this->getParam('type'))));
             $response->setCode(200);
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

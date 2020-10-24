@@ -21,6 +21,6 @@ class AdminTypesGetAction extends AdminAction
                 $service = new ContentService($this->getPrivateDirPath());
                 $response->setResult($service->adminOptions('types.json'));
                 $response->setCode(200);
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

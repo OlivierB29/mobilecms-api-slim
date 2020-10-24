@@ -31,6 +31,6 @@ class AdminIndexGetAction extends AdminAction
         
 
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

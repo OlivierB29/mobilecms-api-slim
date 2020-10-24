@@ -92,7 +92,7 @@ final class AuthenticationApiTest extends ApiTest
     {
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $this->REQUEST = ['path' => $this->path];
-        $this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
+        
         
         $response = $this->request('POST', $this->path);
 
@@ -109,7 +109,7 @@ final class AuthenticationApiTest extends ApiTest
         $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
 
         $this->REQUEST = ['path' => $this->path];
-        $this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
+        
         $response = $this->request('POST', $this->path);
 
         $this->POST = ['requestbody' => ''];
@@ -177,7 +177,7 @@ final class AuthenticationApiTest extends ApiTest
 
 
         $this->POST = ['requestbody' => $recordStr];
-        $this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
+        
         $response = $this->request('POST', $this->path);
 
 
@@ -194,7 +194,7 @@ final class AuthenticationApiTest extends ApiTest
 
 
         $this->POST = ['requestbody' => $recordStr];
-        $this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
+        
         $response = $this->request('POST', $this->path);
 
 
@@ -212,8 +212,7 @@ final class AuthenticationApiTest extends ApiTest
 
         $this->POST = ['requestbody' => $recordStr];
 
-//        $this->expectException(\Slim\Exception\HttpBadRequestException::class);
-$this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
+
         $response = $this->request('POST', $this->path);
 
 
@@ -273,7 +272,7 @@ $this->expectException(\Slim\Exception\HttpUnauthorizedException::class);
 
 
         $this->POST = ['requestbody' => $recordStr];
-        $this->expectException(\Slim\Exception\HttpBadRequestException::class);
+        
         $response = $this->request('POST', $this->path);
 
 

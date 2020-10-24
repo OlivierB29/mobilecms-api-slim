@@ -13,6 +13,6 @@ class ContentGetByIdAction extends CmsAction
      */
     protected function action(): Response
     {
-        return $this->respondWithData($this->getService()->getRecord($this->resolveArg('type'), $this->resolveArg('id'))->getResult());
+        return $this->withResponse($this->getService()->getRecord($this->resolveArg('type'), $this->resolveArg('id')));
     }
 }

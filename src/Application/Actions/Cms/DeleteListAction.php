@@ -41,7 +41,7 @@ class DeleteListAction extends CmsAction
                 $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
 
 
-        return $this->response($this->request, $response);
+        return $this->withResponse($response);
 
     }
 }

@@ -13,6 +13,6 @@ class ContentGetListAction extends CmsAction
      */
     protected function action(): Response
     {
-        return $this->respondWithData($this->getService()->getAllObjects($this->resolveArg('type'))->getResult());
+        return $this->withResponse($this->getService()->getAllObjects($this->resolveArg('type')));
     }
 }

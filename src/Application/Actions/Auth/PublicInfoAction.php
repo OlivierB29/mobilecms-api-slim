@@ -30,6 +30,6 @@ class PublicInfoAction extends AuthAction
             $response = $service->getPublicInfo($this->getParam('id'));
             unset($user);
         
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

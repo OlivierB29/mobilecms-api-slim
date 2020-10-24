@@ -43,6 +43,6 @@ class ChangePasswordAction extends AuthAction
             unset($logindata);
         
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

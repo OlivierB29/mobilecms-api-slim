@@ -25,6 +25,6 @@ class AdminContentGetListAction extends AdminAction
                 //get all records in directory
                 $userService = new UserService($this->getPrivateDirPath() . '/users');
                 $response = $userService->getAllUsers();
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

@@ -14,6 +14,6 @@ class IndexGetAction extends CmsAction
     protected function action(): Response
     {
 
-        return $this->respondWithData($this->getService()->getAll($this->resolveArg('type') . '/index/index.json')->getResult());
+        return $this->withResponse($this->getService()->getAll($this->resolveArg('type') . '/index/index.json'));
     }
 }

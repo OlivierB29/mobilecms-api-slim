@@ -43,6 +43,6 @@ class RegisterAction extends AuthAction
             }
         
 
-                return $this->response($this->request, $response);
+                return $this->withResponse($response);
     }
 }

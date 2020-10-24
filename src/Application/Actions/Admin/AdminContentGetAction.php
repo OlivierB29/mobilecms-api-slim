@@ -31,6 +31,6 @@ class AdminContentGetAction extends AdminAction
             $response->setCode(200);
             $response->setResult($this->getUserResponse($tmpResponse->getResult()));
         }
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

@@ -33,6 +33,6 @@ class DownloadAction extends FileAction
             
         
 
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }

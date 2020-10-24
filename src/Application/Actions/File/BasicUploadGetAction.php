@@ -28,6 +28,6 @@ class BasicUploadGetAction extends FileAction
                 $response->setCode(200);
 
                 $response->setResult($uploadResult);
-                return $this->response($this->request, $response);
+                return $this->withResponse( $response);
     }
 }
