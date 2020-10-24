@@ -35,7 +35,8 @@ $container = $app->getContainer();
         "attribute" => false,
         "relaxed" => ["192.168.1.10", "127.0.0.1", "localhost"],
         "error" => function ($response, $arguments) {
-            return new UnauthorizedResponse($arguments["message"], 401);
+            //return new UnauthorizedResponse($arguments["message"]);
+            return $response;
         }
         /*,
         "rules" => [

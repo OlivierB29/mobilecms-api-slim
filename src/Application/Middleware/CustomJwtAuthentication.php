@@ -143,7 +143,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
                     // CUSTOM start
                     // TODO : with shouldAuthenticate
                     $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);          
-                    $rule = new AuthorizeRule($authorizeOptions);
+                    $rule = new FilterRule($authorizeOptions);
                     if (false === $rule->isIgnore($request)) {
                         return $handler->handle($request);
                     }
@@ -172,11 +172,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $jsonUser = $this->decodeToken($token);
             $decoded = $jsonUser->{'decoded'};
             // CUSTOM start
-            $rule->setUserRole($jsonUser->{'role'});
+
+
+            $authRule = new AuthorizeRule($authorizeOptions);
+            $authRule->setUserRole($jsonUser->{'role'});
        
-
-
-            $permitted = $rule->__invoke($request);
+            $permitted = $authRule->__invoke($request);
             if (!$permitted) {
                 throw new HttpForbiddenException($request, "operation not permitted");
             }

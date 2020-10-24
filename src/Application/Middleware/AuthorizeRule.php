@@ -53,7 +53,7 @@ class AuthorizeRule
         foreach ((array)$this->options["ignore"] as $ignore) {
             $ignore = rtrim($ignore, "/");
             if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
-                return false;
+                return true;
             }
         }
 
@@ -78,20 +78,7 @@ class AuthorizeRule
         return false;
     }
 
-    public function isIgnore(ServerRequestInterface $request): bool{
-        $uri = "/" . $request->getUri()->getPath();
-        $uri = preg_replace("#/+#", "/", $uri);
 
-        /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->options["ignore"] as $ignore) {
-            $ignore = rtrim($ignore, "/");
-            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
 
       /**
      * Control if the current user has access to API.
