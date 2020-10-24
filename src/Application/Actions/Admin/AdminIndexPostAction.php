@@ -5,11 +5,11 @@ namespace App\Application\Actions\Admin;
 
 
 use Psr\Http\Message\ResponseInterface as Response;
+
 use App\Infrastructure\Services\ContentService;
-use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\FileUtils;
 
-class MetadataAction extends AdminAction
+class AdminIndexPostAction extends AdminAction
 {
 
     /**
@@ -17,14 +17,19 @@ class MetadataAction extends AdminAction
      */
     protected function action(): Response
     {
+        $userKey = 'email';
         $response = $this->getDefaultResponse();
 
         $this->checkConfiguration();
 
-   
             $service = new ContentService($this->getPrivateDirPath());
-            $response->setResult(JsonUtils::readJsonFile($service->getMetadataFileName($this->getParam('type'))));
-            $response->setCode(200);
+
+            // eg : /mobilecmsapi/v1/content/calendar
+
+                $response = $service->rebuildIndex($this->getParam('type'), $userKey);
+
+        
+
 
                 return $this->response($this->request, $response);
     }

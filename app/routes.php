@@ -34,6 +34,14 @@ use App\Application\Actions\Auth\RegisterAction;
 use App\Application\Actions\Auth\ResetPasswordAction;
 
 use App\Application\Actions\Admin\MetadataAction;
+use App\Application\Actions\Admin\AdminContentGetAction;
+use App\Application\Actions\Admin\AdminContentCreateAction;
+use App\Application\Actions\Admin\AdminContentResetAction;
+use App\Application\Actions\Admin\AdminContentDeleteAction;
+use App\Application\Actions\Admin\AdminContentGetListAction;
+use App\Application\Actions\Admin\AdminIndexGetAction;
+use App\Application\Actions\Admin\AdminIndexPostAction;
+use App\Application\Actions\Admin\AdminTypesGetAction;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -90,18 +98,24 @@ return function (App $app) {
     });
 
     $app->group('/mobilecmsapi/v1/adminapi', function (Group $group) {
-   
+        
+        $group->get('/content', AdminTypesGetAction::class);
         $group->get('/metadata/{type}', MetadataAction::class);
-        $group->get('/content/{type}/{id}', MetadataAction::class);
-        $group->post('/content/{type}/{id}', MetadataAction::class);
-        $group->delete('/content/{type}/{id}', MetadataAction::class);
+        
+        $group->get('/content/{type}/{id}', AdminContentGetAction::class);
+        $group->get('/content/{type}', AdminContentGetListAction::class);
 
-        $group->get('/content/{type}', MetadataAction::class);
-        $group->post('/content/{type}', MetadataAction::class);
-        $group->get('/content', MetadataAction::class);
-
+        $group->post('/content/{type}/{id}', AdminContentResetAction::class);
+        $group->delete('/content/{type}/{id}', AdminContentDeleteAction::class);
 
         
+        ///mobilecmsapi/v1/adminapi/content/users/
+        $group->post('/content/{type}', AdminContentCreateAction::class);
+
+
+        // /mobilecmsapi/v1/adminapi/index/users
+        $group->post('/index/{type}', AdminIndexPostAction::class);
+        $group->get('/index/{type}', AdminIndexGetAction::class);
     });
 
     $app->group('/mobilecmsapi/v1/cmsapi/index', function (Group $group) {

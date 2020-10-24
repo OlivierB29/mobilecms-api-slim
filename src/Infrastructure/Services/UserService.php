@@ -1,5 +1,5 @@
 <?php namespace App\Infrastructure\Services;
-
+use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
 /*
  * Inspired by http://fr.wikihow.com/cr%C3%A9er-un-script-de-connexion-s%C3%A9curis%C3%A9e-avec-PHP-et-MySQL

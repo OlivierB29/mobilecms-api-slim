@@ -22,7 +22,7 @@ final class CmsAdminApiTest extends AuthApiTest
         parent::setUp();
         $this->setAdmin();
     }
-/*
+
 
     public function testTypes()
     {
@@ -147,8 +147,8 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'newuser@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/';
-        $file = $this->API->getPrivateDirPath() . '/users/' . $email . '.json';
+        $this->path = '/mobilecmsapi/v1/adminapi/content/users';
+        $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
 
         $recordStr = '{ "name": "test role", "email": "' . $email . '", "role":"editor", "password":"Something1234567890"}';
         $this->POST = ['requestbody' => $recordStr];
@@ -169,7 +169,7 @@ final class CmsAdminApiTest extends AuthApiTest
 
     public function testResetPassword()
     {
-        $userdir = $this->API->getPrivateDirPath() . '/users/';
+        $userdir = $this->getPrivateDirPath() . '/users/';
         $email = 'modifypassword@example.com';
         $file = $userdir . '/' . $email . '.json';
         copy($userdir . '/' . $email . '.backup.json', $file);
@@ -200,9 +200,9 @@ final class CmsAdminApiTest extends AuthApiTest
         $this->setAdmin();
         $email = 'delete@example.com';
         $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
-        $file = $this->API->getPrivateDirPath() . '/users/' . $email . '.json';
+        $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
 
-        $this->assertTrue(copy($this->API->getPrivateDirPath() . '/save/' . $email . '.json', $file));
+        $this->assertTrue(copy($this->getPrivateDirPath() . '/save/' . $email . '.json', $file));
 
 
         $response = $this->request('DELETE', $this->path);
@@ -255,8 +255,8 @@ final class CmsAdminApiTest extends AuthApiTest
 
 
 
-        $file = $this->API->getPrivateDirPath() . '/users/' . $email . '.json';
-        $this->assertTrue(copy($this->API->getPrivateDirPath() . '/save/' . $email . '.json', $file));
+        $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
+        $this->assertTrue(copy($this->getPrivateDirPath() . '/save/' . $email . '.json', $file));
 
 
 
@@ -277,7 +277,7 @@ final class CmsAdminApiTest extends AuthApiTest
             unlink($file);
         }
     }
-*/
+
     public function testGetMetadata()
     {
         $this->setAdmin();
@@ -291,7 +291,7 @@ final class CmsAdminApiTest extends AuthApiTest
         $this->assertEquals(200, $response->getCode());
 
         $this->assertTrue($response != null);
-        $index_data = file_get_contents($this->API->getPrivateDirPath() . '/users/index/metadata.json');
+        $index_data = file_get_contents($this->getPrivateDirPath() . '/users/index/metadata.json');
 
         $this->assertJsonStringEqualsJsonString($index_data, $response->getEncodedResult());
     }

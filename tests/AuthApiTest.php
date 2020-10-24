@@ -40,11 +40,11 @@ abstract class AuthApiTest extends ApiTest
 
         $response = $service->getToken('editor@example.com', 'Sample#123456');
         $this->editor = $response->getResult();
-        $this->editortoken = 'Bearer ' . $this->guest->{'token'};
+        $this->editortoken = 'Bearer ' . $this->editor->{'token'};
 
         $response = $service->getToken('admin@example.com', 'Sample#123456');
         $this->admin = $response->getResult();
-        $this->admintoken = 'Bearer ' . $this->user->{'token'};
+        $this->admintoken = 'Bearer ' . $this->admin->{'token'};
 
         $this->memory();
         $this->setEditor();

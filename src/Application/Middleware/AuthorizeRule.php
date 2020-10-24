@@ -145,7 +145,7 @@ class AuthorizeRule
      *
      * @return true if access is authorized
      */
-    private function isPermittedAdmin($user): bool
+    private function isPermittedAdmin($userRole): bool
     {
         $result = false;
         if (!empty($userRole) && !empty(self::$ADMINROLE) ) {

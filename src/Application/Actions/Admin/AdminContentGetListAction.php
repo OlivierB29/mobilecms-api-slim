@@ -5,11 +5,11 @@ namespace App\Application\Actions\Admin;
 
 
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Infrastructure\Services\UserService;
 use App\Infrastructure\Services\ContentService;
-use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\FileUtils;
 
-class MetadataAction extends AdminAction
+class AdminContentGetListAction extends AdminAction
 {
 
     /**
@@ -21,11 +21,10 @@ class MetadataAction extends AdminAction
 
         $this->checkConfiguration();
 
-   
-            $service = new ContentService($this->getPrivateDirPath());
-            $response->setResult(JsonUtils::readJsonFile($service->getMetadataFileName($this->getParam('type'))));
-            $response->setCode(200);
 
+                //get all records in directory
+                $userService = new UserService($this->getPrivateDirPath() . '/users');
+                $response = $userService->getAllUsers();
                 return $this->response($this->request, $response);
     }
 }
