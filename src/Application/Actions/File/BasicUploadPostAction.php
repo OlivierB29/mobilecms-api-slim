@@ -17,7 +17,8 @@ class BasicUploadPostAction extends FileAction
      */
     protected function action(): Response
     {         
-
+        $response = $this->getDefaultResponse();
+        $this->initConf();
         //get the full data of a single record
         // eg : /mobilecmsapi/v1/file/calendar/1
         $uploadResult = $this->uploadFiles($this->getParam('type'), $this->getParam('id'));

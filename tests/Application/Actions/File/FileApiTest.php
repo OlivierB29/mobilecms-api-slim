@@ -215,7 +215,7 @@ final class FileApiTest extends AuthApiTest
         ];
 
         // mock HTTP parameters
-
+        $this->expectException(\Slim\Exception\HttpInternalServerErrorException::class);
         $response = $this->request('POST', $this->path, $files);
 
         $this->assertEquals(500, $response->getCode());
@@ -239,7 +239,7 @@ final class FileApiTest extends AuthApiTest
             ['name'=>$filename,'type'=>'image/bmp','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>24612]
             ];
 
-
+            $this->expectException(\Slim\Exception\HttpInternalServerErrorException::class);
         $response = $this->fileRequest('POST', $this->path, $files);
         $this->assertEquals(500, $response->getCode());
 

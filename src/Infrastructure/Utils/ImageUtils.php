@@ -54,7 +54,7 @@ class ImageUtils
     public function imageInfo(string $file)
     {
         $result = \json_decode('{}');
-        $fileutils = new App\Infrastructure\Utils\FileUtils();
+        $fileutils = new FileUtils();
         $result->{'mimetype'} = $fileutils->getMimeType($file);
 
         // calculate height

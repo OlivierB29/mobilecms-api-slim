@@ -1,5 +1,8 @@
 <?php namespace App\Infrastructure\Services;
 use  App\Infrastructure\Utils\JsonUtils;
+use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\ImageUtils;
+use App\Infrastructure\Utils\PdfUtils;
 /**
  * File utility service.
  */
@@ -146,7 +149,7 @@ class FileService
 
 
         $result = [];
-        $utils = new App\Infrastructure\Utils\ImageUtils();
+        $utils = new ImageUtils();
         $utils->setQuality($quality);
         $utils->setImagick($imagick);
         foreach ($files as $formKey => $file) {
@@ -185,7 +188,7 @@ class FileService
                             // @codeCoverageIgnoreEnd
                         }
                         // future version with PDF preview : https://gist.github.com/umidjons/11037635
-                        $pdfUtils = new App\Infrastructure\Utils\PdfUtils();
+                        $pdfUtils = new PdfUtils();
                         $fileResponse = $pdfUtils->pdfInfo($filePath);
                         $pdfUtils->setQuality($pdfQuality);
                         $thumbnails = $pdfUtils->multipleResize($filePath, $thumbdir, $sizes);

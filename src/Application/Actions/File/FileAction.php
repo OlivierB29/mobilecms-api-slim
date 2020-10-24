@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application\Actions\Cms;
+namespace App\Application\Actions\File;
 
 use App\Application\Actions\RestAction;
 use App\Domain\User\UserRepository;
@@ -10,7 +10,7 @@ use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\ImageUtils;
 use App\Infrastructure\Utils\FileUtils;
-use App\Infrastructure\Rest\Response as RestResponse;
+use App\Infrastructure\Rest\Response;
 
 abstract class FileAction extends RestAction
 {
@@ -18,33 +18,33 @@ abstract class FileAction extends RestAction
     /**
      * Media directory (eg: media ).
      */
-    private $media;
+    protected $media;
 
     /**
      * Default umask for directories and files.
      */
-    private $umask = 0775;
+    protected $umask = 0775;
 
-    private $files;
+    protected $files;
 
-    private $debug;
+    protected $debug;
 
-    private $thumbnailsizes = [];
+    protected $thumbnailsizes = [];
 
-    private $pdfthumbnailsizes = [];
+    protected $pdfthumbnailsizes = [];
 
-    private $pdfimagequality = 80;
-
-
-    private $fileExtensions = [];
-
-    private $imagequality = 100;
-
-    private $imagick = false;
+    protected $pdfimagequality = 80;
 
 
+    protected $fileExtensions = [];
 
-    private $service;
+    protected $imagequality = 100;
+
+    protected $imagick = false;
+
+
+
+    protected $service;
 
 
 
@@ -67,23 +67,16 @@ abstract class FileAction extends RestAction
      */
     public function initConf()
     {
-        parent::initConf();
 
-        // Default headers for RESTful API
-        if ($this->enableHeaders) {
-            // @codeCoverageIgnoreStart
-            header('Access-Control-Allow-Methods: *');
-            // @codeCoverageIgnoreEnd
-        }
 
         $this->media = $this->getConf()->{'media'};
         $this->thumbnailsizes = $this->getConf()->{'thumbnailsizes'};
         // width 214 * height 82
         $this->pdfthumbnailsizes = [100, 200];
         $this->fileExtensions = $this->getConf()->{'fileextensions'};
-        $this->imagequality = $this->properties->getInteger('imagequality', 100);
+        $this->imagequality = $this->getProperties()->getInteger('imagequality', 100);
 
-        $this->imagick = $this->properties->getBoolean('imagick', false);
+        $this->imagick = $this->getProperties()->getBoolean('imagick', false);
     }
 
     public function setRequest(
@@ -164,7 +157,7 @@ abstract class FileAction extends RestAction
      *
      * @return array of files descriptions
      */
-    private function uploadFiles($type, $id): array
+    protected function uploadFiles($type, $id): array
     {
         /*
       File properties example
@@ -312,7 +305,7 @@ abstract class FileAction extends RestAction
     /**
      * Verify minimal configuration.
      */
-    private function checkConfiguration()
+    protected function checkConfiguration()
     {
         if (!isset($this->getConf()->{'media'})) {
             throw new \Exception('Empty media dir');
@@ -326,7 +319,7 @@ abstract class FileAction extends RestAction
      * @param string $id       123
      * @param string $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
      */
-    private function deleteFiles($datatype, $id, $filesStr): Response
+    protected function deleteFiles($datatype, $id, $filesStr): Response
     {
         $response = $this->getDefaultResponse();
 

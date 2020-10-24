@@ -101,9 +101,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
     private $defaultAuthorizeOptions = [
         "userrole" => "",
-        "editorpath" => ["/mobilecmsapi/v1/cmsapi"],
+        "editorpath" => ["/mobilecmsapi/v1/cmsapi", "/mobilecmsapi/v1/fileapi"],
         "adminpath" => ["/mobilecmsapi/v1/adminapi"],
-        "ignore" => ["/mobilecmsapi/v1/authapi", "/test-action-response-code", "/debugapi"]
+        "ignore" => ["/mobilecmsapi/v1/authapi", "/debugapi"]
     ];
 
     /**

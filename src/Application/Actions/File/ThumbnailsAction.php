@@ -18,7 +18,8 @@ class ThumbnailsAction extends FileAction
     protected function action(): Response
     {
         $response = $this->getDefaultResponse();
-
+        
+        $this->initConf();
         $this->checkConfiguration();
 
             $service = new FileService();

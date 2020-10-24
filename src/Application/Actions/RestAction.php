@@ -110,7 +110,7 @@ abstract class RestAction extends Action
         return $this->getFormData();
     }
 */
-    public function getRequestBody() : \stdClass {
+    public function getRequestBody() {
         return $this->request->getParsedBody();
     }
     public function getRequestBodyStr() : string {

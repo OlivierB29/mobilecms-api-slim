@@ -17,6 +17,7 @@ class BasicUploadGetAction extends FileAction
      */
     protected function action(): Response
     {
+        $response = $this->getDefaultResponse();
                 // create service
                 $service = new FileService();
 
