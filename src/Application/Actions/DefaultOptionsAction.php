@@ -9,7 +9,7 @@ use App\Infrastructure\Services\FileService;
 
 use App\Infrastructure\Utils\FileUtils;
 
-class DefaultOptionsAction extends AuthAction
+class DefaultOptionsAction extends Action
 {
 
     /**
