@@ -72,4 +72,51 @@ class ResetPasswordAction extends AuthAction
         
                 return $this->withResponse( $response);
     }
+
+        /**
+     * Get IP and user agent from client.
+     *
+     * @return string IP and user agent
+     */
+    private function getClientInfo(): string
+    {
+        $result = $this->getClientIp() . ' ';
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            // @codeCoverageIgnoreStart
+            $result .= $_SERVER['HTTP_USER_AGENT'];
+            // @codeCoverageIgnoreEnd
+        }
+        return $result;
+    }
+
+
+    /**
+     * Get IP address.
+     *
+     * @return string IP address
+     */
+    private function getClientIp(): string
+    {
+        $ipaddress = '';
+        // @codeCoverageIgnoreStart
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        // @codeCoverageIgnoreEnd
+        } else {
+            $ipaddress = 'UNKNOWN';
+        }
+
+        return $ipaddress;
+    }
+
 }

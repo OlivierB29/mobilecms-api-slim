@@ -21,28 +21,6 @@ abstract class AdminAction extends RestAction
 
 
     /**
-     * Init configuration.
-     *
-
-     */
-    public function initConf()
-    {
-        parent::initConf();
-        // Default headers for RESTful API
-        if ($this->enableHeaders) {
-            // @codeCoverageIgnoreStart
-            header('Access-Control-Allow-Methods: *');
-            header('Content-Type: application/json');
-            // @codeCoverageIgnoreEnd
-        }
-        // role control is ensured by parent class
-        $this->role = 'admin';
-    }
-
-
-
-
-    /**
      * Basic user fields, without password.
      *
      * @param userStr $userStr JSON user string

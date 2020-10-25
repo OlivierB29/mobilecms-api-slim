@@ -32,19 +32,12 @@ class BasicUploadPostAction extends FileAction
                 return $this->withResponse( $response);
     }
 
-// UploadedFileInterface 
-    protected function uploadFilesSlim($type, $id, $files): array
+
+    private function uploadFilesSlim($type, $id, $files): array
     {
-        /*
-      File properties example
-      - name:1.jpg
-      - type:image/jpeg
-      - tmp_name:/tmp/phpzDc6qT
-      - error:0
-      - size:700
-        */
+
         $result = [];
-        // $_FILES
+
         
         if (!isset($files) || count($files) === 0) {
             throw new HttpBadRequestException($this->request, 'no file.');
@@ -70,25 +63,15 @@ class BasicUploadPostAction extends FileAction
             // upload
             if ($file->getClientFilename() !== null) {
                 $destfile = $destdir . '/' . $file->getClientFilename();
-                $moveResult = false;
-                // why not inline notation condition ? a : b;
-                // If an exception is thrown with IO, I prefer to be sure of the line in error.
-
-/*
-                if ($this->debug) {
-                    $moveResult = rename($file->getClientFilename(), $destfile);
-                } else {
-                    $moveResult = move_uploaded_file($file->getClientFilename(), $destfile);
-                }
-*/
+  
 
                 $file->moveTo($destfile);
                 if (!file_exists($destfile)) {
                     throw new HttpInternalServerErrorException($this->request, 'Upload error ' . $file->getClientFilename());
                 }
-                $moveResult = true;
+   
 
-                if ($moveResult) {
+     
                     chmod($destfile, $this->umask);
                     $title = $file->getClientFilename();
                     $url = $file->getClientFilename();
@@ -96,14 +79,8 @@ class BasicUploadPostAction extends FileAction
                     $fileResult = $this->getFileResponse($destfile, $title, $url);
 
                     array_push($result, $fileResult);
-                } else {
-                    throw new HttpInternalServerErrorException($this->request,$file->getClientFilename() . ' KO');
-                }
-            }
-        }
 
-        if (count($result) === 0) {
-            throw new HttpInternalServerErrorException($this->request,'no file uploaded. Please check file size.');
+            }
         }
 
         return $result;

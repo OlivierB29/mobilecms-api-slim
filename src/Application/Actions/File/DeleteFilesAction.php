@@ -35,9 +35,7 @@ class DeleteFilesAction extends FileAction
                     if (!unlink($destfile)) {
                         throw new \Exception('delete ' . $file['url'] . ' KO');
                     }
-                } else {
-                    // TODO add message
-                }
+                } 
             } else {
                 throw new \Exception('wrong file ' . $file['url'] . ' KO');
             }
