@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Application\Actions\File;
 use Slim\Exception\HttpBadRequestException;//400
 use Slim\Exception\HttpNotFoundException;//404
+use Slim\Exception\HttpInternalServerErrorException;//500
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Infrastructure\Services\FileService;
@@ -46,14 +47,14 @@ class BasicUploadPostAction extends FileAction
         // $_FILES
         
         if (!isset($files) || count($files) === 0) {
-            throw new Exception('no file.');
+            throw new HttpBadRequestException($this->request, 'no file.');
         }
         
         // Basic upload verification
         foreach ($files as $fileControl) {
             
             if (!$this->isAllowedExtension($fileControl->getClientFilename())) {
-                throw new Exception('forbidden file type');
+                throw new HttpBadRequestException($this->request, 'forbidden file type');
             }
         }
 
@@ -83,7 +84,7 @@ class BasicUploadPostAction extends FileAction
 
                 $file->moveTo($destfile);
                 if (!file_exists($destfile)) {
-                    throw new \Exception('Upload error ' . $file->getClientFilename());
+                    throw new HttpInternalServerErrorException($this->request, 'Upload error ' . $file->getClientFilename());
                 }
                 $moveResult = true;
 
@@ -96,13 +97,13 @@ class BasicUploadPostAction extends FileAction
 
                     array_push($result, $fileResult);
                 } else {
-                    throw new \Exception($file->getClientFilename() . ' KO');
+                    throw new HttpInternalServerErrorException($this->request,$file->getClientFilename() . ' KO');
                 }
             }
         }
 
         if (count($result) === 0) {
-            throw new \Exception('no file uploaded. Please check file size.');
+            throw new HttpInternalServerErrorException($this->request,'no file uploaded. Please check file size.');
         }
 
         return $result;

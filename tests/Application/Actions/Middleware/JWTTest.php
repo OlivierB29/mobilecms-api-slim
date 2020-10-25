@@ -45,6 +45,7 @@ final class JWTTest extends TestCase
         $this->assertTrue(strlen($phpjwtToken) > 100);
     }
 
+    /* TODO
     public function testVerifyToken()
     {
 
@@ -71,7 +72,7 @@ final class JWTTest extends TestCase
         
         $this->assertEquals($phpjwtToken, $jwtPayload);
     }
-
+*/
     public function testVerifyWrongSecret()
     {
 
