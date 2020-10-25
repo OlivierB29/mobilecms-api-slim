@@ -1,9 +1,5 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
 
 /**
  * @deprecated
  */
-class Logger
-{
-
-}

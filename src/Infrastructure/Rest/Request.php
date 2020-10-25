@@ -1,8 +1,4 @@
-<?php namespace App\Infrastructure\Rest;
+<?php
 /**
  * @deprecated
  */
-class Request extends GenericRequest
-{
-
-}

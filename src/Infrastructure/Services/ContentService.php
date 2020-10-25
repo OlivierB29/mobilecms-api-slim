@@ -62,10 +62,6 @@ class ContentService
      */
     private $databasedir;
 
-    /**
-     * logger
-     */
-    private $logger;
 
 
     /**
@@ -76,7 +72,7 @@ class ContentService
     public function __construct(string $databasedir)
     {
         $this->databasedir = $databasedir;
-        $this->logger = new Logger();
+
     }
 
     /**
