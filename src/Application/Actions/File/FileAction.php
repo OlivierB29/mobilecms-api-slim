@@ -149,6 +149,7 @@ abstract class FileAction extends RestAction
         return $this->getMediaDirPath() . '/' . $type . '/' . $id;
     }
 
+
     /**
      * Upload files from $_FILES.
      *
@@ -170,18 +171,18 @@ abstract class FileAction extends RestAction
         $result = [];
         // $_FILES
 
-        if (!isset($this->files) || count($this->files) === 0) {
+        if (!isset($files) || count($files) === 0) {
             throw new \Exception('no file.');
         }
 
         // Basic upload verification
-        foreach ($this->files as $formKey => $fileControl) {
+        foreach ($files as $formKey => $fileControl) {
             if (!$this->isAllowedExtension($fileControl['name'])) {
                 throw new \Exception('forbidden file type');
             }
         }
 
-        foreach ($this->files as $formKey => $file) {
+        foreach ($files as $formKey => $file) {
             $destdir = $this->getRecordDirPath($type, $id);
 
             // create directory if it doesn't exist
@@ -283,7 +284,7 @@ abstract class FileAction extends RestAction
      * @param string $title    : title of file
      * @param string $url      : url
      */
-    private function getFileResponse($destfile, $title, $url): \stdClass
+    protected function getFileResponse($destfile, $title, $url): \stdClass
     {
         $result = null;
         $utils = new ImageUtils();
@@ -369,7 +370,7 @@ abstract class FileAction extends RestAction
     * @param string $file file name
     * @return bool
     */
-    private function isAllowedExtension($file): bool
+    protected function isAllowedExtension($file): bool
     {
         $result = false;
         if ($file) {

@@ -149,6 +149,9 @@ final class CmsAdminApiTest extends AuthApiTest
         $email = 'newuser@example.com';
         $this->path = '/mobilecmsapi/v1/adminapi/content/users';
         $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
+        if (file_exists($file)) {
+            unlink($file);
+        }
 
         $recordStr = '{ "name": "test role", "email": "' . $email . '", "role":"editor", "password":"Something1234567890"}';
         $this->POST = ['requestbody' => $recordStr];
