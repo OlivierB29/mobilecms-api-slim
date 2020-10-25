@@ -1,0 +1,17 @@
+{
+    "id": "some-seminar-of-tennis",
+    "type": "calendar",
+    "date": "2015-09-02",
+    "activity": "activitya",
+    "title": "some seminar of tennis",
+    "organization": "Some org",
+    "description": "some infos",
+    "url": "",
+    "location": "",
+    "startdate": "",
+    "enddate": "",
+    "updated": "",
+    "updatedby": "",
+    "images": [],
+    "attachments": []
+}

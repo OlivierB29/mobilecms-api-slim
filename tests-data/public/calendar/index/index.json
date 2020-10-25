@@ -1,0 +1,78 @@
+[
+    {
+        "id": "6",
+        "date": "2018-08-10",
+        "activity": "activitya",
+        "title": "some seminar of activity A",
+        "description": "some infos",
+        "media": [],
+        "images": [],
+        "attachments": []
+    },
+    {
+        "id": "4",
+        "date": "2016-11-30",
+        "activity": "activityb",
+        "title": "yet another seminar of activity B",
+        "description": "foo",
+        "media": [],
+        "images": [],
+        "attachments": []
+    },
+    {
+        "id": "3",
+        "date": "2016-11-17",
+        "activity": "activityb",
+        "title": "another seminar of activity B",
+        "description": "foo",
+        "media": [],
+        "images": [],
+        "attachments": []
+    },
+    {
+        "id": "some-seminar-of-golf",
+        "date": "2015-10-02",
+        "activity": "activitya",
+        "title": "some seminar of golf",
+        "description": "some infos",
+        "media": [],
+        "images": [],
+        "attachments": []
+    },
+    {
+        "id": "2",
+        "date": "2015-09-25",
+        "activity": "activitya",
+        "title": "a new seminar of activity A"
+    },
+    {
+        "id": "10",
+        "date": "2015-09-02",
+        "activity": "activitya",
+        "title": "some seminar of activity A"
+    },
+    {
+        "id": "some-seminar-of-tennis",
+        "date": "2015-09-02",
+        "activity": "activitya",
+        "title": "some seminar of tennis"
+    },
+    {
+        "id": "basketball-championship",
+        "date": "2015-09-02",
+        "activity": "activitya",
+        "title": "basketball championship"
+    },
+    {
+        "id": "5",
+        "date": "2015-09-01",
+        "activity": "activitya",
+        "title": "some seminar of activity A"
+    },
+    {
+        "id": "1",
+        "date": "2015-09-01",
+        "activity": "activitya",
+        "title": "some seminar of activity A"
+    }
+]

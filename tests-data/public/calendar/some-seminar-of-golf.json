@@ -1,0 +1,17 @@
+{
+    "id": "some-seminar-of-golf",
+    "type": "calendar",
+    "date": "2015-10-02",
+    "activity": "activitya",
+    "title": "some seminar of golf",
+    "organization": "Some org",
+    "description": "some infos",
+    "url": "",
+    "location": "",
+    "startdate": "",
+    "enddate": "",
+    "updated": "",
+    "updatedby": "",
+    "images": [],
+    "attachments": []
+}

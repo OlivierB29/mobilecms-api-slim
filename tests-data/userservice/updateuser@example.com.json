@@ -1,0 +1,9 @@
+{
+    "name": "updated",
+    "email": "updateuser@example.com",
+    "password": "pass",
+    "salt": "salt",
+    "role": "admin",
+    "clientalgorithm": "hashmacbase64",
+    "newpasswordrequired": "false"
+}

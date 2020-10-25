@@ -1,0 +1,17 @@
+{
+    "id": "some-basketball-event-for-kids",
+    "type": "calendar",
+    "date": "2015-09-11",
+    "activity": "activitya",
+    "title": "some basketball event for kids",
+    "organization": "Some org",
+    "description": "some infos",
+    "url": "",
+    "location": "",
+    "startdate": "",
+    "enddate": "",
+    "updated": "",
+    "updatedby": "",
+    "images": [],
+    "attachments": []
+}
