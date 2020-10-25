@@ -7,7 +7,7 @@ namespace App\Application\Actions\Auth;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
-use App\Infrastructure\Utils\FileUtils;
+
 
 class RegisterAction extends AuthAction
 {

@@ -9,8 +9,9 @@ use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\ImageUtils;
-use App\Infrastructure\Utils\FileUtils;
+
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 
 abstract class FileAction extends RestAction
 {

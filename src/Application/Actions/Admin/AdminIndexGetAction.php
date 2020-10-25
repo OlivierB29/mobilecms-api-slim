@@ -7,7 +7,7 @@ namespace App\Application\Actions\Admin;
 use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
-use App\Infrastructure\Utils\FileUtils;
+
 
 class AdminIndexGetAction extends AdminAction
 {

@@ -7,7 +7,7 @@ namespace App\Application\Actions;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 
-use App\Infrastructure\Utils\FileUtils;
+
 
 class DefaultOptionsAction extends Action
 {

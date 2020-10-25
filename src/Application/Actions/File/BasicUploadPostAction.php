@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Infrastructure\Services\FileService;
 
-use App\Infrastructure\Utils\FileUtils;
+
 
 class BasicUploadPostAction extends FileAction
 {

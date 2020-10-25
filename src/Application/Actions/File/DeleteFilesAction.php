@@ -7,7 +7,7 @@ namespace App\Application\Actions\File;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 
-use App\Infrastructure\Utils\FileUtils;
+
 
 class DeleteFilesAction extends FileAction
 {
