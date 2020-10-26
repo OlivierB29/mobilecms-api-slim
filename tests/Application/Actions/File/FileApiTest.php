@@ -279,6 +279,36 @@ final class FileApiTest extends AuthApiTest
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg');
     }
 
+    public function testPdfThumbnails()
+    {
+        $record = '/calendar/2';
+        $this->path = '/mobilecmsapi/v1/fileapi/thumbnails/calendar/2';
+
+        $recordStr = '[{ "url": "loremipsum.pdf", "sizes": ["100", "200", "300"]}]';
+
+        $this->POST = ['requestbody' => $recordStr];
+        unset($recordStr);
+
+
+        $response = $this->request('POST', $this->path);
+
+
+        $this->assertEquals(200, $response->getCode());
+
+        $this->assertTrue($response != null);
+
+        $expected = '[{"mimetype":"application\/pdf","url":"loremipsum.pdf","thumbnails":[{"width":"100","height":"142","url":"loremipsum-100.jpg"},{"width":"200","height":"283","url":"loremipsum-200.jpg"},{"width":"300","height":"425","url":"loremipsum-300.jpg"}]}]';
+
+        $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
+
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-100.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-100.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-200.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-200.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-300.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-300.jpg');
+    }
+
     public function testThumbnailsDefaultSizes()
     {
         $record = '/calendar/2';

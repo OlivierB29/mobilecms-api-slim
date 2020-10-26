@@ -105,7 +105,7 @@ class PdfUtils
     public function pdfInfo(string $file)
     {
         $result = \json_decode('{}');
-        $fileutils = new App\Infrastructure\Utils\FileUtils();
+        $fileutils = new FileUtils();
         $result->{'mimetype'} = $fileutils->getMimeType($file);
         $result->{'url'} = \basename($file);
 
