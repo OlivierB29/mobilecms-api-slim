@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 use App\Infrastructure\Services\ContentService;
 
-
 final class ContentServiceTest extends TestCase
 {
     private $dir = 'tests-data/public';

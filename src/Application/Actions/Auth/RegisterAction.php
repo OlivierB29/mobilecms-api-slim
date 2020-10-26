@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
-
 
 class RegisterAction extends AuthAction
 {
@@ -26,23 +24,23 @@ class RegisterAction extends AuthAction
 
         // register and create a user
 
-            $user = $this->getRequestBody();
-            //returns a empty string if success, a string with the message otherwise
+        $user = $this->getRequestBody();
+        //returns a empty string if success, a string with the message otherwise
 
-            $createresult = $service->createUser(
-                $user->{'name'},
-                $user->{'email'},
-                $user->{'password'},
-                'create'
-            );
-            if ($createresult === null) {
-                $response->setCode(200);
-                $response->setResult(new \stdClass);
-            } else {
-                $response->setError(400, 'Bad user parameters');
-            }
+        $createresult = $service->createUser(
+            $user->{'name'},
+            $user->{'email'},
+            $user->{'password'},
+            'create'
+        );
+        if ($createresult === null) {
+            $response->setCode(200);
+            $response->setResult(new \stdClass);
+        } else {
+            $response->setError(400, 'Bad user parameters');
+        }
         
 
-                return $this->withResponse($response);
+        return $this->withResponse($response);
     }
 }

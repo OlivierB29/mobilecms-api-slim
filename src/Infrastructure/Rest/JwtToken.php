@@ -79,15 +79,15 @@ class JwtToken
             throw new Exception('Wrong number of segments!');
         }
 
-            $header = $tokenArray[0];
-            $payload = $tokenArray[1];
-            $signatureFromToken = $tokenArray[2];
+        $header = $tokenArray[0];
+        $payload = $tokenArray[1];
+        $signatureFromToken = $tokenArray[2];
 
-            $computedSignature = $this->createSignature($header, $payload, $secretKey);
+        $computedSignature = $this->createSignature($header, $payload, $secretKey);
 
-            if (!hash_equals($signatureFromToken, $computedSignature)) {
-                throw new Exception('Signature verification failed!');
-            }
+        if (!hash_equals($signatureFromToken, $computedSignature)) {
+            throw new Exception('Signature verification failed!');
+        }
 
 
 
@@ -120,9 +120,9 @@ class JwtToken
      */
     private function initHeader(): string
     {
-        // cf firebase/php-jwt 
+        // cf firebase/php-jwt
         $algs = ['sha512' => 'HS512'];
-        return base64_encode('{ "alg": "' . $algs[$this->algorithm]  . '","typ": "JWT"}');
+        return base64_encode('{ "alg": "' . $algs[$this->algorithm] . '","typ": "JWT"}');
     }
 
     /**
@@ -210,7 +210,6 @@ class JwtToken
 
     public function getUserFromToken($token): string
     {
-
         if (!isset($token)) {
             throw new \Exception('empty token');
         }
@@ -237,5 +236,4 @@ class JwtToken
 
         return $payloadJson->{'sub'};
     }
-
 }

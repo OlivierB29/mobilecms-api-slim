@@ -16,6 +16,5 @@ class MetadataGetAction extends CmsAction
     protected function action(): Response
     {
         return $this->respondWithData(JsonUtils::readJsonFile($this->getService()->getMetadataFileName($this->getParam('type'))));
-
     }
 }

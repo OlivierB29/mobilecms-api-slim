@@ -13,7 +13,6 @@ class IndexGetAction extends CmsAction
      */
     protected function action(): Response
     {
-
         return $this->withResponse($this->getService()->getAll($this->resolveArg('type') . '/index/index.json'));
     }
 }

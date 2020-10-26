@@ -15,10 +15,10 @@ use App\Application\Actions\Cms\ContentGetListAction;
 use App\Application\Actions\Cms\ContentDeleteByIdAction;
 
 use App\Application\Actions\File\BasicUploadGetAction;
-use App\Application\Actions\File\BasicUploadPostAction;  
+use App\Application\Actions\File\BasicUploadPostAction;
 use App\Application\Actions\File\DeleteAction;
-use App\Application\Actions\File\DeleteFilesAction;  
-use App\Application\Actions\File\DownloadAction;  
+use App\Application\Actions\File\DeleteFilesAction;
+use App\Application\Actions\File\DownloadAction;
 use App\Application\Actions\File\ThumbnailsAction;
 
 
@@ -70,14 +70,12 @@ return function (App $app) {
     });
 
     $app->group($root . $version . '/authapi', function (Group $group) {
-
         $group->get('/publicinfo/{id}', PublicInfoAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 
         $group->post('/changepassword', ChangePasswordAction::class);
-        $group->post('/resetpassword', ResetPasswordAction::class);        
+        $group->post('/resetpassword', ResetPasswordAction::class);
         $group->post('/register', RegisterAction::class);
-        
     });
 
 
@@ -101,7 +99,6 @@ return function (App $app) {
     });
 
     $app->group($root . $version . '/adminapi', function (Group $group) {
-        
         $group->get('/content', AdminTypesGetAction::class);
         $group->get('/metadata/{type}', MetadataAction::class);
         
@@ -134,8 +131,4 @@ return function (App $app) {
     $app->group($root . $version . '/cmsapi/template', function (Group $group) {
         $group->get('/{type}', TemplateGetAction::class);
     });
-
-
-
-
 };

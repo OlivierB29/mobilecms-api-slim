@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 use App\Infrastructure\Utils\MailUtils;
 
-
 final class MailUtilsTest extends TestCase
 {
     public function testHeaders()

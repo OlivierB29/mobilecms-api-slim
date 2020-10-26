@@ -2,14 +2,13 @@
 declare(strict_types=1);
 
 namespace App\Application\Actions\File;
+
 use Slim\Exception\HttpBadRequestException;//400
 use Slim\Exception\HttpNotFoundException;//404
 use Slim\Exception\HttpInternalServerErrorException;//500
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Infrastructure\Services\FileService;
-
-
 
 class BasicUploadPostAction extends FileAction
 {
@@ -18,7 +17,7 @@ class BasicUploadPostAction extends FileAction
      * {@inheritdoc}
      */
     protected function action(): Response
-    {         
+    {
         $response = $this->getDefaultResponse();
         $this->initConf();
         //get the full data of a single record
@@ -29,13 +28,12 @@ class BasicUploadPostAction extends FileAction
 
         $response->setResult($uploadResult);
                
-                return $this->withResponse( $response);
+        return $this->withResponse($response);
     }
 
 
     private function uploadFilesSlim($type, $id, $files): array
     {
-
         $result = [];
 
         
@@ -45,7 +43,6 @@ class BasicUploadPostAction extends FileAction
         
         // Basic upload verification
         foreach ($files as $fileControl) {
-            
             if (!$this->isAllowedExtension($fileControl->getClientFilename())) {
                 throw new HttpBadRequestException($this->request, 'forbidden file type');
             }
@@ -72,14 +69,13 @@ class BasicUploadPostAction extends FileAction
    
 
      
-                    chmod($destfile, $this->umask);
-                    $title = $file->getClientFilename();
-                    $url = $file->getClientFilename();
+                chmod($destfile, $this->umask);
+                $title = $file->getClientFilename();
+                $url = $file->getClientFilename();
 
-                    $fileResult = $this->getFileResponse($destfile, $title, $url);
+                $fileResult = $this->getFileResponse($destfile, $title, $url);
 
-                    array_push($result, $fileResult);
-
+                array_push($result, $fileResult);
             }
         }
 

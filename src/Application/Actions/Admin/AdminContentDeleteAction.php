@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
-
 
 class AdminContentDeleteAction extends AdminAction
 {
@@ -21,15 +19,15 @@ class AdminContentDeleteAction extends AdminAction
         $service = new ContentService($this->getPrivateDirPath());
         $this->checkConfiguration();
 
-                // delete a single record.
-                // eg : /mobilecmsapi/v1/content/calendar/1/foo/bar --> ['1', 'foo', 'bar']
-                $response = $service->deleteRecord($this->getParam('type'), $this->getParam('id'));
-                if ($response->getCode() === 200) {
-                    // rebuild index
-                    $response = $service->rebuildIndex($this->getParam('type'), self::EMAIL);
-                }
+        // delete a single record.
+        // eg : /mobilecmsapi/v1/content/calendar/1/foo/bar --> ['1', 'foo', 'bar']
+        $response = $service->deleteRecord($this->getParam('type'), $this->getParam('id'));
+        if ($response->getCode() === 200) {
+            // rebuild index
+            $response = $service->rebuildIndex($this->getParam('type'), self::EMAIL);
+        }
 
-                // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
-                return $this->withResponse( $response);
+        // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
+        return $this->withResponse($response);
     }
 }

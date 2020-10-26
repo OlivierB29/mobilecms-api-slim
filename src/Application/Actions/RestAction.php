@@ -17,8 +17,6 @@ use Slim\Exception\HttpForbiddenException;//403
 use Slim\Exception\HttpNotFoundException;//404
 use Slim\Exception\HttpInternalServerErrorException;//500
 
-
-
 abstract class RestAction extends Action
 {
 
@@ -32,7 +30,6 @@ abstract class RestAction extends Action
     public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
-
     }
 
 
@@ -97,27 +94,30 @@ abstract class RestAction extends Action
     /**
      * replace it later
      */
-    public function getParam(string $arg) : string {
+    public function getParam(string $arg) : string
+    {
         return $this->resolveArg($arg);
     }
     
   
     /**
      * replace it later
-     */  
+     */
     /*
     public function getRequestBody() : mixed {
         return $this->getFormData();
     }
 */
-    public function getRequestBody() {
+    public function getRequestBody()
+    {
         return $this->request->getParsedBody();
     }
-    public function getRequestBodyStr() : string {
+    public function getRequestBodyStr() : string
+    {
         return json_encode($this->request->getParsedBody());
     }
 
-        /**
+    /**
      * Initialize a default Response object.
      *
      * @return Response object
@@ -131,36 +131,36 @@ abstract class RestAction extends Action
         return $response;
     }
 
-          /**
+    /**
      * @param  array|object|null $data
      * @return Response
      */
     protected function withResponse(RestResponse $resp)
     {
-       // $this->slimException($request, $resp);
+        // $this->slimException($request, $resp);
         return $this->respondWithData($resp->getResult(), $resp->getCode());
     }
 
-/*
-    protected function slimException(ServerRequestInterface $request, RestResponse $response) {
-        switch ($response->getCode()) {
-            case 200:                
+    /*
+        protected function slimException(ServerRequestInterface $request, RestResponse $response) {
+            switch ($response->getCode()) {
+                case 200:
+                    break;
+                case 400:
+                  throw new HttpBadRequestException($request, $response->getError());
+                  break;
+                case 401:
+                  throw new HttpUnauthorizedException($request, $response->getError());
+                  break;
+                case 403:
+                    throw new HttpForbiddenException($request, $response->getError());
+                  break;
+                case 404:
+                    throw new HttpNotFoundException($request, $response->getError());
                 break;
-            case 400:
-              throw new HttpBadRequestException($request, $response->getError());
-              break;
-            case 401:
-              throw new HttpUnauthorizedException($request, $response->getError());
-              break;
-            case 403:
-                throw new HttpForbiddenException($request, $response->getError());
-              break;
-            case 404:
-                throw new HttpNotFoundException($request, $response->getError());
-            break;
-            default:
-            throw new HttpUnauthorizedException($request, $response->getError());;
-          } 
-    }
-    */
+                default:
+                throw new HttpUnauthorizedException($request, $response->getError());;
+              }
+        }
+        */
 }

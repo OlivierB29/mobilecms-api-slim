@@ -16,25 +16,25 @@ class ContentDeleteByIdAction extends CmsAction
      */
     protected function action(): Response
     {
-                //delete media
-                $fileservice = new FileService();
-                $mediadir = $fileservice->getRecordDirectoryWithoutRecord($this->getMediaDirPath(), $this->resolveArg('type'), $this->getParam('id'));
-                unset($fileservice);
-                if (\file_exists($mediadir)) {
-                    $fileutils = new FileUtils();
-                    $fileutils->deleteDir($mediadir);
-                }
+        //delete media
+        $fileservice = new FileService();
+        $mediadir = $fileservice->getRecordDirectoryWithoutRecord($this->getMediaDirPath(), $this->resolveArg('type'), $this->getParam('id'));
+        unset($fileservice);
+        if (\file_exists($mediadir)) {
+            $fileutils = new FileUtils();
+            $fileutils->deleteDir($mediadir);
+        }
 
-                //delete record
-                $response = $this->getService()->deleteRecord($this->resolveArg('type'), $this->resolveArg('id'));
-                // step 1 : update Record
+        //delete record
+        $response = $this->getService()->deleteRecord($this->resolveArg('type'), $this->resolveArg('id'));
+        // step 1 : update Record
 
-                if ($response->getCode() === 200) {
-                    // step 2 : publish to index
-                    $response = $this->getService()->rebuildIndex($this->resolveArg('type'), self::ID);
-                }
+        if ($response->getCode() === 200) {
+            // step 2 : publish to index
+            $response = $this->getService()->rebuildIndex($this->resolveArg('type'), self::ID);
+        }
 
-                // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
-                return $this->withResponse( $response);
+        // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
+        return $this->withResponse($response);
     }
 }

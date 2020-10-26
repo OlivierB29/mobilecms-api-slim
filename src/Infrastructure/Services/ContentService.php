@@ -1,4 +1,5 @@
 <?php namespace App\Infrastructure\Services;
+
 use App\Infrastructure\Utils\Logger;
 use App\Infrastructure\Utils\JsonUtils;
 
@@ -8,6 +9,7 @@ use App\Application\Actions\ActionPayload;
 use App\Infrastructure\Rest\Response;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Slim\Psr7\Response as ResponseImpl;
+
 /**
  * Function used for sorting.
  *
@@ -72,7 +74,6 @@ class ContentService
     public function __construct(string $databasedir)
     {
         $this->databasedir = $databasedir;
-
     }
 
     /**
@@ -456,7 +457,7 @@ class ContentService
      */
     public function publishById(string $type, string $keyname, string $keyvalue): Response
     {
-      //  $this->logger->info('publishById' . $type . ',' . $keyname . ',' . $keyvalue);
+        //  $this->logger->info('publishById' . $type . ',' . $keyname . ',' . $keyvalue);
         
         $response = $this->getDefaultResponse();
 
@@ -535,7 +536,6 @@ class ContentService
     {
         $conf = new Properties();
         if (\file_exists($this->getConfFileName($type))) {
-            
             $conf->loadConf($this->getConfFileName($type));
         }
         
@@ -666,7 +666,6 @@ class ContentService
         } else {
             usort($data, compareIndexReverse($sortby));
         }
-
     }
 
     /**
@@ -745,9 +744,4 @@ class ContentService
 
 
     /*----------------------------------------------------- */
-
-
-  
-
-
 }

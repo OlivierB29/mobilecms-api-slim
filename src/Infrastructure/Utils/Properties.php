@@ -126,11 +126,12 @@ class Properties
         return self::$instance;
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         return self::$instance;
     }
 
-        /**
+    /**
      * Get main working directory.
      *
      * @return string rootDir main working directory
@@ -140,7 +141,7 @@ class Properties
         return $this->rootDir;
     }
 
-        /**
+    /**
      * Get public directory.
      *
      * @return string publicdir main public directory

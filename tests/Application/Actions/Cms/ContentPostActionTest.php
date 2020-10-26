@@ -15,9 +15,6 @@ use App\Infrastructure\Utils\Properties;
 
 class ContentPostActionTest extends AuthApiTest
 {
-
-
-
     public function testPostBbCode()
     {
         $app = $this->getAppInstance();

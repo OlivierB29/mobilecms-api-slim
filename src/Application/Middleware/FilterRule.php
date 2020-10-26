@@ -9,12 +9,13 @@ namespace App\Application\Middleware;
 
 
 use Psr\Http\Message\ServerRequestInterface;
+
 // wtf ???
 // Error: Interface 'Psr\Http\Message\RuleInterface' not found
 // use Psr\Http\Message\RuleInterface;
 // implements RuleInterface
 
-class FilterRule 
+class FilterRule
 {
 
 
@@ -58,7 +59,8 @@ class FilterRule
         return true;
     }
 
-    public function isIgnore(ServerRequestInterface $request): bool{
+    public function isIgnore(ServerRequestInterface $request): bool
+    {
         $uri = "/" . $request->getUri()->getPath();
         $uri = preg_replace("#/+#", "/", $uri);
 
@@ -71,5 +73,4 @@ class FilterRule
         }
         return true;
     }
-    
 }

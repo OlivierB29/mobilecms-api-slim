@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Tests\Application\Actions\Middleware;
+
 use Tests\TestCase;
 use App\Infrastructure\Rest\JwtToken;
 

@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
-
 
 class ChangePasswordAction extends AuthAction
 {
@@ -26,23 +24,23 @@ class ChangePasswordAction extends AuthAction
 
 
        
-            // login and get token
-            // eg : { "user": "test@example.com", "password":"Sample#123456"}
+        // login and get token
+        // eg : { "user": "test@example.com", "password":"Sample#123456"}
 
-            $logindata = $this->getRequestBody();
+        $logindata = $this->getRequestBody();
 
-            //TODO : user contains either email of name
+        //TODO : user contains either email of name
 
-            // free variables before response
-            $response = $service->changePassword(
-                $this->getUser($logindata),
-                $logindata->{'password'},
-                $logindata->{'newpassword'}
-            );
+        // free variables before response
+        $response = $service->changePassword(
+            $this->getUser($logindata),
+            $logindata->{'password'},
+            $logindata->{'newpassword'}
+        );
 
-            unset($logindata);
+        unset($logindata);
         
 
-                return $this->withResponse( $response);
+        return $this->withResponse($response);
     }
 }

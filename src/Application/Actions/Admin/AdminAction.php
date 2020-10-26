@@ -17,7 +17,7 @@ abstract class AdminAction extends RestAction
 
     const EMAIL = 'email';
 
-    protected $role = 'admin'; 
+    protected $role = 'admin';
 
 
     /**
@@ -64,6 +64,4 @@ abstract class AdminAction extends RestAction
             // @codeCoverageIgnoreEnd
         }
     }
-
-
 }

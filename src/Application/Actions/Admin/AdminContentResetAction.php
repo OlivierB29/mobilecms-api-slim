@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
@@ -24,27 +23,27 @@ class AdminContentResetAction extends AdminAction
         $service = new ContentService($this->getPrivateDirPath());
         $authService = new AuthService($this->getPrivateDirPath() . '/users');
 
-                // save a record and update the index. eg : /mobilecmsapi/v1/content/calendar
-                // step 1 : update Record
+        // save a record and update the index. eg : /mobilecmsapi/v1/content/calendar
+        // step 1 : update Record
 
-                // update password if needed
-                $user = $this->getRequestBody();
-                if (isset($user->{'newpassword'})) {
-                    $response = $authService->resetPassword($user->{'email'}, $user->{'newpassword'});
-                } else {
-                    $putResponse = $service->update(
-                        $this->getParam('type'),
-                        self::EMAIL,
-                        $this->getUserResponse($user)
-                    );
+        // update password if needed
+        $user = $this->getRequestBody();
+        if (isset($user->{'newpassword'})) {
+            $response = $authService->resetPassword($user->{'email'}, $user->{'newpassword'});
+        } else {
+            $putResponse = $service->update(
+                $this->getParam('type'),
+                self::EMAIL,
+                $this->getUserResponse($user)
+            );
 
-                    $myobjectJson = $putResponse->getResult();
-                    unset($putResponse);
-                    // step 2 : publish to index
-                    $id = $myobjectJson->{self::EMAIL};
-                    unset($myobjectJson);
-                    $response = $service->publishById($this->getParam('type'), self::EMAIL, $id);
-                }
-                return $this->withResponse( $response);
+            $myobjectJson = $putResponse->getResult();
+            unset($putResponse);
+            // step 2 : publish to index
+            $id = $myobjectJson->{self::EMAIL};
+            unset($myobjectJson);
+            $response = $service->publishById($this->getParam('type'), self::EMAIL, $id);
+        }
+        return $this->withResponse($response);
     }
 }

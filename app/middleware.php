@@ -19,8 +19,7 @@ use App\Application\Middleware\CustomJwtAuthentication;
 use App\Application\Middleware\AuthorizeRule;
 
 return function (App $app) {
-
-$container = $app->getContainer();
+    $container = $app->getContainer();
 
     $app->add(SessionMiddleware::class);
 
@@ -61,17 +60,17 @@ $container = $app->getContainer();
         // }
     ]));
     
-/*
-    $app->add(new Tuupola\Middleware\JwtAuthentication([
-        "rules" => [
-            new Tuupola\Middleware\JwtAuthentication\RequestPathRule([
-                "path" => "/",
-                "ignore" => []
-            ]),
-            new Tuupola\Middleware\JwtAuthentication\RequestMethodRule([
-                "ignore" => ["OPTIONS"]
-            ])
-        ]
-    ]));
-    */
+    /*
+        $app->add(new Tuupola\Middleware\JwtAuthentication([
+            "rules" => [
+                new Tuupola\Middleware\JwtAuthentication\RequestPathRule([
+                    "path" => "/",
+                    "ignore" => []
+                ]),
+                new Tuupola\Middleware\JwtAuthentication\RequestMethodRule([
+                    "ignore" => ["OPTIONS"]
+                ])
+            ]
+        ]));
+        */
 };

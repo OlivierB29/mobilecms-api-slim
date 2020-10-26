@@ -60,7 +60,6 @@ class TestCase extends PHPUnit_TestCase
         $routes($app);
 
         return $app;
-        
     }
 
 
@@ -90,5 +89,4 @@ class TestCase extends PHPUnit_TestCase
 
         return new SlimRequest($method, $uri, $h, $cookies, $serverParams, $stream);
     }
-
 }

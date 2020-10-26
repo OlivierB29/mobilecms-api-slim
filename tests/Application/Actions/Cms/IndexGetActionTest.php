@@ -15,9 +15,6 @@ use App\Infrastructure\Utils\Properties;
 
 class IndexGetActionTest extends AuthApiTest
 {
-
-
-
     public function testGetIndex()
     {
         $app = $this->getAppInstance();
@@ -49,7 +46,7 @@ class IndexGetActionTest extends AuthApiTest
         $responseFactory = $app->getResponseFactory();
 
         $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
-        $errorMiddleware = new ErrorMiddleware($callableResolver, $responseFactory, true, false ,false);
+        $errorMiddleware = new ErrorMiddleware($callableResolver, $responseFactory, true, false, false);
         $errorMiddleware->setDefaultErrorHandler($errorHandler);
 
         $app->add($errorMiddleware);
@@ -63,6 +60,5 @@ class IndexGetActionTest extends AuthApiTest
         $expectedPayload = new ActionPayload(500, null, $expectedError);
 
         $this->assertResponse($expectedPayload, $response);
-
     }
 }

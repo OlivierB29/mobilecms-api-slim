@@ -1,8 +1,6 @@
 <?php
 namespace Tests;
 
-
-
 use App\Infrastructure\Services\AuthService;
 
 abstract class AuthApiTest extends ApiTest
@@ -48,7 +46,6 @@ abstract class AuthApiTest extends ApiTest
 
         $this->memory();
         $this->setEditor();
-        
     }
 
     protected function setGuest()
