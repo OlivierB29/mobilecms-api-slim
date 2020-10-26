@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
-
+use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;//400
 use Slim\Exception\HttpUnauthorizedException;//401
@@ -135,7 +135,7 @@ abstract class RestAction extends Action
      * @param  array|object|null $data
      * @return Response
      */
-    protected function withResponse(RestResponse $resp)
+    protected function withResponse(RestResponse $resp): Response
     {
         // $this->slimException($request, $resp);
         return $this->respondWithData($resp->getResult(), $resp->getCode());
