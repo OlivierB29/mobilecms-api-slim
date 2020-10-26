@@ -70,7 +70,7 @@ return function (App $app) {
     });
 
     $app->group($root . $version . '/authapi', function (Group $group) {
-     //   $group->options('/authenticate', DefaultOptionsAction::class);
+
         $group->get('/publicinfo/{id}', PublicInfoAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 

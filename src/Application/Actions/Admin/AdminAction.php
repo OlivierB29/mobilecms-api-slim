@@ -65,15 +65,5 @@ abstract class AdminAction extends RestAction
         }
     }
 
-    /**
-     * Get file info.
-     *
-     * @return Response object
-     */
-    protected function metadata() : Response
-    {
 
-
-        return $response;
-    }
 }
