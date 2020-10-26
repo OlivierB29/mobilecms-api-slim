@@ -17,8 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class AuthorizeRule 
 {
 
-    private static $EDITORROLE = "editor";
-    private static $ADMINROLE = "admin";
+   
 
     private $userrole = null;
 
@@ -61,7 +60,7 @@ class AuthorizeRule
         foreach ((array)$this->options["editorpath"] as $path) {
             $path = rtrim($path, "/");
             if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->userrole, self::$EDITORROLE);
+                $result = $this->isPermitted($this->userrole, "editor");
                 return $result;
             }
         }
@@ -69,7 +68,7 @@ class AuthorizeRule
         foreach ((array)$this->options["adminpath"] as $path) {
             $path = rtrim($path, "/");
                 if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->userrole, self::$ADMINROLE);
+                $result = $this->isPermitted($this->userrole, "admin");
                 return $result;
             }
         }
@@ -92,11 +91,11 @@ class AuthorizeRule
     {
         $result = false;
         if (!empty($userRole) && !empty($requiredRole)) {
-            if ($requiredRole === self::$EDITORROLE) {
+            if ($requiredRole === "editor") {
                 $result = $this->isPermittedEditor($userRole);
             }
 
-            if ($requiredRole === self::$ADMINROLE) {
+            if ($requiredRole === "admin") {
                 $result = $this->isPermittedAdmin($userRole);
             }
         }
@@ -114,10 +113,10 @@ class AuthorizeRule
     private function isPermittedEditor(string $userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty(self::$EDITORROLE) && !empty(self::$ADMINROLE) ) {
-            if ($userRole === self::$EDITORROLE) {
+        if (!empty($userRole) && !empty("editor") && !empty("admin") ) {
+            if ($userRole === "editor") {
                 $result = true;
-            } elseif ($userRole === self::$ADMINROLE) {
+            } elseif ($userRole === "admin") {
                 $result = true;
             }
         }
@@ -135,8 +134,8 @@ class AuthorizeRule
     private function isPermittedAdmin($userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty(self::$ADMINROLE) ) {
-            if ($userRole === self::$ADMINROLE) {
+        if (!empty($userRole) && !empty("admin") ) {
+            if ($userRole === "admin") {
                 $result = true;
             }
         }

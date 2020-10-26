@@ -299,6 +299,18 @@ final class CmsApiTest extends AuthApiTest
         $this->assertJsonStringEqualsJsonString($index_data, $response->getEncodedResult());
     }
 
+    public function testPostRebuildIndex()
+    {
+        $this->path = '/mobilecmsapi/v1/cmsapi/index/calendar' . $this->requestparams;
+
+
+        $response = $this->request('POST', $this->path);
+
+        $this->assertEquals(200, $response->getCode());
+
+ 
+    }
+
     public function testGetMetadata()
     {
         $this->path = '/mobilecmsapi/v1/cmsapi/metadata/calendar';
