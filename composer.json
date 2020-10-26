@@ -20,7 +20,6 @@
         "php": "^7.2",
         "ext-json": "*",
         "monolog/monolog": "^2.1",
-        "php-coveralls/php-coveralls": "^2.2.0",
         "php-di/php-di": "^6.2",
         "slim/psr7": "^1.1",
         "slim/slim": "^4.5",
@@ -30,6 +29,7 @@
         "jangregor/phpstan-prophecy": "^0.8.0",
         "phpstan/extension-installer": "^1.0.4",
         "phpstan/phpstan": "^0.12.37",
+        "php-coveralls/php-coveralls": "^2.2.0",
         "phpunit/phpunit": "^8"
     },
     "config": {
