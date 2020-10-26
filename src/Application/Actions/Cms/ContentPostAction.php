@@ -17,19 +17,19 @@ class ContentPostAction extends CmsAction
 
                 // step 1 : update Record
 
-                $body = $this->request->getParsedBody();
-                $putResponse = $this->getService()->post($this->getParam('type'), self::ID, $body );
-                $myobjectJson = $putResponse->getResult();
-                unset($putResponse);
+        $body = $this->request->getParsedBody();
+        $putResponse = $this->getService()->post($this->getParam('type'), self::ID, $body);
+        $myobjectJson = $putResponse->getResult();
+        unset($putResponse);
 
-                // step 2 : publish to index
-                $id = $myobjectJson->{self::ID};
-                unset($myobjectJson);
+        // step 2 : publish to index
+        $id = $myobjectJson->{self::ID};
+        unset($myobjectJson);
                 
-                // issue : sometimes, the index is not refreshed
-                $response = $this->getService()->publishById($this->getParam('type'), self::ID, $id);
-                // $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
+        // issue : sometimes, the index is not refreshed
+        $response = $this->getService()->publishById($this->getParam('type'), self::ID, $id);
+        // $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
 
-        return $this->withResponse( $response);
+        return $this->withResponse($response);
     }
 }

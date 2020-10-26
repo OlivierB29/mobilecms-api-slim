@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
-
 
 class PublicInfoAction extends AuthAction
 {
@@ -27,9 +25,9 @@ class PublicInfoAction extends AuthAction
 
             
 
-            $response = $service->getPublicInfo($this->getParam('id'));
-            unset($user);
+        $response = $service->getPublicInfo($this->getParam('id'));
+        unset($user);
         
-                return $this->withResponse( $response);
+        return $this->withResponse($response);
     }
 }

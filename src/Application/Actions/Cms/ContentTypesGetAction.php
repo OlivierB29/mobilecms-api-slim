@@ -13,7 +13,6 @@ class ContentTypesGetAction extends CmsAction
      */
     protected function action(): Response
     {
-
         return $this->respondWithData($this->getService()->options('types.json'));
     }
 }

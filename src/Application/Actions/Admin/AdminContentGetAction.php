@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
@@ -31,6 +30,6 @@ class AdminContentGetAction extends AdminAction
             $response->setCode(200);
             $response->setResult($this->getUserResponse($tmpResponse->getResult()));
         }
-                return $this->withResponse( $response);
+        return $this->withResponse($response);
     }
 }

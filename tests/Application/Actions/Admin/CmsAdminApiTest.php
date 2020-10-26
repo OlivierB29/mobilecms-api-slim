@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 namespace Tests\Application\Actions\Cms;
+
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
 use App\Application\Handlers\HttpErrorHandler;
@@ -16,7 +17,6 @@ use App\Infrastructure\Utils\FileUtils;
 
 final class CmsAdminApiTest extends AuthApiTest
 {
-
     protected function setUp(): void
     {
         parent::setUp();

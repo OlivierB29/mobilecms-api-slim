@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 namespace Tests\Application\Actions\Cms;
+
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
 use App\Application\Handlers\HttpErrorHandler;
@@ -188,7 +189,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarRecord()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/1'. $this->requestparams;
+        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/1' . $this->requestparams;
 
 
         $response = $this->request('GET', $this->path);
@@ -199,7 +200,7 @@ final class CmsApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
         $this->assertTrue($response->getResult() != null);
-        if(array_key_exists('id', $response->getResult())) {
+        if (array_key_exists('id', $response->getResult())) {
             $this->assertTrue($response->getResult()->{'id'} === '1');
         }
        
@@ -307,8 +308,6 @@ final class CmsApiTest extends AuthApiTest
         $response = $this->request('POST', $this->path);
 
         $this->assertEquals(200, $response->getCode());
-
- 
     }
 
     public function testGetMetadata()

@@ -13,10 +13,6 @@ use App\Infrastructure\Services\AuthService;
 
 abstract class AuthAction extends RestAction
 {
-
-
-
-
     public function getUser($logindata): string
     {
         $result = null;

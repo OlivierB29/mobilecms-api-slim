@@ -6,7 +6,6 @@ namespace Tests\Infrastructure\Services;
 use PHPUnit\Framework\TestCase;
 use \App\Infrastructure\Services\AuthService;
 
-
 final class AuthServiceTest extends TestCase
 {
     private $service;

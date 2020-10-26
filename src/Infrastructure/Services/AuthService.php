@@ -1,4 +1,5 @@
 <?php namespace App\Infrastructure\Services;
+
 use  App\Infrastructure\Utils\JsonUtils;
 use  App\Infrastructure\Rest\Response;
 use  App\Infrastructure\Rest\JwtToken;
@@ -122,12 +123,9 @@ class AuthService
             $token = null;
             $jwt = new JwtToken();
             if ('php-jwt' === $this->jwtImpl) {
-
-
                 $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
                 
                 $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
-
             } else {
                 // old jwt impl
   
@@ -216,12 +214,10 @@ class AuthService
 
     public function getJsonUserFromToken($token): \stdClass
     {
-
-
         $jwt = new JwtToken();
 
        
-        return $this->service->getJsonUser( $jwt->getUserFromToken($token));
+        return $this->service->getJsonUser($jwt->getUserFromToken($token));
     }
 
     /**
@@ -517,7 +513,8 @@ class AuthService
         return $error_msg;
     }
 
-    public function setJwtImpl(string $jwt) {
+    public function setJwtImpl(string $jwt)
+    {
         $this->jwtImpl = $jwt;
     }
 }

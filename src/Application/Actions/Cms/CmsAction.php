@@ -25,7 +25,7 @@ abstract class CmsAction extends RestAction
 
 
 
-            /**
+    /**
      * Get a service
      */
     protected function getService(): ContentService
@@ -36,7 +36,4 @@ abstract class CmsAction extends RestAction
         
         return $this->service;
     }
-
-
-
 }

@@ -9,16 +9,14 @@ namespace App\Application\Middleware;
 
 
 use Psr\Http\Message\ServerRequestInterface;
+
 // wtf ???
 // Error: Interface 'Psr\Http\Message\RuleInterface' not found
 // use Psr\Http\Message\RuleInterface;
 // implements RuleInterface
 
-class AuthorizeRule 
+class AuthorizeRule
 {
-
-   
-
     private $userrole = null;
 
     /**
@@ -64,10 +62,10 @@ class AuthorizeRule
                 return $result;
             }
         }
-                /* Otherwise check if path matches and we should authenticate. */
+        /* Otherwise check if path matches and we should authenticate. */
         foreach ((array)$this->options["adminpath"] as $path) {
             $path = rtrim($path, "/");
-                if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
+            if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
                 $result = $this->isPermitted($this->userrole, "admin");
                 return $result;
             }
@@ -79,7 +77,7 @@ class AuthorizeRule
 
 
 
-      /**
+    /**
      * Control if the current user has access to API.
      *
      * @param string $userRole         object
@@ -113,7 +111,7 @@ class AuthorizeRule
     private function isPermittedEditor(string $userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty("editor") && !empty("admin") ) {
+        if (!empty($userRole) && !empty("editor") && !empty("admin")) {
             if ($userRole === "editor") {
                 $result = true;
             } elseif ($userRole === "admin") {
@@ -134,7 +132,7 @@ class AuthorizeRule
     private function isPermittedAdmin($userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty("admin") ) {
+        if (!empty($userRole) && !empty("admin")) {
             if ($userRole === "admin") {
                 $result = true;
             }
@@ -143,8 +141,8 @@ class AuthorizeRule
         return $result;
     }
 
-    public function setUserRole(string $role) {
+    public function setUserRole(string $role)
+    {
         $this->userrole = $role;
     }
-
 }

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 use App\Infrastructure\Utils\ImageUtils;
 
-
 final class ImageUtilsTest extends TestCase
 {
     public function testResizeJpeg()

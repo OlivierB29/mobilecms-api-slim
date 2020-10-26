@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Tests\Application\Actions\Middleware;
+
 use Tests\TestCase;
 use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
@@ -23,8 +24,6 @@ final class JWTTest extends TestCase
 
     public function testBasic()
     {
-
-
         $username = 'test';
         $email = 'test@example.com';
         $role = 'guest';
@@ -59,23 +58,22 @@ final class JWTTest extends TestCase
 
 
         $payload = $this->util->initPayload($username, $email, $role);
-        
+
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
-        
+
         $this->assertTrue(
             $this->util->verifyToken($token, $key)
         );
         //$jwt, $key, array $allowed_algs = array()
         $jwtPayload = JWT::decode($phpjwtToken, $key, $this->allowed_algs);
-        
-        
+
+
         $this->assertEquals($phpjwtToken, $jwtPayload);
     }
 */
     public function testVerifyWrongSecret()
     {
-
         $username = 'test';
         $email = 'test@example.com';
         $role = 'guest';
@@ -98,9 +96,5 @@ final class JWTTest extends TestCase
         $this->expectException(\Exception::class);
 
         JWT::decode($phpjwtToken, 'wrongsecret', $this->allowed_algs);
-        
-
-
-
     }
 }

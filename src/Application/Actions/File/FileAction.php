@@ -49,7 +49,7 @@ abstract class FileAction extends RestAction
 
 
 
-            /**
+    /**
      * Get a service
      */
     protected function getService(): FileService
@@ -68,8 +68,6 @@ abstract class FileAction extends RestAction
      */
     public function initConf()
     {
-
-
         $this->media = $this->getConf()->{'media'};
         $this->thumbnailsizes = $this->getConf()->{'thumbnailsizes'};
         // width 214 * height 82
@@ -305,6 +303,4 @@ abstract class FileAction extends RestAction
         }
         return $result;
     }
-
-
 }

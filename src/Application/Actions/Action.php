@@ -59,7 +59,7 @@ abstract class Action
             return $this->action();
         } catch (DomainRecordNotFoundException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new HttpInternalServerErrorException($this->request, $e->getMessage());
         }
     }
@@ -107,7 +107,6 @@ abstract class Action
      */
     protected function respondWithData($data = null, int $statusCode = 200): Response
     {
-
         $payload = new ActionPayload($statusCode, $data);
 
         return $this->respond($payload);
@@ -130,10 +129,9 @@ abstract class Action
     }
 
     //--------------------------------------------------------------------------------------
-        /** mobilecms patch */
-        protected function getFormData()
-        {
-            return $this->request->getBody();
-        }
-    
+    /** mobilecms patch */
+    protected function getFormData()
+    {
+        return $this->request->getBody();
+    }
 }

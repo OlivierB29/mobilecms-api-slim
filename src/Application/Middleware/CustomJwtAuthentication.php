@@ -32,7 +32,6 @@ SOFTWARE.
 
 namespace App\Application\Middleware;
 
-
 use Closure;
 use DomainException;
 use InvalidArgumentException;
@@ -136,18 +135,17 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-
         $scheme = $request->getUri()->getScheme();
         $host = $request->getUri()->getHost();
 
-                    // CUSTOM start
-                    // TODO : with shouldAuthenticate
-                    $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);          
-                    $rule = new FilterRule($authorizeOptions);
-                    if (false === $rule->isIgnore($request)) {
-                        return $handler->handle($request);
-                    }
-                    // CUSTOM end
+        // CUSTOM start
+        // TODO : with shouldAuthenticate
+        $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);
+        $rule = new FilterRule($authorizeOptions);
+        if (false === $rule->isIgnore($request)) {
+            return $handler->handle($request);
+        }
+        // CUSTOM end
 
         /* If rules say we should not authenticate call next and return. */
         if (false === $this->shouldAuthenticate($request)) {

@@ -12,6 +12,7 @@ use Slim\Psr7\Uri;
 use App\Application\Actions\ActionPayload;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request;
+
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 
 abstract class ApiTest extends TestCase
@@ -32,7 +33,7 @@ abstract class ApiTest extends TestCase
 
     protected function setUp(): void
     {
-        Properties::init(__DIR__ . '/../tests-data', __DIR__ .'/conf.json');
+        Properties::init(__DIR__ . '/../tests-data', __DIR__ . '/conf.json');
 
         $this->path='';
         $this->headers=['HTTP_ACCEPT' => 'application/json'];
@@ -41,7 +42,6 @@ abstract class ApiTest extends TestCase
         $this->GET=[];
         $this->POST=[];
         $this->API = new FakeApi();
-
     }
 
     protected function memory()
@@ -55,9 +55,9 @@ abstract class ApiTest extends TestCase
 
     protected function printError(Response $response)
     {
-      /*  if ($response->getCode() != 200) {
-            echo 'ERROR ' . $response->getCode() . ' : ' . $response->getEncodedResult();
-        }*/
+        /*  if ($response->getCode() != 200) {
+              echo 'ERROR ' . $response->getCode() . ' : ' . $response->getEncodedResult();
+          }*/
     }
 
     protected function fileRequest($verb, $pathArg, $files): Response
@@ -71,20 +71,18 @@ abstract class ApiTest extends TestCase
         }
 
         // request with verb and path
-       // $token = 'TEST';
-      //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
-      if(\count($files)) {
-        $cookies = [];
-        $serverParams = []; 
-        $request = $this->createFilesRequest($verb, $path, $this->headers,$cookies,$serverParams , $files);
-        
-      } else {
-        $request = $this->createRequest($verb, $path, $this->headers);
-      }
+        // $token = 'TEST';
+        //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
+        if (\count($files)) {
+            $cookies = [];
+            $serverParams = [];
+            $request = $this->createFilesRequest($verb, $path, $this->headers, $cookies, $serverParams, $files);
+        } else {
+            $request = $this->createRequest($verb, $path, $this->headers);
+        }
         
         // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
-
             $contents = \json_decode($this->POST['requestbody']);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $request = $request->withParsedBody($contents);
@@ -101,11 +99,9 @@ abstract class ApiTest extends TestCase
         $response = $app->handle($request);
 
         return $this->toOldResponse($response);
-
-
     }
 
-        /**
+    /**
      * execute request throw slim, using previous class Response
      */
     protected function request($verb, $pathArg): Response
@@ -119,15 +115,14 @@ abstract class ApiTest extends TestCase
         }
 
         // request with verb and path
-       // $token = 'TEST';
-      //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
+        // $token = 'TEST';
+        //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
 
         $request = $this->createRequest($verb, $path, $this->headers);
  
         
         // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
-
             $contents = \json_decode($this->POST['requestbody']);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $request = $request->withParsedBody($contents);
@@ -144,15 +139,14 @@ abstract class ApiTest extends TestCase
         $response = $app->handle($request);
 
         return $this->toOldResponse($response);
-
-
     }
 
 
     /**
      * convert a PSR to the previous Response class
      */
-    protected function toOldResponse(ResponseInterface $psrResponse ) : Response {
+    protected function toOldResponse(ResponseInterface $psrResponse) : Response
+    {
         $result = new Response();
         $result->setCode($psrResponse->getStatusCode());
 
@@ -170,12 +164,14 @@ abstract class ApiTest extends TestCase
     }
 
 
-    protected function getPublicFile(string $file) : string {
+    protected function getPublicFile(string $file) : string
+    {
         return file_get_contents(Properties::getInstance()->getPublicDirPath() . '/' . $file);
     }
 
-    protected function assertResponse(ActionPayload $expected, ResponseInterface $actual){
-        if ($expected->getData() != null ) {
+    protected function assertResponse(ActionPayload $expected, ResponseInterface $actual)
+    {
+        if ($expected->getData() != null) {
             $jsonResponse = \json_decode((string) $actual->getBody());
 
             if (\array_key_exists('data', $jsonResponse)) {
@@ -183,7 +179,6 @@ abstract class ApiTest extends TestCase
     
                 $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
             }
-
         }
 
         if ($expected->getError()  != null) {
@@ -193,7 +188,7 @@ abstract class ApiTest extends TestCase
         $this->assertEquals($expected->getStatusCode(), $actual->getStatusCode());
     }
 
-        /**
+    /**
     * get JSON conf
     * @return \stdClass JSON conf
     */
@@ -239,13 +234,14 @@ abstract class ApiTest extends TestCase
 
     // UploadedFileInterface[]
 
-    protected function toUploadedFileInterface(array $files) : array {
+    protected function toUploadedFileInterface(array $files) : array
+    {
         $result = [];
-/*
-        $files = [
-        ['name'=>$filename,'type'=>'application/pdf','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>24612]
-        ];
-*/
+        /*
+                $files = [
+                ['name'=>$filename,'type'=>'application/pdf','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>24612]
+                ];
+        */
         $factory = new UploadedFileFactory();
         $streamFactory = new StreamFactory();
         foreach ($files as $file) {
@@ -258,12 +254,12 @@ abstract class ApiTest extends TestCase
             $clientMediaType = $file['type'];
             $uploadedFile = $factory->createUploadedFile(
                 $stream,
-                $size ,
+                $size,
                 $error,
-                $clientFilename ,
-                $clientMediaType 
+                $clientFilename,
+                $clientMediaType
             );
-            array_push($result , $uploadedFile);
+            array_push($result, $uploadedFile);
         }
         
         return $result;

@@ -6,8 +6,6 @@ namespace Tests\Infrastructure\Services;
 use PHPUnit\Framework\TestCase;
 use \App\Infrastructure\Services\FileService;
 
-
-
 final class FileServiceTest extends TestCase
 {
     private $dir = 'tests-data/fileservice';
