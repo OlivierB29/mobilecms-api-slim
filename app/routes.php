@@ -48,10 +48,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+use App\ApiConstants;
 
 return function (App $app) {
-    $root = '/mobilecmsapi';
-    $version = '/v1';
+
 
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         // CORS Pre-Flight OPTIONS Request Handler
@@ -62,7 +62,7 @@ return function (App $app) {
         $response->getBody()->write('');
         return $response;
     });
-    $app->group($root . $version . '/cmsapi/status', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/status', function (Group $group) {
         $group->get('', StatusGetAction::class);
     });
     $app->group('/debugapi', function (Group $group) {
@@ -70,7 +70,7 @@ return function (App $app) {
         $group->get('/{id}', ViewUserAction::class);
     });
 
-    $app->group($root . $version . '/authapi', function (Group $group) {
+    $app->group(ApiConstants::API . '/authapi', function (Group $group) {
         $group->get('/publicinfo/{id}', PublicInfoAction::class);
         $group->post('/publicinfo', PublicInfoPostAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
@@ -81,18 +81,18 @@ return function (App $app) {
     });
 
 
-    $app->group($root . $version . '/cmsapi/content', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/content', function (Group $group) {
         $group->get('/{type}/{id}', ContentGetByIdAction::class);
         $group->get('', ContentTypesGetAction::class);
         $group->delete('/{type}/{id}', ContentDeleteByIdAction::class);
         $group->get('/{type}', ContentGetListAction::class);
         $group->post('/{type}', ContentPostAction::class);
     });
-    $app->group($root . $version . '/cmsapi/deletelist', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/deletelist', function (Group $group) {
         $group->post('/{type}', DeleteListAction::class);
     });
 
-    $app->group($root . $version . '/fileapi', function (Group $group) {
+    $app->group(ApiConstants::API . '/fileapi', function (Group $group) {
         $group->get('/basicupload/{type}/{id}', BasicUploadGetAction::class);
         $group->post('/basicupload/{type}/{id}', BasicUploadPostAction::class);
         $group->post('/delete/{type}/{id}', DeleteAction::class);
@@ -100,7 +100,7 @@ return function (App $app) {
         $group->post('/thumbnails/{type}/{id}', ThumbnailsAction::class);
     });
 
-    $app->group($root . $version . '/adminapi', function (Group $group) {
+    $app->group(ApiConstants::API . '/adminapi', function (Group $group) {
         $group->get('/content', AdminTypesGetAction::class);
         $group->get('/metadata/{type}', MetadataAction::class);
         
@@ -120,17 +120,17 @@ return function (App $app) {
         $group->get('/index/{type}', AdminIndexGetAction::class);
     });
 
-    $app->group($root . $version . '/cmsapi/index', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/index', function (Group $group) {
         $group->get('/{type}', IndexGetAction::class);
         $group->post('/{type}', IndexPostAction::class);
     });
 
 
 
-    $app->group($root . $version . '/cmsapi/metadata', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/metadata', function (Group $group) {
         $group->get('/{type}', MetadataGetAction::class);
     });
-    $app->group($root . $version . '/cmsapi/template', function (Group $group) {
+    $app->group(ApiConstants::API . '/cmsapi/template', function (Group $group) {
         $group->get('/{type}', TemplateGetAction::class);
     });
 };

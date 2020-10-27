@@ -18,6 +18,7 @@ use App\Application\Middleware\CustomJwtAuthentication;
 
 use App\Application\Middleware\AuthorizeRule;
 
+
 return function (App $app) {
     $container = $app->getContainer();
 

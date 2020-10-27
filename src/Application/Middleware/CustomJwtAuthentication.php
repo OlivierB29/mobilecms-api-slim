@@ -56,6 +56,7 @@ use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\JwtToken;
 use Slim\Exception\HttpForbiddenException;
+use App\ApiConstants;
 
 class CustomJwtAuthentication implements MiddlewareInterface
 {
@@ -98,12 +99,16 @@ class CustomJwtAuthentication implements MiddlewareInterface
         "error" => null
     ];
 
+    //CUSTOM start
+    
     private $defaultAuthorizeOptions = [
         "userrole" => "",
-        "editorpath" => ["/mobilecmsapi/v1/cmsapi", "/mobilecmsapi/v1/fileapi"],
-        "adminpath" => ["/mobilecmsapi/v1/adminapi"],
-        "ignore" => ["/mobilecmsapi/v1/authapi", "/debugapi"]
+        "editorpath" => [ApiConstants::API . "/cmsapi", ApiConstants::API . "/fileapi"],
+        "adminpath" => [ApiConstants::API . "/adminapi"],
+        "ignore" => [ApiConstants::API . "/authapi", "/debugapi"]
     ];
+
+    //CUSTOM end
 
     /**
      * @param mixed[] $options

@@ -6,8 +6,9 @@ use Monolog\Logger;
 
 use App\Infrastructure\Utils\Properties;
 
+
 return function (ContainerBuilder $containerBuilder) {
-    Properties::init(__DIR__ . '/../sample-database', __DIR__ . '/../conf/conf.json');
+    Properties::init($_SERVER["DOCUMENT_ROOT"], $_SERVER["DOCUMENT_ROOT"] . '/api/conf/conf.json');
 
     // Global Settings Object
     $containerBuilder->addDefinitions([
