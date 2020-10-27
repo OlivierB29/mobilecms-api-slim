@@ -30,6 +30,7 @@ use App\Application\Actions\Cms\TemplateGetAction;
 use App\Application\Actions\Auth\AuthenticateAction;
 use App\Application\Actions\Auth\ChangePasswordAction;
 use App\Application\Actions\Auth\PublicInfoAction;
+use App\Application\Actions\Auth\PublicInfoPostAction;
 use App\Application\Actions\Auth\RegisterAction;
 use App\Application\Actions\Auth\ResetPasswordAction;
 
@@ -71,6 +72,7 @@ return function (App $app) {
 
     $app->group($root . $version . '/authapi', function (Group $group) {
         $group->get('/publicinfo/{id}', PublicInfoAction::class);
+        $group->post('/publicinfo', PublicInfoPostAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 
         $group->post('/changepassword', ChangePasswordAction::class);

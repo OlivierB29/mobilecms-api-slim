@@ -91,7 +91,7 @@ final class AuthenticationApiTest extends ApiTest
     public function testAuthenticateNoBody()
     {
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
-        $this->REQUEST = ['path' => $this->path];
+        
         
         
         $response = $this->request('POST', $this->path);
@@ -108,7 +108,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
         
         $response = $this->request('POST', $this->path);
 
@@ -126,7 +126,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -149,7 +149,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "email": "test@example.com", "password":"Sample#123456"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
         $this->POST = ['requestbody' => $recordStr];
@@ -172,7 +172,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -189,7 +189,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com", "password":""}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -206,7 +206,7 @@ final class AuthenticationApiTest extends ApiTest
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
         $recordStr = '{ "user": "","password":"foo"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -234,7 +234,7 @@ final class AuthenticationApiTest extends ApiTest
 
         $recordStr = '{ "name": "test register", "email": "testregister@example.com", "password":"Sample#123456", "secretQuestion": "some secret" , "secretResponse": "secret response"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -268,7 +268,7 @@ final class AuthenticationApiTest extends ApiTest
 
         $recordStr = '{ "name": "test register", "email": "", "password":""}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
         $this->POST = ['requestbody' => $recordStr];
@@ -291,7 +291,7 @@ final class AuthenticationApiTest extends ApiTest
 
         $recordStr = '{ "user": "' . $user . '", "password":"Sample#123456", "newpassword":"Foobar!654321"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
 
 
@@ -331,7 +331,7 @@ final class AuthenticationApiTest extends ApiTest
 
         $recordStr = '{ "user": "' . $user . '", "password":"Sample#123456", "newpassword":"Foobar!654321"}';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
@@ -355,7 +355,7 @@ final class AuthenticationApiTest extends ApiTest
     {
         $this->path = '/mobilecmsapi/v1/authapi/authenticate';
 
-        $this->REQUEST = ['path' => $this->path];
+        
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
 
@@ -369,15 +369,39 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
     }
 
-    public function testPublicInfo()
+    public function testPublicInfoGet()
     {
         $this->path = '/mobilecmsapi/v1/authapi/publicinfo/editor@example.com';
 
-        $this->REQUEST = ['path' => $this->path];
+        
 
         $response = $this->request('GET', $this->path);
 
 
+
+
+
+        $this->printError($response);
+        $this->assertEquals(200, $response->getCode());
+        $this->assertTrue($response != null);
+
+        $userObject = $response->getResult();
+
+        $this->assertTrue($userObject->{'name'} === 'editor@example.com');
+        $this->assertTrue($userObject->{'clientalgorithm'} === 'hashmacbase64');
+        $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
+    }
+
+    public function testPublicInfoPost()
+    {
+        $this->path = '/mobilecmsapi/v1/authapi/publicinfo';
+
+        
+
+
+        $recordStr = '{ "email": "editor@example.com" }';
+        $this->POST = ['requestbody' => $recordStr];
+        $response = $this->request('POST', $this->path);
 
 
 
