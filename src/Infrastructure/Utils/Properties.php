@@ -90,7 +90,6 @@ class Properties
      * Read a JSON configuration file.
      *
      * @param string $file : file
-     * @return \stdClass JSON conf
      */
     public function loadConf(string $file)
     {
