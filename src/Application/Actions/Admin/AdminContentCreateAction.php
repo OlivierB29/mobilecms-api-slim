@@ -41,8 +41,8 @@ class AdminContentCreateAction extends AdminAction
             'create'
         );
         if (empty($createresult)) {
-            $id = $user->{self::EMAIL};
-            $response = $service->publishById($this->getParam('type'), self::EMAIL, $id);
+            $id = $user->{'email'};
+            $response = $service->publishById($this->getParam('type'), 'email', $id);
             unset($user);
             $response->setResult(new \stdClass);
             $response->setCode(200);

@@ -25,7 +25,7 @@ abstract class RestAction extends Action
 
     /**
      * @param LoggerInterface $logger
-     * @param UserRepository  $userRepository
+     * 
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -120,7 +120,7 @@ abstract class RestAction extends Action
     /**
      * Initialize a default Response object.
      *
-     * @return Response object
+     * @return RestResponse object
      */
     protected function getDefaultResponse() : RestResponse
     {

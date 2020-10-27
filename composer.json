@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
         "monolog/monolog": "^2.1",
         "php-di/php-di": "^6.2",
@@ -30,7 +30,7 @@
         "phpstan/extension-installer": "^1.0.4",
         "phpstan/phpstan": "^0.12.37",
         "php-coveralls/php-coveralls": "^2.2.0",
-        "phpunit/phpunit": "^8"
+        "phpunit/phpunit": "^9"
     },
     "config": {
         "process-timeout": 0,
@@ -48,6 +48,7 @@
     },
     "scripts": {
         "start": "php -S localhost:8080 -t public",
-        "test": "phpunit"
+        "test": "phpunit",
+        "dist": "rm -rf vendor dist && composer install --no-dev && mkdir dist && cp -R public app src dist"
     }
 }

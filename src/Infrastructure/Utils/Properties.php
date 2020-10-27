@@ -19,7 +19,7 @@ class Properties
     /**
      * Constructor.
      *
-     * @param databasedir $databasedir eg : public
+     * 
      */
     public function __construct()
     {
@@ -31,7 +31,7 @@ class Properties
      *
      * @param string $key : key
      * @param int $default : default value if configuration is empty
-     * @param int value
+     * @return int value
      */
     public function getInteger(string $key, int $default = 0) : int
     {
@@ -52,7 +52,7 @@ class Properties
      *
      * @param string $key : key
      * @param bool $default : default value if configuration is empty
-     * @param bool value
+     * @return bool value
      */
     public function getBoolean(string $key, bool $default) : bool
     {
@@ -74,7 +74,7 @@ class Properties
      * Read a boolean property.
      *
      * @param string $key : key
-     * @param string value
+     * @return string value
      */
     public function getString(string $key) : string
     {
@@ -90,7 +90,7 @@ class Properties
      * Read a JSON configuration file.
      *
      * @param string $file : file
-     * @param \stdClass JSON conf
+     * @return \stdClass JSON conf
      */
     public function loadConf(string $file)
     {
@@ -115,6 +115,9 @@ class Properties
         return $this->conf;
     }
 
+    /**
+     * initialize
+     */
     public static function init(string $rootDir, string $file)
     {
         if (!isset(self::$instance)) {

@@ -55,7 +55,7 @@ abstract class FileAction extends RestAction
     protected function getService(): FileService
     {
         if ($this->service == null) {
-            $this->service = new FileService($this->getPublicDirPath());
+            $this->service = new FileService();
         }
         
         return $this->service;
@@ -78,18 +78,7 @@ abstract class FileAction extends RestAction
         $this->imagick = $this->getProperties()->getBoolean('imagick', false);
     }
 
-    public function setRequest(
-        array $REQUEST = null,
-        array $SERVER = null,
-        array $GET = null,
-        array $POST = null,
-        array $headers = null,
-        array $files = null
-    ) {
-        parent::setRequest($REQUEST, $SERVER, $GET, $POST, $headers);
 
-        $this->setFiles($files);
-    }
 
     public function setFiles(array $files = null)
     {
@@ -106,27 +95,7 @@ abstract class FileAction extends RestAction
 
 
 
-    /**
-     * Preflight response
-     * http://stackoverflow.com/questions/25727306/request-header-field-access-control-allow-headers-is-not-allowed-by-access-contr.
-     *
-     * @return Response object
-     */
-    public function preflight(): Response
-    {
-        $response = new Response();
-        $response->setCode(200);
-        $response->setResult(new \stdClass);
 
-        if ($this->enableHeaders) {
-            // @codeCoverageIgnoreStart
-            header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-            header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-            // @codeCoverageIgnoreEnd
-        }
-
-        return $response;
-    }
 
     /**
      * Main storage directory.
@@ -150,55 +119,7 @@ abstract class FileAction extends RestAction
 
 
 
-    /**
-     * Download files from specified URLs.
-     *
-     * @param string $datatype : news
-     * @param string $id       : 123
-     * @param string $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
-     *
-     * @return Response result
-     */
-    private function downloadFiles(string $datatype, string $id, string $filesStr): Response
-    {
-        $response = $this->getDefaultResponse();
-
-        $files = json_decode($filesStr);
-
-        $result = [];
-        foreach ($files as $formKey => $file) {
-            $destdir = $this->getRecordDirPath($datatype, $id);
-
-            // create directory if it doesn't exist
-            if (!file_exists($destdir)) {
-                mkdir($destdir, $this->umask, true);
-                chmod($destdir, $this->umask);
-            }
-
-            // upload
-            if (isset($file->{'url'})) {
-                $current = file_get_contents($file->{'url'});
-                // get foobar.html from http://something.com/[...]/foobar.html
-                $destfile = $destdir . '/' . basename($file->{'url'});
-
-                if (file_put_contents($destfile, $current)) {
-                    chmod($destfile, $this->umask);
-                    $title = $file->{'title'};
-                    $url = basename($file->{'url'});
-                    $fileResult = $this->getFileResponse($destfile, $title, $url);
-                    array_push($result, $fileResult);
-                } else {
-                    throw new \Exception($file['name'] . ' KO');
-                }
-            }
-        }
-
-        $response->setResult($result);
-        $response->setCode(200);
-
-        return $response;
-    }
-
+   
     /**
      * Get file info and build JSON response.
      *

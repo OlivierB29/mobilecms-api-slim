@@ -15,7 +15,6 @@ abstract class AdminAction extends RestAction
 {
     const INDEX_JSON = '/index/index.json';
 
-    const EMAIL = 'email';
 
     protected $role = 'admin';
 
@@ -23,9 +22,9 @@ abstract class AdminAction extends RestAction
     /**
      * Basic user fields, without password.
      *
-     * @param userStr $userStr JSON user string
+     * @param \stdClass $user JSON user
      *
-     * @return \stdClass JSON user string
+     * @return \stdClass JSON user without password
      */
     public function getUserResponse(\stdClass $user): \stdClass
     {

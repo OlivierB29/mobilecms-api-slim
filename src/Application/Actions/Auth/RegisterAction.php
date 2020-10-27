@@ -33,7 +33,7 @@ class RegisterAction extends AuthAction
             $user->{'password'},
             'create'
         );
-        if ($createresult === null) {
+        if (empty($createresult)) {
             $response->setCode(200);
             $response->setResult(new \stdClass);
         } else {

@@ -33,16 +33,16 @@ class AdminContentResetAction extends AdminAction
         } else {
             $putResponse = $service->update(
                 $this->getParam('type'),
-                self::EMAIL,
+                'email',
                 $this->getUserResponse($user)
             );
 
             $myobjectJson = $putResponse->getResult();
             unset($putResponse);
             // step 2 : publish to index
-            $id = $myobjectJson->{self::EMAIL};
+            $id = $myobjectJson->{'email'};
             unset($myobjectJson);
-            $response = $service->publishById($this->getParam('type'), self::EMAIL, $id);
+            $response = $service->publishById($this->getParam('type'), 'email', $id);
         }
         return $this->withResponse($response);
     }

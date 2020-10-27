@@ -10,7 +10,7 @@
   "https": "false",
   "debugapiexceptions": "true",
   "errorlog": "true",
-  "enableheaders": "true",
+
   "enablemail": "false",
   "mailsender": "sendmail@example.org",
   "debugnotifications": "true"

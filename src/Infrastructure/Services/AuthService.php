@@ -139,7 +139,7 @@ class AuthService
             }
 
 
-            if (isset($token)) {
+            
                 $response->setCode(200);
                 $userResponse = json_decode('{}');
                 $userResponse->{'name'} = $user->{'name'};
@@ -154,7 +154,7 @@ class AuthService
                 $response->setResult($userResponse);
                 // success
                 $loginmsg = '';
-            }
+            
         } else {
             // incorrect password
             $loginmsg = 'wrong password';
@@ -398,6 +398,8 @@ class AuthService
         return $result;
     }
 
+
+
     /**
      * Control if the current user has access to an editor API.
      *
@@ -441,10 +443,9 @@ class AuthService
     /**
      * Create a new user.
      *
-     * @param string $username       : email
+     * @param string $username       : username
+     * @param string $emailParam       : email
      * @param string $password       : password
-     * @param string $salt           : private salt
-     * @param string $role           : role none|editor|admin
      * @param string $mode           : values 'create' or 'update'
      *
      * @return string empty string if success

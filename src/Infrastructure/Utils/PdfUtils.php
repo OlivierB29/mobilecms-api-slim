@@ -11,7 +11,7 @@ class PdfUtils
 
     /**
     * Create a list of thumbnails
-    * @param string $fileName : file path
+    * @param string $file : file path
     * @param string $dir : directory containing resized files
     * @param array $sizes : array of new resized widths
     * @return array created files
@@ -50,6 +50,7 @@ class PdfUtils
     * Create a thumbnail of the first page
     *
     * @param string $source somewhere/foo.pdf
+    * @param string $target foo/foo.pdf
     * @param string $uri thumbnails/foo.jpg
 
     * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}

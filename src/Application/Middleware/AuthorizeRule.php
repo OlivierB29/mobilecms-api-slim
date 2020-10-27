@@ -134,11 +134,11 @@ class AuthorizeRule
         $result = false;
         if (!empty($userRole) && !empty("admin")) {
             if ($userRole === "admin") {
-                $result = true;
+                return true;
             }
         }
 
-        return $result;
+        return false;
     }
 
     public function setUserRole(string $role)

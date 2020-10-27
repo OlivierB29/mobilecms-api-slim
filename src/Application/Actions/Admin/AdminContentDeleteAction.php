@@ -24,7 +24,7 @@ class AdminContentDeleteAction extends AdminAction
         $response = $service->deleteRecord($this->getParam('type'), $this->getParam('id'));
         if ($response->getCode() === 200) {
             // rebuild index
-            $response = $service->rebuildIndex($this->getParam('type'), self::EMAIL);
+            $response = $service->rebuildIndex($this->getParam('type'), 'email');
         }
 
         // delete a record and update the index. eg : /mobilecmsapi/v1/content/calendar/1.json
