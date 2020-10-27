@@ -30,8 +30,6 @@ Otherwise, the API sends a generic response {"error":"internal error"}
 -  "errorlog": "true"
 Enable error log on backend
 
--  "enableheaders": "true|false"
-Enable the PHP header() function. Disabled with PHPUnit.
 
 -  "enablemail": "true|false"
 Enable send mail for password reset
