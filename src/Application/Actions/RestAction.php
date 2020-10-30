@@ -110,11 +110,11 @@ abstract class RestAction extends Action
 */
     public function getRequestBody()
     {
-        return $this->request->getParsedBody();
+        return $this->getFormData();
     }
     public function getRequestBodyStr() : string
     {
-        return json_encode($this->request->getParsedBody());
+        return json_encode($this->getFormData());
     }
 
     /**
@@ -139,6 +139,26 @@ abstract class RestAction extends Action
     {
         // $this->slimException($request, $resp);
         return $this->respondWithData($resp->getResult(), $resp->getCode());
+    }
+
+
+    protected function getFormData()
+    {
+
+        if ($this->postformdata === true) {
+            return $_POST;
+        } else {
+            $input = json_decode(file_get_contents('php://input'));
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new HttpBadRequestException($this->request, 'Malformed JSON input.');
+            }
+    
+            return $input;
+        }
+
+
+
     }
 
     /*

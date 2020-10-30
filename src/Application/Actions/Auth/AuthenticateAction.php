@@ -22,12 +22,12 @@ class AuthenticateAction extends AuthAction
             $this->checkConfiguration();
 
 
-            if (empty($this->request->getParsedBody())) {
+            if (empty($this->getFormData())) {
                 throw new \Exception('no login request');
             }
             // login and get token
             // eg : { "user": "test@example.com", "password":"Sample#123456"}
-            $logindata = $this->request->getParsedBody();
+            $logindata = $this->getFormData();
 
             if (!isset($logindata->{'password'})) {
                 throw new \Exception('no password data');

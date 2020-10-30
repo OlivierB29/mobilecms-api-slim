@@ -33,6 +33,8 @@ abstract class Action
      */
     protected $args;
 
+    protected $postformdata = false;
+
     /**
      * @param LoggerInterface $logger
      */
@@ -130,8 +132,9 @@ abstract class Action
 
     //--------------------------------------------------------------------------------------
     /** mobilecms patch */
-    protected function getFormData()
+    protected function getFormDataZZZ()
     {
         return $this->request->getBody();
     }
+
 }
