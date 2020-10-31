@@ -86,7 +86,8 @@ abstract class ApiTest extends TestCase
         }
         
         // emulate POST body
-        if (\array_key_exists('requestbody', $this->POST)) {
+        
+        if (isset($this->POST['requestbody'])) {
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -127,7 +128,7 @@ abstract class ApiTest extends TestCase
         $request = $this->createRequest($verb, $path, $this->headers);
  
         
-        if (\array_key_exists('requestbody', $this->POST)) {
+        if (isset($this->POST['requestbody'])) {
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -160,7 +161,7 @@ abstract class ApiTest extends TestCase
         $jsonResponse = \json_decode($psrResponse->getBody()->__toString());
         //$body = \json_encode($jsonResponse->{'data'});
         if (isset($jsonResponse)) {
-            if (\array_key_exists('data', $jsonResponse)) {
+            if (isset($jsonResponse['data'])) {
                 $result->setResult($jsonResponse->{'data'});
             } else {
                 $result->setResult($jsonResponse);
@@ -184,7 +185,7 @@ abstract class ApiTest extends TestCase
         if ($expected->getData() != null) {
             $jsonResponse = \json_decode((string) $actual->getBody());
 
-            if (\array_key_exists('data', $jsonResponse)) {
+            if (isset($jsonResponse['data'])) {
                 $bodyStr = \json_encode($jsonResponse->{'data'});
     
                 $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);

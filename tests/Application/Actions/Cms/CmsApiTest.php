@@ -200,9 +200,8 @@ final class CmsApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
         $this->assertTrue($response->getResult() != null);
-        if (array_key_exists('id', $response->getResult())) {
-            $this->assertTrue($response->getResult()->{'id'} === '1');
-        }
+        $this->assertTrue($response->getResult()->{'id'} === '1');
+
        
         $this->assertTrue($response->getResult()->{'type'} === 'calendar');
 
