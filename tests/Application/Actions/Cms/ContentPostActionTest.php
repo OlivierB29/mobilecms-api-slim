@@ -23,7 +23,7 @@ class ContentPostActionTest extends AuthApiTest
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('POST', '/mobilecmsapi/v1/cmsapi/content/calendar', $this->headers);
+        $request = $this->createRequest('POST', $this->getApi() . '/cmsapi/content/calendar', $this->headers);
 
         $contents = \json_decode(file_get_contents('tests-data/public/bbcode.json'));
         if (json_last_error() === JSON_ERROR_NONE) {
@@ -55,7 +55,7 @@ class ContentPostActionTest extends AuthApiTest
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('POST', '/mobilecmsapi/v1/cmsapi/content/calendar');
+        $request = $this->createRequest('POST', $this->getApi() . '/cmsapi/content/calendar');
 
         $contents = \json_decode($this->getPublicFile('6.json'));
         if (json_last_error() === JSON_ERROR_NONE) {

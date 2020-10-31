@@ -25,9 +25,9 @@ final class AuthenticationApiTest extends ApiTest
 
 
 
-    public function testAuthenticateOptions()
+    public function testOptions()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $response = $this->request('OPTIONS', $this->path);
 
 
@@ -43,7 +43,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testRegisterOptions()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/register';
+        $this->path = $this->getApi() . '/authapi/register';
         $response = $this->request('OPTIONS', $this->path);
 
 
@@ -59,7 +59,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testResetPasswordOptions()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/resetpassword';
+        $this->path = $this->getApi() . '/authapi/resetpassword';
         $response = $this->request('OPTIONS', $this->path);
 
 
@@ -74,7 +74,7 @@ final class AuthenticationApiTest extends ApiTest
     }
     public function testChangePasswordOptions()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/changepassword';
+        $this->path = $this->getApi() . '/authapi/changepassword';
         $response = $this->request('OPTIONS', $this->path);
 
 
@@ -88,9 +88,9 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
     }
 
-    public function testAuthenticateNoBody()
+    public function testNoBody()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         
         
         
@@ -103,27 +103,11 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertTrue($response != null);
     }
 
-    public function testAuthenticateEmptyBody()
+   
+
+    public function testAuthByUser()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
-        $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
-
-        
-        
-        $response = $this->request('POST', $this->path);
-
-        $this->POST = ['requestbody' => ''];
-
-
-
-
-        $this->assertEquals(401, $response->getCode());
-        $this->assertTrue($response != null);
-    }
-
-    public function testLoginByUser()
-    {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
 
         
@@ -144,9 +128,9 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
     }
 
-    public function testLoginByEmail()
+    public function testAuthByEmail()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $recordStr = '{ "email": "test@example.com", "password":"Sample#123456"}';
 
         
@@ -169,7 +153,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testNoPassword()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com"}';
 
         
@@ -186,7 +170,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testEmptyPassword()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $recordStr = '{ "user": "test@example.com", "password":""}';
 
         
@@ -203,7 +187,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testEmptyUser()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
         $recordStr = '{ "user": "","password":"foo"}';
 
         
@@ -221,7 +205,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testRegister()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/register';
+        $this->path = $this->getApi() . '/authapi/register';
 
         $email = 'testregister@example.com';
 
@@ -255,7 +239,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testRegisterEmptyParam()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/register';
+        $this->path = $this->getApi() . '/authapi/register';
 
         $email = 'testregister@example.com';
 
@@ -283,7 +267,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testResetPassword()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/resetpassword';
+        $this->path = $this->getApi() . '/authapi/resetpassword';
         $user = 'resetpassword@example.com';
         $userFile = $user . '.json';
 
@@ -323,7 +307,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testChangePassword()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/changepassword';
+        $this->path = $this->getApi() . '/authapi/changepassword';
         $user = 'changepassword@example.com';
         $userFile = $user . '.json';
 
@@ -353,7 +337,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function verifyChangePassword($user, $recordStr)
     {
-        $this->path = '/mobilecmsapi/v1/authapi/authenticate';
+        $this->path = $this->getApi() . '/authapi/authenticate';
 
         
         $this->POST = ['requestbody' => $recordStr];
@@ -371,7 +355,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testPublicInfoGet()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/publicinfo/editor@example.com';
+        $this->path = $this->getApi() . '/authapi/publicinfo/editor@example.com';
 
         
 
@@ -394,7 +378,7 @@ final class AuthenticationApiTest extends ApiTest
 
     public function testPublicInfoPost()
     {
-        $this->path = '/mobilecmsapi/v1/authapi/publicinfo';
+        $this->path = $this->getApi() . '/authapi/publicinfo';
 
         
 
@@ -414,5 +398,23 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertTrue($userObject->{'name'} === 'editor@example.com');
         $this->assertTrue($userObject->{'clientalgorithm'} === 'hashmacbase64');
         $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
+    }
+
+    public function testEmptyBody()
+    {
+        $this->path = $this->getApi() . '/authapi/authenticate';
+        $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
+
+        
+        
+        $response = $this->request('POST', $this->path);
+
+        $this->POST = ['requestbody' => ''];
+
+
+
+
+        $this->assertEquals(401, $response->getCode());
+        $this->assertTrue($response != null);
     }
 }

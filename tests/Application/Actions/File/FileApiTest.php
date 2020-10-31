@@ -26,7 +26,7 @@ final class FileApiTest extends AuthApiTest
     /*
         public function testDownload()
         {
-            $this->path = '/mobilecmsapi/v1/fileapi/download/calendar/4';
+            $this->path = $this->getApi() . '/fileapi/download/calendar/4';
             $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'POST', 'HTTP_ORIGIN' => 'foobar'];
 
             $recordStr = '[{ "url": "https://mit-license.org/index.html", "title":"MIT licence"}]';
@@ -61,7 +61,7 @@ final class FileApiTest extends AuthApiTest
 
         public function testDownloadImage()
         {
-            $this->path = '/mobilecmsapi/v1/fileapi/download/calendar/5';
+            $this->path = $this->getApi() . '/fileapi/download/calendar/5';
             $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'POST', 'HTTP_ORIGIN' => 'foobar'];
 
             $recordStr = '[{ "url": "https://php.net/images/logos/new-php-logo.png", "title":"php logo"}]';
@@ -95,7 +95,7 @@ final class FileApiTest extends AuthApiTest
 
         public function testDownloadNoFiles()
         {
-            $this->path = '/mobilecmsapi/v1/fileapi/download/calendar/4';
+            $this->path = $this->getApi() . '/fileapi/download/calendar/4';
             $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'POST', 'HTTP_ORIGIN' => 'foobar'];
             $recordStr = '[{ "url": "/foobar/foo.html", "title":"foobar"}]';
             $this->POST = ['requestbody' => $recordStr];
@@ -120,7 +120,7 @@ final class FileApiTest extends AuthApiTest
 
         // assert file exists before API call
         $this->assertTrue(file_exists($destfile));
-        $this->path = '/mobilecmsapi/v1/fileapi/delete/calendar/2';
+        $this->path = $this->getApi() . '/fileapi/delete/calendar/2';
 
         $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'POST', 'HTTP_ORIGIN' => 'foobar'];
 
@@ -147,7 +147,7 @@ final class FileApiTest extends AuthApiTest
     {
 
           // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = '/mobilecmsapi/v1/fileapi/basicupload/calendar/1';
+        $this->path = $this->getApi() . '/fileapi/basicupload/calendar/1';
         $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'GET', 'HTTP_ORIGIN' => 'foobar'];
         $this->GET = ['requestbody' => '{}'];
         $recordStr = '[{ "url": "https://mit-license.org/index.html", "title":"MIT licence"}]';
@@ -177,7 +177,7 @@ final class FileApiTest extends AuthApiTest
     {
         // API request
         $record = '/calendar/3';
-        $this->path = '/mobilecmsapi/v1/fileapi/basicupload' . $record;
+        $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
         $filename = 'testupload.pdf';
         // mock file
         $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . '123456789.pdf';
@@ -205,7 +205,7 @@ final class FileApiTest extends AuthApiTest
     {
         // API request
         $record = '/calendar/3';
-        $this->path = '/mobilecmsapi/v1/fileapi/basicupload' . $record;
+        $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
         $filename = 'wrongfile.pdf';
         // mock file
         $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . $filename;
@@ -230,7 +230,7 @@ final class FileApiTest extends AuthApiTest
     {
         // API request
         $record = '/calendar/3';
-        $this->path = '/mobilecmsapi/v1/fileapi/basicupload' . $record;
+        $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
         $filename = 'testupload.bmp';
         // mock file
         $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . $filename;
@@ -251,7 +251,7 @@ final class FileApiTest extends AuthApiTest
     public function testThumbnails()
     {
         $record = '/calendar/2';
-        $this->path = '/mobilecmsapi/v1/fileapi/thumbnails/calendar/2';
+        $this->path = $this->getApi() . '/fileapi/thumbnails/calendar/2';
 
         $recordStr = '[{ "url": "tennis.jpg", "sizes": ["100", "200", "300"]}]';
 
@@ -281,7 +281,7 @@ final class FileApiTest extends AuthApiTest
     public function testPdfThumbnails()
     {
         $record = '/calendar/2';
-        $this->path = '/mobilecmsapi/v1/fileapi/thumbnails/calendar/2';
+        $this->path = $this->getApi() . '/fileapi/thumbnails/calendar/2';
 
         $recordStr = '[{ "url": "loremipsum.pdf", "sizes": ["100", "200", "300"]}]';
 
@@ -311,7 +311,7 @@ final class FileApiTest extends AuthApiTest
     public function testThumbnailsDefaultSizes()
     {
         $record = '/calendar/2';
-        $this->path = '/mobilecmsapi/v1/fileapi/thumbnails/calendar/2';
+        $this->path = $this->getApi() . '/fileapi/thumbnails/calendar/2';
 
         $recordStr = '[{ "url": "tennis.jpg"}]';
 

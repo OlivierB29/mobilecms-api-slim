@@ -27,7 +27,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testTypes()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content';
+        $this->path = $this->getApi() . '/cmsapi/content';
         $this->SERVER = ['REQUEST_URI' => $this->path,    'REQUEST_METHOD' => 'GET', 'HTTP_ORIGIN' => 'foobar'];
         $response = $this->request('GET', $this->path);
 
@@ -44,7 +44,7 @@ final class CmsApiTest extends AuthApiTest
     {
 
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
         $recordStr = file_get_contents($this->API->getPublicDirPath() . '/big.json');
@@ -67,7 +67,7 @@ final class CmsApiTest extends AuthApiTest
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendar');
+        $request = $this->createRequest('GET', $this->getApi() . '/cmsapi/index/calendar');
         $response = $app->handle($request);
         $payloadObject = $response->getBody();
         $payload = (string) $response->getBody();
@@ -88,7 +88,7 @@ final class CmsApiTest extends AuthApiTest
     {
 
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
         $recordStr = file_get_contents('tests-data/public/html.json');
@@ -109,7 +109,7 @@ final class CmsApiTest extends AuthApiTest
     {
 
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
         $recordStr = file_get_contents('tests-data/public/bbcode.json');
@@ -128,7 +128,7 @@ final class CmsApiTest extends AuthApiTest
     {
 
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
         $recordStr = file_get_contents($this->API->getPublicDirPath() . '/6.json');
@@ -145,7 +145,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testEmptyToken()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar';
         $this->headers['Authorization']= '';
 
 
@@ -158,7 +158,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarList()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar' . $this->requestparams;
+        $this->path = $this->getApi() . '/cmsapi/content/calendar' . $this->requestparams;
 
 
         $this->GET = ['requestbody' => '{}'];
@@ -176,7 +176,7 @@ final class CmsApiTest extends AuthApiTest
     public function testGetByGuest()
     {
         $this->setGuest();
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/1';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar/1';
 
         $response = $this->request('GET', $this->path);
 
@@ -189,7 +189,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarRecord()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/1' . $this->requestparams;
+        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . $this->requestparams;
 
 
         $response = $this->request('GET', $this->path);
@@ -212,7 +212,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarError()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/999999999';
+        $this->path = $this->getApi() . '/cmsapi/content/calendar/999999999';
 
         $response = $this->request('GET', $this->path);
 
@@ -233,7 +233,7 @@ final class CmsApiTest extends AuthApiTest
         $mediadir = $this->API->getMediaDirPath() . '/calendar/' . $id;
         $fileutils->copydir($this->API->getMediaDirPath() . '/calendar/backup/' . $id, $mediadir);
 
-        $this->path = '/mobilecmsapi/v1/cmsapi/content/calendar/' . $id;
+        $this->path = $this->getApi() . '/cmsapi/content/calendar/' . $id;
 
 
 
@@ -260,7 +260,7 @@ final class CmsApiTest extends AuthApiTest
             copy($this->API->getPublicDirPath() . '/calendar/backuplist/' . $id . '.json', $recordfile);
         }
 
-        $this->path = '/mobilecmsapi/v1/cmsapi/deletelist/calendar';
+        $this->path = $this->getApi() . '/cmsapi/deletelist/calendar';
 
 
         $this->POST = ['requestbody' => \json_encode($ids)];
@@ -285,7 +285,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetIndex()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/index/calendar' . $this->requestparams;
+        $this->path = $this->getApi() . '/cmsapi/index/calendar' . $this->requestparams;
 
 
         $response = $this->request('GET', $this->path);
@@ -302,7 +302,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testPostRebuildIndex()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/index/calendar' . $this->requestparams;
+        $this->path = $this->getApi() . '/cmsapi/index/calendar' . $this->requestparams;
 
 
         $response = $this->request('POST', $this->path);
@@ -312,7 +312,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetMetadata()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/metadata/calendar';
+        $this->path = $this->getApi() . '/cmsapi/metadata/calendar';
 
 
         $response = $this->request('GET', $this->path);
@@ -329,7 +329,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testTemplate()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/template/calendar';
+        $this->path = $this->getApi() . '/cmsapi/template/calendar';
 
 
         $response = $this->request('GET', $this->path);
@@ -346,7 +346,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testStatus()
     {
-        $this->path = '/mobilecmsapi/v1/cmsapi/status';
+        $this->path = $this->getApi() . '/cmsapi/status';
         $this->SERVER = ['REQUEST_URI' => $this->path,    'REQUEST_METHOD' => 'GET', 'HTTP_ORIGIN' => 'foobar'];
         $response = $this->request('GET', $this->path);
 

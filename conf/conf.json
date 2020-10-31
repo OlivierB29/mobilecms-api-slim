@@ -9,8 +9,8 @@
   "enablecleaninputs": "true",
   "https": "false",
   "debugapiexceptions": "true",
+  "postformdata": "phpinput",
   "errorlog": "true",
-
   "enablemail": "false",
   "mailsender": "sendmail@example.org",
   "debugnotifications": "true"

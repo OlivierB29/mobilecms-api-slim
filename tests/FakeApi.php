@@ -5,30 +5,7 @@ use App\Infrastructure\Utils\Properties;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use App\Infrastructure\Rest\Response;
 
-/*
-     public function testGetIndex()
-    {
-        $app = $this->getAppInstance();
 
-        $container = $app->getContainer();
-
-        // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendar');
-        $response = $app->handle($request);
-        $payloadObject = $response->getBody();
-        $payload = (string) $response->getBody();
-
-        // Assert
-        $index_data = $this->getPublicFile('/calendar/index/index.json');
-
-        $expectedPayload = new ActionPayload(200, $index_data);
-        $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
-
-
-        $this->assertResponse($expectedPayload, $response);
-    }
-
-    */
 
 final class FakeApi
 {

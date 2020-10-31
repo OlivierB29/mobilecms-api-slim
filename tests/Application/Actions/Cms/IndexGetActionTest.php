@@ -23,7 +23,7 @@ class IndexGetActionTest extends AuthApiTest
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendar', $this->headers);
+        $request = $this->createRequest('GET', $this->getApi() . '/cmsapi/index/calendar', $this->headers);
         $response = $app->handle($request);
         $payloadObject = $response->getBody();
         $payload = (string) $response->getBody();
@@ -52,7 +52,7 @@ class IndexGetActionTest extends AuthApiTest
         $app->add($errorMiddleware);
 
         // API
-        $request = $this->createRequest('GET', '/mobilecmsapi/v1/cmsapi/index/calendarZZ', $this->headers);
+        $request = $this->createRequest('GET', $this->getApi() . '/cmsapi/index/calendarZZ', $this->headers);
         $response = $app->handle($request);
 
         // Assert

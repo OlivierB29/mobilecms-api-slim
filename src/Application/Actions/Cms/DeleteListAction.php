@@ -27,7 +27,7 @@ class DeleteListAction extends CmsAction
 
         // step 1 : delete records
 
-        $body = $this->getFormData();
+        $body = $this->getRequestBody();
         $putResponse = $this->getService()->deleteRecords(
             $this->getParam('type'),
             $body

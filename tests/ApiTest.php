@@ -12,7 +12,7 @@ use Slim\Psr7\Uri;
 use App\Application\Actions\ActionPayload;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request;
-
+use App\ApiConstants;
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 
 abstract class ApiTest extends TestCase
@@ -24,11 +24,13 @@ abstract class ApiTest extends TestCase
     protected $GET=[];
     protected $POST=[];
 
-
+    protected $requestbody=[];
     protected $memory1 = 0;
     protected $memory2 = 0;
 
     protected $API;
+
+    protected $postformdata = false;
 
 
     protected function setUp(): void
@@ -36,7 +38,8 @@ abstract class ApiTest extends TestCase
         Properties::init(__DIR__ . '/../tests-data', __DIR__ . '/conf.json');
 
         $this->path='';
-        $this->headers=['HTTP_ACCEPT' => 'application/json'];
+        $this->headers['HTTP_ACCEPT']= 'application/json';
+        $this->headers['Content-Type']='application/json';
         $this->REQUEST=[];
         $this->SERVER=[];
         $this->GET=[];
@@ -83,16 +86,20 @@ abstract class ApiTest extends TestCase
         
         // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
-            $contents = \json_decode($this->POST['requestbody']);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $request = $request->withParsedBody($contents);
+
+            if ($this->postformdata) {
+                $contents = \json_decode($this->POST['requestbody']);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $requestbody['requestbody'] = $contents;
+                    $request = $request->withParsedBody($requestbody);
+                }
+            } else {
+                $contents = \json_decode($this->POST['requestbody']);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $request = $request->withParsedBody($contents);
+                }
             }
 
-
-            // $body = new StringStream(json_encode(['tasks' => ['Code','Coffee', ]]));;
-          /*  $body = new StringStream($this->POST['requestbody']);;
-            $request = $request->withHeader('Content-Type', 'application/json')->withBody($body);
-        */
         }
         $app = $this->getAppInstance();
         // execute
@@ -121,18 +128,21 @@ abstract class ApiTest extends TestCase
         $request = $this->createRequest($verb, $path, $this->headers);
  
         
-        // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
-            $contents = \json_decode($this->POST['requestbody']);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $request = $request->withParsedBody($contents);
+
+            if ($this->postformdata) {
+                $contents = \json_decode($this->POST['requestbody']);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $requestbody['requestbody'] = $contents;
+                    $request = $request->withParsedBody($requestbody);
+                }
+            } else {
+                $contents = \json_decode($this->POST['requestbody']);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $request = $request->withParsedBody($contents);
+                }
             }
 
-
-            // $body = new StringStream(json_encode(['tasks' => ['Code','Coffee', ]]));;
-          /*  $body = new StringStream($this->POST['requestbody']);;
-            $request = $request->withHeader('Content-Type', 'application/json')->withBody($body);
-        */
         }
         $app = $this->getAppInstance();
         // execute
@@ -150,11 +160,15 @@ abstract class ApiTest extends TestCase
         $result = new Response();
         $result->setCode($psrResponse->getStatusCode());
 
-        $jsonResponse = \json_decode((string) $psrResponse->getBody());
+        $jsonResponse = \json_decode($psrResponse->getBody()->__toString());
         //$body = \json_encode($jsonResponse->{'data'});
-        if (isset($jsonResponse) && \array_key_exists('data', $jsonResponse)) {
-            $body = $jsonResponse->{'data'};
-            $result->setResult($body);
+        if (isset($jsonResponse)) {
+            if ( \array_key_exists('data', $jsonResponse)) {
+                $result->setResult($jsonResponse->{'data'});
+            } else {
+                $result->setResult($jsonResponse);
+            }
+
         } else {
             $result->setResult(\json_decode('{}'));
         }
@@ -284,5 +298,9 @@ abstract class ApiTest extends TestCase
         }
         $uploadedFiles = $this->toUploadedFileInterface($files);
         return new Request($method, $uri, $h, $cookies, $serverParams, $stream, $uploadedFiles);
+    }
+
+    protected function getApi() {
+        return ApiConstants::API;
     }
 }

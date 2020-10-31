@@ -27,7 +27,7 @@ final class CmsAdminApiTest extends AuthApiTest
     public function testTypes()
     {
         $this->setAdmin();
-        $this->path = '/mobilecmsapi/v1/adminapi/content';
+        $this->path = $this->getApi() . '/adminapi/content';
 
         $response = $this->request('GET', $this->path);
 
@@ -42,7 +42,7 @@ final class CmsAdminApiTest extends AuthApiTest
     public function testOptions()
     {
         $email = 'editor@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
         $response = $this->request('OPTIONS', $this->path);
 
 
@@ -58,7 +58,7 @@ final class CmsAdminApiTest extends AuthApiTest
         $this->headers=['Authorization' => 'foobar'];
 
         $email = 'editor@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
         $response = $this->request('GET', $this->path);
 
@@ -74,7 +74,7 @@ final class CmsAdminApiTest extends AuthApiTest
         $this->setEditor();
 
         $email = 'foobar@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
         $response = $this->request('GET', $this->path);
 
@@ -91,7 +91,7 @@ final class CmsAdminApiTest extends AuthApiTest
         $this->setGuest();
 
         $email = 'foobar@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
         $response = $this->request('GET', $this->path);
 
@@ -108,7 +108,7 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'editor@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
         $response = $this->request('GET', $this->path);
 
@@ -130,7 +130,7 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'editor@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users';
+        $this->path = $this->getApi() . '/adminapi/content/users';
 
         $response = $this->request('GET', $this->path);
 
@@ -147,7 +147,7 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'newuser@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users';
+        $this->path = $this->getApi() . '/adminapi/content/users';
         $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
         if (file_exists($file)) {
             unlink($file);
@@ -179,7 +179,7 @@ final class CmsAdminApiTest extends AuthApiTest
 
         $this->setAdmin();
 
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
         $recordStr = '{ "name": "test", "email": "' . $email . '", "role":"editor", "newpassword":"Something1234567890"}';
         $this->POST = ['requestbody' => $recordStr];
@@ -202,7 +202,7 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'delete@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
         $file = $this->getPrivateDirPath() . '/users/' . $email . '.json';
 
         $this->assertTrue(copy($this->getPrivateDirPath() . '/save/' . $email . '.json', $file));
@@ -222,7 +222,7 @@ final class CmsAdminApiTest extends AuthApiTest
     public function testIndex()
     {
         $this->setAdmin();
-        $this->path = '/mobilecmsapi/v1/adminapi/index/users' ;
+        $this->path = $this->getApi() . '/adminapi/index/users' ;
 
 
 
@@ -235,7 +235,7 @@ final class CmsAdminApiTest extends AuthApiTest
     public function testRebuildUserIndex()
     {
         $this->setAdmin();
-        $this->path = '/mobilecmsapi/v1/adminapi/index/users' ;
+        $this->path = $this->getApi() . '/adminapi/index/users' ;
 
 
 
@@ -253,7 +253,7 @@ final class CmsAdminApiTest extends AuthApiTest
     {
         $this->setAdmin();
         $email = 'role@example.com';
-        $this->path = '/mobilecmsapi/v1/adminapi/content/users/' . $email;
+        $this->path = $this->getApi() . '/adminapi/content/users/' . $email;
 
 
 
@@ -284,7 +284,7 @@ final class CmsAdminApiTest extends AuthApiTest
     public function testGetMetadata()
     {
         $this->setAdmin();
-        $this->path = '/mobilecmsapi/v1/adminapi/metadata/users';
+        $this->path = $this->getApi() . '/adminapi/metadata/users';
 
 
         $response = $this->request('GET', $this->path);

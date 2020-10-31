@@ -10,7 +10,7 @@
   "enablecleaninputs": "true",
   "https": "false",
   "debugapiexceptions": "true",
-  "postformdata": "true",
+  "postformdata": "parsedbody",
   "errorlog": "true",
   "logfile": "unittests.log",
 
