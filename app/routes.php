@@ -51,8 +51,6 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use App\ApiConstants;
 
 return function (App $app) {
-
-
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;

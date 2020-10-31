@@ -5,8 +5,6 @@ use App\Infrastructure\Utils\Properties;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use App\Infrastructure\Rest\Response;
 
-
-
 final class FakeApi
 {
 

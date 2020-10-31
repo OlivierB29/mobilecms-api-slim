@@ -19,7 +19,7 @@ class Properties
     /**
      * Constructor.
      *
-     * 
+     *
      */
     public function __construct()
     {

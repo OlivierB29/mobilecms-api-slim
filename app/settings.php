@@ -6,7 +6,6 @@ use Monolog\Logger;
 
 use App\Infrastructure\Utils\Properties;
 
-
 return function (ContainerBuilder $containerBuilder) {
     Properties::init($_SERVER["DOCUMENT_ROOT"], $_SERVER["DOCUMENT_ROOT"] . '/api/conf/conf.json');
 

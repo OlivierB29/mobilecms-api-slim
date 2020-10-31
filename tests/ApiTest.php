@@ -13,6 +13,7 @@ use App\Application\Actions\ActionPayload;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request;
 use App\ApiConstants;
+
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 
 abstract class ApiTest extends TestCase
@@ -86,7 +87,6 @@ abstract class ApiTest extends TestCase
         
         // emulate POST body
         if (\array_key_exists('requestbody', $this->POST)) {
-
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -99,7 +99,6 @@ abstract class ApiTest extends TestCase
                     $request = $request->withParsedBody($contents);
                 }
             }
-
         }
         $app = $this->getAppInstance();
         // execute
@@ -129,7 +128,6 @@ abstract class ApiTest extends TestCase
  
         
         if (\array_key_exists('requestbody', $this->POST)) {
-
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -142,7 +140,6 @@ abstract class ApiTest extends TestCase
                     $request = $request->withParsedBody($contents);
                 }
             }
-
         }
         $app = $this->getAppInstance();
         // execute
@@ -163,12 +160,11 @@ abstract class ApiTest extends TestCase
         $jsonResponse = \json_decode($psrResponse->getBody()->__toString());
         //$body = \json_encode($jsonResponse->{'data'});
         if (isset($jsonResponse)) {
-            if ( \array_key_exists('data', $jsonResponse)) {
+            if (\array_key_exists('data', $jsonResponse)) {
                 $result->setResult($jsonResponse->{'data'});
             } else {
                 $result->setResult($jsonResponse);
             }
-
         } else {
             $result->setResult(\json_decode('{}'));
         }
@@ -300,7 +296,8 @@ abstract class ApiTest extends TestCase
         return new Request($method, $uri, $h, $cookies, $serverParams, $stream, $uploadedFiles);
     }
 
-    protected function getApi() {
+    protected function getApi()
+    {
         return ApiConstants::API;
     }
 }

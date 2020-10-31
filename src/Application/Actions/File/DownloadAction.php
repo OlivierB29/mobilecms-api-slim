@@ -34,15 +34,15 @@ class DownloadAction extends FileAction
         return $this->withResponse($response);
     }
 
-     /**
-     * Download files from specified URLs.
-     *
-     * @param string $datatype : news
-     * @param string $id       : 123
-     * @param string $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
-     *
-     * @return RestResponse result
-     */
+    /**
+    * Download files from specified URLs.
+    *
+    * @param string $datatype : news
+    * @param string $id       : 123
+    * @param string $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
+    *
+    * @return RestResponse result
+    */
     private function downloadFiles(string $datatype, string $id, string $filesStr): RestResponse
     {
         $response = $this->getDefaultResponse();
@@ -82,5 +82,4 @@ class DownloadAction extends FileAction
 
         return $response;
     }
-
 }

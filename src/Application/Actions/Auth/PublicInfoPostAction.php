@@ -23,10 +23,10 @@ class PublicInfoPostAction extends AuthAction
         $service = new AuthService($this->getPrivateDirPath() . '/users');
 
 
-        $userdata = $this->getRequestBody();    
+        $userdata = $this->getRequestBody();
         if (isset($userdata->{'email'})) {
             $response = $service->getPublicInfo($userdata->{'email'});
-        } elseif (isset($userdata->{'user'})){
+        } elseif (isset($userdata->{'user'})) {
             $response = $service->getPublicInfo($userdata->{'user'});
         }
         
