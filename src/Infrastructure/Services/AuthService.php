@@ -140,21 +140,20 @@ class AuthService
 
 
             
-                $response->setCode(200);
-                $userResponse = json_decode('{}');
-                $userResponse->{'name'} = $user->{'name'};
-                $userResponse->{'username'} = $user->{'name'};
-                $userResponse->{'email'} = $user->{'email'};
-                $userResponse->{'role'} = $user->{'role'};
-                $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
-                $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
+            $response->setCode(200);
+            $userResponse = json_decode('{}');
+            $userResponse->{'name'} = $user->{'name'};
+            $userResponse->{'username'} = $user->{'name'};
+            $userResponse->{'email'} = $user->{'email'};
+            $userResponse->{'role'} = $user->{'role'};
+            $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
+            $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
 
-                $userResponse->{'token'} = $token;
+            $userResponse->{'token'} = $token;
 
-                $response->setResult($userResponse);
-                // success
-                $loginmsg = '';
-            
+            $response->setResult($userResponse);
+            // success
+            $loginmsg = '';
         } else {
             // incorrect password
             $loginmsg = 'wrong password';

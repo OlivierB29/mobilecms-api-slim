@@ -136,5 +136,4 @@ abstract class Action
     {
         return $this->request->getBody();
     }
-
 }

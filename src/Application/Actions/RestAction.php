@@ -25,7 +25,7 @@ abstract class RestAction extends Action
 
     /**
      * @param LoggerInterface $logger
-     * 
+     *
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -127,31 +127,28 @@ abstract class RestAction extends Action
 
     protected function getRequestBody()
     {
-        $postformdata = $this->getProperties()->getString('postformdata' ,'');
+        $postformdata = $this->getProperties()->getString('postformdata', '');
 
-    if ($postformdata === 'post') {
-
+        if ($postformdata === 'post') {
             return $_POST;
+        }
+        if ($postformdata === 'parsedbody') {
+            return  $this->request->getParsedBody();
+        }
 
-    }
-    if ($postformdata === 'parsedbody') {
-        return  $this->request->getParsedBody();
-    }
-
-    if ($postformdata === 'phpinput') {
-        $input = json_decode(file_get_contents('php://input'));
+        if ($postformdata === 'phpinput') {
+            $input = json_decode(file_get_contents('php://input'));
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new HttpBadRequestException($this->request, 'Malformed JSON input.');
             }
     
             return $input;
-    }
+        }
     
 
 
         throw new \Exception('request body');
-    
     }
 
     private function getFormData()
@@ -169,9 +166,6 @@ abstract class RestAction extends Action
     
             return $input;
         }
-
-
-
     }
 
     /*
