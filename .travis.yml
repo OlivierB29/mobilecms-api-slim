@@ -12,6 +12,12 @@ matrix:
   allow_failures:
   - php: nightly
 
+before_install:
+  - sudo apt-get -qq update
+  - yes | pecl install imagick
+  - sudo apt-get install -y ghostscript
+  - travis_retry composer self-update
+
 before_script:
 - composer install -n
 
