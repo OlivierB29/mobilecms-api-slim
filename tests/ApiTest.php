@@ -161,7 +161,7 @@ abstract class ApiTest extends TestCase
         $jsonResponse = \json_decode($psrResponse->getBody()->__toString());
         //$body = \json_encode($jsonResponse->{'data'});
         if (isset($jsonResponse)) {
-            if (isset($jsonResponse['data'])) {
+            if (isset($jsonResponse->{'data'})) {
                 $result->setResult($jsonResponse->{'data'});
             } else {
                 $result->setResult($jsonResponse);
@@ -185,7 +185,7 @@ abstract class ApiTest extends TestCase
         if ($expected->getData() != null) {
             $jsonResponse = \json_decode((string) $actual->getBody());
 
-            if (isset($jsonResponse['data'])) {
+            if (isset($jsonResponse->{'data'})) {
                 $bodyStr = \json_encode($jsonResponse->{'data'});
     
                 $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
