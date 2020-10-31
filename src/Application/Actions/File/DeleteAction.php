@@ -18,14 +18,13 @@ class DeleteAction extends FileAction
 
         $this->checkConfiguration();
 
-        $deleteResult = $this->deleteFiles(
+        $response = $this->deleteFiles(
             $this->getParam('type'),
             $this->getParam('id'),
-            $this->getRequestBodyStr()
+            $this->getRequestBody()
         );
-        $response->setCode(200);
 
-        $response->setResult(json_encode($deleteResult));
+
 
         return $this->withResponse($response);
     }

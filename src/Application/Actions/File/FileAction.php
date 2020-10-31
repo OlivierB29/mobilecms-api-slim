@@ -161,13 +161,12 @@ abstract class FileAction extends RestAction
      *
      * @param string $datatype news
      * @param string $id       123
-     * @param string $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
+     * @param array $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
      */
-    protected function deleteFiles($datatype, $id, $filesStr): Response
+    protected function deleteFiles(string $datatype, string $id, array $files): Response
     {
         $response = $this->getDefaultResponse();
 
-        $files = json_decode($filesStr);
 
         $result = [];
 
@@ -191,7 +190,7 @@ abstract class FileAction extends RestAction
             }
         }
 
-        $response->setResult(json_encode($result));
+        $response->setResult($result);
         $response->setCode(200);
 
         return $response;

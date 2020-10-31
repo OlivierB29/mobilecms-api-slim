@@ -99,20 +99,7 @@ abstract class RestAction extends Action
         return $this->resolveArg($arg);
     }
     
-  
-    /**
-     * replace it later
-     */
-    /*
-    public function getRequestBody() : mixed {
-        return $this->getFormData();
-    }
-*/
 
-    public function getRequestBodyStr() : string
-    {
-        return json_encode($this->getFormData());
-    }
 
     /**
      * Initialize a default Response object.
