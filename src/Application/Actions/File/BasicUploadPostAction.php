@@ -61,11 +61,11 @@ class BasicUploadPostAction extends FileAction
                 throw new HttpBadRequestException($this->request, 'forbidden file type');
             }
         }
-/*
-        foreach ($files as $tmpfile) {
-            throw new \Exception("files ? " . $tmpfile->getClientFilename());
-        }
-*/
+        /*
+                foreach ($files as $tmpfile) {
+                    throw new \Exception("files ? " . $tmpfile->getClientFilename());
+                }
+        */
         
 
         foreach ($files as $file) {
