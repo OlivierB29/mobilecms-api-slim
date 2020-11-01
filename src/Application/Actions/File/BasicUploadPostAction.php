@@ -23,6 +23,20 @@ class BasicUploadPostAction extends FileAction
         //get the full data of a single record
         // eg : /mobilecmsapi/v1/file/calendar/1
         $files = $this->request->getUploadedFiles();
+  
+        /* just in case
+
+               if (isset($tmpfiles['uploadfiles1'])) {
+            $files = $tmpfiles['uploadfiles1'];
+            error_log('Using 1');
+        } elseif (isset($files['uploadfiles2'])){
+            $files = $tmpfiles['uploadfiles2'];
+            error_log('Using 2');
+        } else {
+            $files = $tmpfiles;
+            error_log('Using 0');
+        }
+*/
         $uploadResult = $this->uploadFilesSlim($this->getParam('type'), $this->getParam('id'), $files);
         $response->setCode(200);
 
@@ -47,6 +61,12 @@ class BasicUploadPostAction extends FileAction
                 throw new HttpBadRequestException($this->request, 'forbidden file type');
             }
         }
+/*
+        foreach ($files as $tmpfile) {
+            throw new \Exception("files ? " . $tmpfile->getClientFilename());
+        }
+*/
+        
 
         foreach ($files as $file) {
             $destdir = $this->getRecordDirPath($type, $id);
