@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Application\Actions\File;
 
 use App\Application\Actions\RestAction;
-use App\Domain\User\UserRepository;
+
 use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Utils\Properties;

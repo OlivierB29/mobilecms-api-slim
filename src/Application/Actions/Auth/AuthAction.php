@@ -4,12 +4,7 @@ declare(strict_types=1);
 namespace App\Application\Actions\Auth;
 
 use App\Application\Actions\RestAction;
-use App\Domain\User\UserRepository;
-use Psr\Log\LoggerInterface;
-use App\Infrastructure\Services\FileService;
-use App\Infrastructure\Utils\Properties;
-use App\Infrastructure\Rest\Response as RestResponse;
-use App\Infrastructure\Services\AuthService;
+
 
 abstract class AuthAction extends RestAction
 {

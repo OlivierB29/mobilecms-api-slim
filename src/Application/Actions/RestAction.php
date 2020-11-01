@@ -2,21 +2,17 @@
 declare(strict_types=1);
 
 namespace App\Application\Actions;
+use Psr\Log\LoggerInterface;
 
 use App\Application\Actions\Action;
-use App\Domain\User\UserRepository;
-use Psr\Log\LoggerInterface;
+
+
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpBadRequestException;//400
-use Slim\Exception\HttpUnauthorizedException;//401
-use Slim\Exception\HttpForbiddenException;//403
-use Slim\Exception\HttpNotFoundException;//404
-use Slim\Exception\HttpInternalServerErrorException;//500
+
 
 abstract class RestAction extends Action
 {
