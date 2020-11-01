@@ -13,7 +13,7 @@ class JsonUtils
      *
      * array or \stdClass JSON object
      */
-    public static function readJsonFile(string $file) 
+    public static function readJsonFile(string $file)
     {
         return json_decode(file_get_contents($file));
     }

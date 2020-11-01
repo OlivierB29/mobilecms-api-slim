@@ -217,7 +217,7 @@ abstract class FileAction extends RestAction
     {
         $result = false;
         if ($file !== '') {
-            $result = in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $this->fileExtensions);          
+            $result = in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $this->fileExtensions);
         }
         return $result;
     }

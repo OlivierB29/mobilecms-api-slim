@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Application\Actions;
+
 use Psr\Log\LoggerInterface;
 
 use App\Application\Actions\Action;
@@ -12,7 +13,6 @@ use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
 
 use Psr\Http\Message\ResponseInterface;
-
 
 abstract class RestAction extends Action
 {
