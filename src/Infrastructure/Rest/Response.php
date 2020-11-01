@@ -41,7 +41,7 @@ class Response
     /**
      * Get result.
      *
-     * @return get string result
+     * json result
      */
     public function getResult()
     {
@@ -51,7 +51,7 @@ class Response
     /**
      * Get result.
      *
-     * @return get string result
+     * @return string get string result
      */
     public function getEncodedResult(): string
     {

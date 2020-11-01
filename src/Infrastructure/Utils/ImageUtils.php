@@ -13,12 +13,12 @@ class ImageUtils
 
     /**
     * Create a list of thumbnails
-    * @param string $fileName : file path
+    * @param string $file : file path
     * @param string $dir : directory containing resized files
     * @param array $sizes : array of new resized widths
     * @return array created files
     */
-    public function multipleResize(string $file, string $dir, array $sizes)
+    public function multipleResize(string $file, string $dir, array $sizes) : array
     {
         $result = [];
 
@@ -172,9 +172,8 @@ class ImageUtils
     }
 
     /**
-     * Set quality.
      *
-     * @param int $newval set quality
+     * @param bool $newval enable imagick
      */
     public function setImagick(bool $newval)
     {

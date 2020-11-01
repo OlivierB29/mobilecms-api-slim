@@ -83,7 +83,7 @@ class AuthorizeRule
      * @param string $userRole         object
      * @param string   $requiredRole required role
      *
-     * @return true if access is authorized
+     * @return bool true if access is authorized
      */
     private function isPermitted(string $userRole, string $requiredRole): bool
     {
@@ -106,7 +106,7 @@ class AuthorizeRule
      *
      * @param string $userRole object
      *
-     * @return true if access is authorized
+     * @return bool true if access is authorized
      */
     private function isPermittedEditor(string $userRole): bool
     {
@@ -127,7 +127,7 @@ class AuthorizeRule
      *
      * @param string $userRole object
      *
-     * @return true if access is authorized
+     * @return bool true if access is authorized
      */
     private function isPermittedAdmin($userRole): bool
     {

@@ -100,7 +100,7 @@ abstract class FileAction extends RestAction
     /**
      * Main storage directory.
      *
-     * @return eg : // /var/www/html/media
+     * @return string eg : // /var/www/html/media
      */
     public function getMediaDirPath(): string
     {
@@ -110,7 +110,7 @@ abstract class FileAction extends RestAction
     /**
      * Record storage directory.
      *
-     * @return eg : // /var/www/html/media/calendar/1
+     * @return string eg : // /var/www/html/media/calendar/1
      */
     public function getRecordDirPath($type, $id): string
     {
@@ -161,7 +161,8 @@ abstract class FileAction extends RestAction
      *
      * @param string $datatype news
      * @param string $id       123
-     * @param array $filesStr : [{ "url": "http://something.com/[...]/foobar.html" }]
+     * @param array $files : [{ "url": "http://something.com/[...]/foobar.html" }]
+     * @return Response rest response
      */
     protected function deleteFiles(string $datatype, string $id, array $files): Response
     {
@@ -198,7 +199,7 @@ abstract class FileAction extends RestAction
 
     /**
     * enable debug
-    * @param boolean value enable debug
+    * @param bool $value enable debug
     */
     public function setDebug(bool $value)
     {
@@ -212,14 +213,11 @@ abstract class FileAction extends RestAction
     * @param string $file file name
     * @return bool
     */
-    protected function isAllowedExtension($file): bool
+    protected function isAllowedExtension(string $file): bool
     {
         $result = false;
-        if ($file) {
-            $extension = pathinfo($file, PATHINFO_EXTENSION);
-            if (isset($extension)) {
-                $result = in_array(strtolower($extension), $this->fileExtensions);
-            }
+        if ($file !== '') {
+            $result = in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $this->fileExtensions);          
         }
         return $result;
     }

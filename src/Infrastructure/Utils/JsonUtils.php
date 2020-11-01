@@ -11,9 +11,9 @@ class JsonUtils
      *
      * @param string $file : file path
      *
-     * @return array or \stdClass JSON object
+     * array or \stdClass JSON object
      */
-    public static function readJsonFile(string $file)
+    public static function readJsonFile(string $file) 
     {
         return json_decode(file_get_contents($file));
     }
@@ -22,7 +22,7 @@ class JsonUtils
      * Read a JSON file.
      *
      * @param string $file : file
-     * @param data   $data : JSON object
+     * param  $data : JSON object
      */
     public static function writeJsonFile(string $file, $data)
     {
@@ -73,7 +73,7 @@ class JsonUtils
     {
         $result = null;
 
-        if (isset($name) && isset($value)) {
+        if ($name !== '' && $value !== '') {
             foreach ($data as $element) {
                 if ($element->{$name} == $value) {
                     $result = $element;
@@ -95,7 +95,7 @@ class JsonUtils
     {
         $result = -1;
 
-        if (isset($name) && isset($value)) {
+        if ($name !== '' && $value !== '') {
             $pos = 0;
             foreach ($data as $element) {
                 if ($element->{$name} == $value) {
@@ -117,7 +117,7 @@ class JsonUtils
      * @param string $name : eg: id
      * @param \stdClass $item : JSON object
      *
-     * @return updated array
+     * @return array updated array
      */
     public static function put(array $data, string $name, \stdClass $item): array
     {

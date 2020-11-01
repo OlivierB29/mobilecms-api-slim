@@ -9,7 +9,8 @@ use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
-use Slim\Psr7\Response;
+
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;//400
 use Slim\Exception\HttpUnauthorizedException;//401
@@ -116,10 +117,10 @@ abstract class RestAction extends Action
     }
 
     /**
-     * @param  array|object|null $data
+     * @param  array|object|null $resp
      * @return Response
      */
-    protected function withResponse(RestResponse $resp): Response
+    protected function withResponse(RestResponse $resp): ResponseInterface
     {
         // $this->slimException($request, $resp);
         return $this->respondWithData($resp->getResult(), $resp->getCode());
@@ -127,7 +128,7 @@ abstract class RestAction extends Action
 
     protected function getRequestBody()
     {
-        $postformdata = $this->getProperties()->getString('postformdata', '');
+        $postformdata = $this->getProperties()->getString('postformdata');
 
         if ($postformdata === 'post') {
             return $_POST;

@@ -48,7 +48,7 @@ class MailUtils
     {
         if (empty($from)) {
             // @codeCoverageIgnoreStart
-            $from = 'no-reply@' . $_SERVER[HTTP_HOST];
+            $from = 'no-reply@' . $_SERVER['HTTP_HOST'];
             // @codeCoverageIgnoreEnd
         }
         $name = $from;

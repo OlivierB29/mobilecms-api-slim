@@ -51,7 +51,7 @@ class PdfUtils
     *
     * @param string $source somewhere/foo.pdf
     * @param string $target foo/foo.pdf
-    * @param string $width width
+    * @param int $width width in px
 
     * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
     */

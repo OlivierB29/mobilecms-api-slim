@@ -76,7 +76,7 @@ class JwtToken
         $tokenArray = explode('.', $token);
 
         if (\count($tokenArray) != 3) {
-            throw new Exception('Wrong number of segments!');
+            throw new \Exception('Wrong number of segments!');
         }
 
         $header = $tokenArray[0];
@@ -86,7 +86,7 @@ class JwtToken
         $computedSignature = $this->createSignature($header, $payload, $secretKey);
 
         if (!hash_equals($signatureFromToken, $computedSignature)) {
-            throw new Exception('Signature verification failed!');
+            throw new \Exception('Signature verification failed!');
         }
 
 
@@ -185,10 +185,10 @@ class JwtToken
      *
      * @param string $payload encoded JSON
      *
-     * @return JSON payload object
+     * @return mixed JSON payload object
      */
     // @codeCoverageIgnoreStart
-    private function parseHeader(string $payload): string
+    private function parseHeader(string $payload) : mixed
     {
         return json_decode(base64_decode($payload));
     }
@@ -199,16 +199,16 @@ class JwtToken
      *
      * @param string $payload encoded JSON
      *
-     * @return string JSON payload object
+     * @return mixed JSON payload object
      */
     // @codeCoverageIgnoreStart
-    private function parsePayload(string $payload): string
+    private function parsePayload(string $payload) : mixed
     {
         return json_decode(base64_decode($payload));
     }
     // @codeCoverageIgnoreEnd
 
-    public function getUserFromToken($token): string
+    public function getUserFromToken($token) : string
     {
         if (!isset($token)) {
             throw new \Exception('empty token');
@@ -220,7 +220,7 @@ class JwtToken
 
         $payload = $this->getPayload($token);
 
-        if (!isset($payload)) {
+        if ($payload === '') {
             // @codeCoverageIgnoreStart
             throw new \Exception('empty payload');
             // @codeCoverageIgnoreEnd
