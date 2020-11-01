@@ -5,7 +5,6 @@ namespace App\Application\Actions\Auth;
 
 use App\Application\Actions\RestAction;
 
-
 abstract class AuthAction extends RestAction
 {
     public function getUser($logindata): string

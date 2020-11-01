@@ -5,7 +5,6 @@ namespace App\Application\Actions\Admin;
 
 use App\Application\Actions\RestAction;
 
-
 abstract class AdminAction extends RestAction
 {
     const INDEX_JSON = '/index/index.json';

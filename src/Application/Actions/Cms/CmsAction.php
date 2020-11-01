@@ -7,7 +7,6 @@ use App\Application\Actions\RestAction;
 
 use App\Infrastructure\Services\ContentService;
 
-
 abstract class CmsAction extends RestAction
 {
 
