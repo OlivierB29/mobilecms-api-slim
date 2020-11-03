@@ -1,6 +1,6 @@
 <?php namespace App\Infrastructure\Services;
 
-use  App\Infrastructure\Utils\JsonUtils;
+use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\ImageUtils;
 use App\Infrastructure\Utils\PdfUtils;
@@ -9,7 +9,7 @@ use App\Infrastructure\Utils\Properties;
 /**
  * File utility service.
  */
-class FileService
+class FileService extends AbstractService
 {
     /**
      * Direct file children from dir.
@@ -230,13 +230,5 @@ class FileService
         return $response;
     }
 
-    public function getConf(string $type): Properties
-    {
-        $conf = new Properties();
-        if (\file_exists($this->getConfFileName($type))) {
-            $conf->loadConf($this->getConfFileName($type));
-        }
-        
-        return $conf;
-    }
+
 }

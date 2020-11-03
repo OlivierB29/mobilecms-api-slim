@@ -3,21 +3,23 @@ declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpInternalServerErrorException;
 
 use App\Application\Actions\Action;
-
-
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
 
-use Psr\Http\Message\ResponseInterface;
 
 abstract class RestAction extends Action
 {
 
-
+    protected $usepost = false;
 
 
     /**
@@ -113,8 +115,8 @@ abstract class RestAction extends Action
     }
 
     /**
-     * @param  array|object|null $resp
-     * @return Response
+     * @param  RestResponse $resp
+     * @return ResponseInterface
      */
     protected function withResponse(RestResponse $resp): ResponseInterface
     {
@@ -150,9 +152,9 @@ abstract class RestAction extends Action
 
     private function getFormData()
     {
-        $usepost = false;
+        
 
-        if ($usepost) {
+        if ($this->usepost) {
             return $_POST;
         } else {
             $input = json_decode(file_get_contents('php://input'));

@@ -64,13 +64,8 @@ function compareIndexReverse(string $key)
  * - put : create a new item
  * - post : update an existing item.
  */
-class ContentService
+class ContentService extends AbstractService
 {
-
-    /**
-     * Main directory (eg: /opt/foobar/data ).
-     */
-    private $databasedir;
 
 
 
@@ -118,23 +113,6 @@ class ContentService
         return $result;
     }
 
-    private function checkParams(string $type, string $id)
-    {
-        $this->checkType($type);
-
-
-        if (empty($id)) {
-            throw new \Exception('empty id');
-        }
-    }
-
-    private function checkType(string $type)
-    {
-        if (empty($type)) {
-            throw new \Exception('empty type');
-        }
-    }
-
 
     /**
      * Return a template index file path.
@@ -164,12 +142,7 @@ class ContentService
         return $this->databasedir . '/' . $type . '/index/cache_template.json';
     }
 
-    private function getConfFileName(string $type) : string
-    {
-        $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/conf.json';
-    }
 
     public function getMetadataFileName(string $type) : string
     {
@@ -540,16 +513,7 @@ class ContentService
         return $response;
     }
 
-    public function getConf(string $type): Properties
-    {
-        $conf = new Properties();
-        if (\file_exists($this->getConfFileName($type))) {
-            $conf->loadConf($this->getConfFileName($type));
-        }
-        
-        return $conf;
-    }
-
+ 
     /**
      * Rebuild an index.
      *
@@ -699,19 +663,7 @@ class ContentService
         return $tmp;
     }
 
-    /**
-     * Initialize a default Response object.
-     *
-     * @return Response object
-     */
-    protected function getDefaultResponse() : Response
-    {
-        $response = new Response();
-        $response->setCode(400);
-        $response->setResult(new \stdClass);
 
-        return $response;
-    }
 
 
     public function deleteRecords(string $type, array $ids)
