@@ -404,9 +404,9 @@ class AuthService
      *
      * @param \stdClass $user object
      *
-     * @return true if access is authorized
+     * @return bool true if access is authorized
      */
-    private bool function isPermittedEditor(\stdClass $user): bool
+    private function isPermittedEditor(\stdClass $user): bool
     {
         $result = false;
         if (!empty($user) && !empty($user->{'role'})) {
@@ -425,9 +425,9 @@ class AuthService
      *
      * @param \stdClass $user object
      *
-     * @return true if access is authorized
+     * @return bool true if access is authorized
      */
-    private bool function isPermittedAdmin($user): bool
+    private function isPermittedAdmin($user): bool
     {
         $result = false;
         if (!empty($user) && !empty($user->{'role'})) {
