@@ -4,6 +4,7 @@ use  App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\ImageUtils;
 use App\Infrastructure\Utils\PdfUtils;
+use App\Infrastructure\Utils\Properties;
 
 /**
  * File utility service.
@@ -80,7 +81,7 @@ class FileService
      * @param string $type eg: calendar
      * @param string $id       eg: 1
      *
-     * @return eg : /var/www/html/media/calendar/1
+     * @return string eg : /var/www/html/media/calendar/1
      */
     public function getRecordDirectory(string $mediadir, string $type, string $id, \stdClass $record): string
     {
@@ -130,8 +131,8 @@ class FileService
      * @param string $mediadir : destination directory
      * @param string $datatype : news
      * @param string $id       : 123
-     * @param string $files : [{ "url": "tennis.jpg", "sizes": [100, 200, 300]}]
-     * @param string $defaultsizes : [100, 200, 300, 400, 500]
+     * @param array $files : [{ "url": "tennis.jpg", "sizes": [100, 200, 300]}]
+     * @param array $defaultsizes : [100, 200, 300, 400, 500]
      *
      * @return Response result
      */
@@ -227,5 +228,15 @@ class FileService
         $response->setResult(new \stdClass);
 
         return $response;
+    }
+
+    public function getConf(string $type): Properties
+    {
+        $conf = new Properties();
+        if (\file_exists($this->getConfFileName($type))) {
+            $conf->loadConf($this->getConfFileName($type));
+        }
+        
+        return $conf;
     }
 }

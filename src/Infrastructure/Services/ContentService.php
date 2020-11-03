@@ -13,14 +13,15 @@ use Slim\Psr7\Response as ResponseImpl;
 /**
  * Function used for sorting.
  *
- * @param key $key name
+ * @param string $key name
  */
 function compareIndex(string $key)
 {
     /*
     * compare two object using the $key property
-    * @param a first object to compare
-    * @param b second object to compare
+    * @param \stdClass a first object to compare
+    * @param \stdClass b second object to compare
+    * @return int same as strnatcmp
     */
     return function (\stdClass $a, \stdClass $b) use ($key) {
         $result = 0;
@@ -31,12 +32,19 @@ function compareIndex(string $key)
     };
 }
 
+/**
+ * Function used for sorting.
+ *
+ * @param string $key name
+
+ */
 function compareIndexReverse(string $key)
 {
     /*
     * compare two object using the $key property
     * @param a first object to compare
     * @param b second object to compare
+    * @return int same as strnatcmp
     */
     return function (\stdClass $a, \stdClass $b) use ($key) {
         $result = 0;
@@ -69,7 +77,7 @@ class ContentService
     /**
      * Constructor.
      *
-     * @param databasedir $databasedir eg : public
+     * @param string $databasedir eg : public
      */
     public function __construct(string $databasedir)
     {
@@ -82,7 +90,7 @@ class ContentService
      * @param string $type : name of type eg : calendar
      * @param string $id   : unique id of record eg : 1
      *
-     * @return /foobar/calendar/index.json
+     * @return string /foobar/calendar/index.json
      */
     private function getItemFileName(string $type, string $id, \stdClass $record) : string
     {
@@ -133,7 +141,7 @@ class ContentService
      *
      * @param string $type : name of type eg : calendar
      *
-     * @return /foobar/calendar/index_template.json
+     * @return string /foobar/calendar/index_template.json
      */
     private function getIndexTemplateFileName(string $type) : string
     {
@@ -147,7 +155,7 @@ class ContentService
      *
      * @param string $type : name of type eg : calendar
      *
-     * @return /foobar/calendar/cache_template.json
+     * @return string /foobar/calendar/cache_template.json
      */
     private function getCacheTemplateFileName(string $type) : string
     {
@@ -282,7 +290,7 @@ class ContentService
      * @param string $keyname   : id
      * @param string $keyvalue  : 1
      *
-     * @return : Response object with a JSON object eg : {"id":"1", "foo":"bar"}
+     * @return Response object with a JSON object eg : {"id":"1", "foo":"bar"}
      */
     public function get(string $filename, string $keyname, string $keyvalue): Response
     {
@@ -318,7 +326,7 @@ class ContentService
      *
      * @param string $type eg: calendar
      *
-     * @return : Response object with a JSON array
+     * @return Response object with a JSON array
      */
     public function getAllObjects(string $type): Response
     {
@@ -350,7 +358,7 @@ class ContentService
      *
      * @param string $filename : JSON data filename eg: [{"id":"1", "foo":"bar"}, {"id":"2", "foo":"bar2"}].
      *
-     * @return : Response object with a JSON array
+     * @return Response object with a JSON array
      */
     public function getAll(string $filename): Response
     {
@@ -387,7 +395,7 @@ class ContentService
      *
      * @param string $type      : object type (eg : calendar)
      * @param string $keyname   : primary key inside the file.
-     * @param string $recordStr : JSON data
+     * @param \stdClass $record : JSON data
      */
     public function post(string $type, string $keyname, \stdClass $record)
     {
@@ -453,7 +461,7 @@ class ContentService
      *
      * @param string $type      : object type (eg : calendar)
      * @param string $keyname   : primary key inside the file.
-     * @param string $recordStr : JSON data
+     * @param string $keyvalue : value
      */
     public function publishById(string $type, string $keyname, string $keyvalue): Response
     {
@@ -731,17 +739,6 @@ class ContentService
         return $response;
     }
 
-    public function getLogger() : App\Infrastructure\Utils\Logger
-    {
-        return $this->logger;
-    }
 
 
-    public function setLogger(App\Infrastructure\Utils\Logger $logger)
-    {
-        $this->logger = $logger;
-    }
-
-
-    /*----------------------------------------------------- */
 }
