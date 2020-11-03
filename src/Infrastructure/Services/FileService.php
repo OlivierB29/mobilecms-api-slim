@@ -229,6 +229,4 @@ class FileService extends AbstractService
 
         return $response;
     }
-
-
 }

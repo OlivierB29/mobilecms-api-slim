@@ -9,6 +9,4 @@ interface ApiConstants
     public const VERSION = '/v2';
 
     public const API = self::ROOT . self::VERSION;
-
-
 }
