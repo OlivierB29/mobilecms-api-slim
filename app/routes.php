@@ -18,7 +18,7 @@ use App\Application\Actions\File\BasicUploadGetAction;
 use App\Application\Actions\File\BasicUploadPostAction;
 use App\Application\Actions\File\DeleteAction;
 use App\Application\Actions\File\DeleteFilesAction;
-use App\Application\Actions\File\DownloadAction;
+
 use App\Application\Actions\File\ThumbnailsAction;
 
 
@@ -94,7 +94,7 @@ return function (App $app) {
         $group->get('/basicupload/{type}/{id}', BasicUploadGetAction::class);
         $group->post('/basicupload/{type}/{id}', BasicUploadPostAction::class);
         $group->post('/delete/{type}/{id}', DeleteAction::class);
-        $group->post('/download/{type}/{id}', DownloadAction::class);
+
         $group->post('/thumbnails/{type}/{id}', ThumbnailsAction::class);
     });
 
