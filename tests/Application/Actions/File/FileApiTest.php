@@ -362,5 +362,4 @@ final class FileApiTest extends AuthApiTest
         $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg'));
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg');
     }
-
 }

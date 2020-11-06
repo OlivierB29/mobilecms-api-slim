@@ -77,11 +77,13 @@ class BasicUploadPostAction extends FileAction
         return $result;
     }
 
-    private function writeStream(string $file, StreamInterface $s) {
+    private function writeStream(string $file, StreamInterface $s)
+    {
         file_put_contents($file, $s->getContents());
     }
 
-    private function uploadFile(string $type,string $id, UploadedFileInterface $file) : \stdClass{
+    private function uploadFile(string $type, string $id, UploadedFileInterface $file) : \stdClass
+    {
         $destdir = $this->getRecordDirPath($type, $id);
 
         // create directory if it doesn't exist
@@ -96,7 +98,6 @@ class BasicUploadPostAction extends FileAction
 
             if ($this->getExtension($file->getClientFilename()) === 'pdf') {
                 $this->writeStream($destfile, $file->getStream());
-
             } else {
                 $file->moveTo($destfile);
             }
@@ -112,7 +113,6 @@ class BasicUploadPostAction extends FileAction
             $url = $file->getClientFilename();
 
             return $this->getFileResponse($destfile, $title, $url);
-
         }
     }
 }
