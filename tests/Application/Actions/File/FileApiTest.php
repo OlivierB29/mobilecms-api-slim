@@ -173,7 +173,7 @@ final class FileApiTest extends AuthApiTest
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
     }
 
-    public function testUploadFile()
+    public function testUploadFilePdf()
     {
         // API request
         $record = '/calendar/3';
@@ -193,6 +193,34 @@ final class FileApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
         $expected = '[{"title":"testupload.pdf","url":"testupload.pdf","size":24612,"mimetype":"application\/pdf"}]';
+
+        $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
+
+        $mediaFile = $this->API->getMediaDirPath() . $record . '/' . $filename;
+        $this->assertTrue(file_exists($mediaFile));
+        unlink($mediaFile);
+    }
+
+    public function testUploadFileJpg()
+    {
+        // API request
+        $record = '/calendar/3';
+        $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
+        $filename = 'testupload.jpg';
+        // mock file
+        $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . 'testupload.jpg';
+        copy('tests-data/fileapi/save/' . $filename, $mockUploadedFile);
+        $files = [
+        ['name'=>$filename,'type'=>'image/jpeg','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>146955]
+        ];
+
+        $response = $this->fileRequest('POST', $this->path, $files);
+
+        $this->printError($response);
+        $this->assertEquals(200, $response->getCode());
+
+        $this->assertTrue($response != null);
+        $expected = '[{"mimetype":"image\/jpeg","width":"640","height":"476","url":"testupload.jpg","size":146955,"title":"testupload.jpg"}]';
 
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
 
@@ -335,11 +363,4 @@ final class FileApiTest extends AuthApiTest
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg');
     }
 
-    protected function filerequestzzz($verb, $path, $files): \mobilecms\rest\Response
-    {
-
-//@TODO !!!     $this->API->setRequest($this->REQUEST, $this->SERVER, $this->GET, $this->POST, $this->headers, $files);
-        
-        return $this->API->processAPI();
-    }
 }
