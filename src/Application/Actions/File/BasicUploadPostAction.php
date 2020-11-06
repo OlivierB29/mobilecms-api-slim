@@ -8,6 +8,7 @@ use Slim\Exception\HttpNotFoundException;//404
 use Slim\Exception\HttpInternalServerErrorException;//500
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\StreamInterface;
 use App\Infrastructure\Services\FileService;
 
 class BasicUploadPostAction extends FileAction
@@ -69,36 +70,49 @@ class BasicUploadPostAction extends FileAction
         
 
         foreach ($files as $file) {
-            $destdir = $this->getRecordDirPath($type, $id);
-
-            // create directory if it doesn't exist
-            if (!file_exists($destdir)) {
-                mkdir($destdir, $this->umask, true);
-                chmod($destdir, $this->umask);
-            }
-
-            // upload
-            if ($file->getClientFilename() !== null) {
-                $destfile = $destdir . '/' . $file->getClientFilename();
-  
-
-                $file->moveTo($destfile);
-                if (!file_exists($destfile)) {
-                    throw new HttpInternalServerErrorException($this->request, 'Upload error ' . $file->getClientFilename());
-                }
-   
-
-     
-                chmod($destfile, $this->umask);
-                $title = $file->getClientFilename();
-                $url = $file->getClientFilename();
-
-                $fileResult = $this->getFileResponse($destfile, $title, $url);
-
-                array_push($result, $fileResult);
-            }
+            $fileResult = $this->uploadFile($type, $id, $file);
+            array_push($result, $fileResult);
         }
 
         return $result;
+    }
+
+    private function writeStream(string $file, StreamInterface $s) {
+        file_put_contents($file, $s->getContents());
+    }
+
+    private function uploadFile(string $type,string $id, UploadedFileInterface $file) : \stdClass{
+        $destdir = $this->getRecordDirPath($type, $id);
+
+        // create directory if it doesn't exist
+        if (!file_exists($destdir)) {
+            mkdir($destdir, $this->umask, true);
+            chmod($destdir, $this->umask);
+        }
+
+        // upload
+        if ($file->getClientFilename() !== null) {
+            $destfile = $destdir . '/' . $file->getClientFilename();
+
+            if ($this->getExtension($file->getClientFilename()) === 'pdf') {
+                $this->writeStream($destfile, $file->getStream());
+
+            } else {
+                $file->moveTo($destfile);
+            }
+            
+            if (!file_exists($destfile)) {
+                throw new HttpInternalServerErrorException($this->request, 'Upload error ' . $file->getClientFilename());
+            }
+
+
+ 
+            chmod($destfile, $this->umask);
+            $title = $file->getClientFilename();
+            $url = $file->getClientFilename();
+
+            return $this->getFileResponse($destfile, $title, $url);
+
+        }
     }
 }

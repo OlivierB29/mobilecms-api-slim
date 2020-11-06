@@ -221,4 +221,18 @@ abstract class FileAction extends RestAction
         }
         return $result;
     }
+
+    /**
+    * Basic upload verification
+    * @param string $file file name
+    * @return string
+    */
+    protected function getExtension(string $file): string
+    {
+        $result = false;
+        if ($file !== '') {
+            $result = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        }
+        return $result;
+    }
 }
