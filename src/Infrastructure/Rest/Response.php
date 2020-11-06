@@ -61,7 +61,7 @@ class Response
     /**
      * Set http code.
      *
-     * @param string $newval set http status code
+     * @param int $newval set http status code
      */
     public function setCode(int $newval)
     {
@@ -71,7 +71,7 @@ class Response
     /**
      * Get http code.
      *
-     * @return get get http status code
+     * @return int get http status code
      */
     public function getCode(): int
     {
@@ -81,7 +81,7 @@ class Response
     /**
      * Set an error message and format it to JSON.
      *
-     * @param string $code http status code
+     * @param int $code http status code
      * @param string $msg  set error message
      */
     public function setError(int $code, string $msg)

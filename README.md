@@ -6,6 +6,8 @@
 # mobilecms-api-slim
 REST API written in PHP, for managing JSON files and images, with Slim 4.5
 
+- [website](https://github.com/OlivierB29/mobilecms)
+- [admin app](https://github.com/OlivierB29/mobilecms-admin) which uses this API
 
 # Features
 It is initially intended to manage a sport organization : News, calendar events, public pages, documents, ...

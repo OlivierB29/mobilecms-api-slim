@@ -223,7 +223,7 @@ class AuthService
      * Verify token.
      *
      * @param string $token : token
-     * @param string $role  : role (editor ...)
+     * @param string $requiredRole  : role (editor ...)
      *
      * @return Response object
      */
