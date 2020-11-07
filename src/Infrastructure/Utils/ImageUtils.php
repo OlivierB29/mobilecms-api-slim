@@ -138,37 +138,37 @@ class ImageUtils
     * @param string $thumbFile : new resized file
     * @param int $width : new resized width
     */
-    private function resizeJpegImagick(string $fileName, string $thumbFile, int $width, int $height){
+    private function resizeJpegImagick(string $fileName, string $thumbFile, int $width, int $height)
+    {
   
             // https://secure.php.net/manual/en/imagick.thumbnailimage.php
-            // Max vert or horiz resolution
-            $maxsize=$width;
+        // Max vert or horiz resolution
+        $maxsize=$width;
 
-            // create new Imagick object
-            $image = new \Imagick($fileName);
+        // create new Imagick object
+        $image = new \Imagick($fileName);
 
-            // Resizes to whichever is larger, width or height
-            if ($image->getImageHeight() <= $image->getImageWidth()) {
-                // Resize image using the lanczos resampling algorithm based on width
-                $image->resizeImage($maxsize, 0, \Imagick::FILTER_LANCZOS, 1);
-            } else {
-                // Resize image using the lanczos resampling algorithm based on height
-                $image->resizeImage(0, $maxsize, \Imagick::FILTER_LANCZOS, 1);
-            }
+        // Resizes to whichever is larger, width or height
+        if ($image->getImageHeight() <= $image->getImageWidth()) {
+            // Resize image using the lanczos resampling algorithm based on width
+            $image->resizeImage($maxsize, 0, \Imagick::FILTER_LANCZOS, 1);
+        } else {
+            // Resize image using the lanczos resampling algorithm based on height
+            $image->resizeImage(0, $maxsize, \Imagick::FILTER_LANCZOS, 1);
+        }
 
-            // Set to use jpeg compression
-            $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
-            // Set compression level (1 lowest quality, 100 highest quality)
-            $image->setImageCompressionQuality($this->quality);
-            // Strip out unneeded meta data
-            $image->stripImage();
-            // Writes resultant image to output directory
-            $image->writeImage($thumbFile);
-            // Destroys \Imagick object, freeing allocated resources in the process
-            $image->destroy();
-
+        // Set to use jpeg compression
+        $image->setImageCompression(\Imagick::COMPRESSION_JPEG);
+        // Set compression level (1 lowest quality, 100 highest quality)
+        $image->setImageCompressionQuality($this->quality);
+        // Strip out unneeded meta data
+        $image->stripImage();
+        // Writes resultant image to output directory
+        $image->writeImage($thumbFile);
+        // Destroys \Imagick object, freeing allocated resources in the process
+        $image->destroy();
     }
-     /**
+    /**
     * @param string $fileName : file path
     * @param string $thumbFile : new resized file
     * @param int $width : new resized width
@@ -176,12 +176,13 @@ class ImageUtils
     * @param int $width_orig : width
     * @param int $height_orig : height
     */
-    private function resizeJpegGd(string $fileName, string $thumbFile, int $width, int $height, int $width_orig, int $height_orig){
-                    // Resample
-                    $image_p = \imagecreatetruecolor($width, $height);
-                    $image = \imagecreatefromjpeg($fileName);
-                    \imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-                    \imagejpeg($image_p, $thumbFile, $this->quality);
+    private function resizeJpegGd(string $fileName, string $thumbFile, int $width, int $height, int $width_orig, int $height_orig)
+    {
+        // Resample
+        $image_p = \imagecreatetruecolor($width, $height);
+        $image = \imagecreatefromjpeg($fileName);
+        \imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+        \imagejpeg($image_p, $thumbFile, $this->quality);
     }
 
 
