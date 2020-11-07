@@ -136,10 +136,10 @@ class JsonUtils
      * Copy properties of $source to $dest, without including the new properties
      * convert to --> $dest = {"id":"1", "foo":"pub"}.
      *
-     * @param \stdClass $source = {"id":"1", "foo":"pub" , "hello":"world"}
-     * @param \stdClass $dest = {"id":"1", "foo":"bar"}
+     * param  $source = {"id":"1", "foo":"pub" , "hello":"world"}
+     * param  $dest = {"id":"1", "foo":"bar"}
      */
-    public static function copy(\stdClass $source, \stdClass $dest)
+    public static function copy($source,  $dest)
     {
         foreach ($dest as $key => $value) {
             if (isset($source->{$key})) {
@@ -152,10 +152,10 @@ class JsonUtils
      * Copy properties of $source to $dest, including the new properties
      * eg:--> $dest = {"id":"1", "foo":"pub" , "hello":"world"}.
      *
-     * @param \stdClass $source = {"id":"1", "foo":"pub" , "hello":"world"}
-     * @param \stdClass $dest = {"id":"1", "foo":"bar"}
+     * param \stdClass $source = {"id":"1", "foo":"pub" , "hello":"world"}
+     * param \stdClass $dest = {"id":"1", "foo":"bar"}
      */
-    public static function replace(\stdClass $source, \stdClass $dest)
+    public static function replace($source,  $dest)
     {
         foreach ($source as $key => $value) {
             $dest->{$key} = $source->{$key};

@@ -84,6 +84,7 @@ class BasicUploadPostAction extends FileAction
 
     private function uploadFile(string $type, string $id, UploadedFileInterface $file) : \stdClass
     {
+        $result = null;
         $destdir = $this->getRecordDirPath($type, $id);
 
         // create directory if it doesn't exist
@@ -112,7 +113,8 @@ class BasicUploadPostAction extends FileAction
             $title = $file->getClientFilename();
             $url = $file->getClientFilename();
 
-            return $this->getFileResponse($destfile, $title, $url);
+            $result = $this->getFileResponse($destfile, $title, $url);
         }
+        return $result;
     }
 }

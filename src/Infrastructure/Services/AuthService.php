@@ -231,7 +231,7 @@ class AuthService
     {
         $response = $this->getDefaultResponse();
 
-        if (!isset($token)) {
+        if (strlen($token) === 0) {
             throw new \Exception('empty token');
         }
 
@@ -241,7 +241,7 @@ class AuthService
 
         $payload = $jwt->getPayload($token);
 
-        if (!isset($payload)) {
+        if (strlen($payload) === 0) {
             // @codeCoverageIgnoreStart
             throw new \Exception('empty payload');
             // @codeCoverageIgnoreEnd

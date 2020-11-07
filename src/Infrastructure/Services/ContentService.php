@@ -274,6 +274,7 @@ class ContentService extends AbstractService
         $data = JsonUtils::readJsonFile($file);
 
         // get one element
+        /** @phpstan-ignore-next-line */
         if (isset($keyvalue)) {
             // extract element data
             $existingObject = JsonUtils::getByKey($data, $keyname, $keyvalue);

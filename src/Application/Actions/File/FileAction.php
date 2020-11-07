@@ -70,12 +70,14 @@ abstract class FileAction extends RestAction
     {
         $this->media = $this->getConf()->{'media'};
         $this->thumbnailsizes = $this->getConf()->{'thumbnailsizes'};
-        // width 214 * height 82
         $this->pdfthumbnailsizes = [100, 200];
         $this->fileExtensions = $this->getConf()->{'fileextensions'};
         $this->imagequality = $this->getProperties()->getInteger('imagequality', 100);
 
-        $this->imagedriver = $this->getProperties()->getString('imagedriver', 'gd');
+        if (!empty($this->getProperties()->getString('imagedriver'))) {
+            $this->imagedriver = $this->getProperties()->getString('imagedriver');
+        }
+        
     }
 
 

@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace App\Application\Response;
 
-use Crell\ApiProblem\ApiProblem;
+
 use Slim\Psr7\Headers;
 use Slim\Psr7\Response;
 use Slim\Psr7\Stream;
@@ -25,12 +25,10 @@ class UnauthorizedResponse extends Response
 {
     public function __construct($message, $status = 401)
     {
-        $problem = new ApiProblem($message, "about:blank");
-        $problem->setStatus($status);
 
         $handle = fopen("php://temp", "wb+");
         $body = new Stream($handle);
-        $body->write($problem->asJson(true));
+        $body->write($message);
         $headers = new Headers;
         $headers->setHeader("Content-type", "application/problem+json");
         parent::__construct($status, $headers, $body);

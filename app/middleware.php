@@ -34,43 +34,11 @@ return function (App $app) {
         "attribute" => false,
         "relaxed" => ["192.168.1.10", "127.0.0.1", "localhost"],
         "error" => function ($response, $arguments) {
-            //return new UnauthorizedResponse($arguments["message"]);
+
             return $response;
         }
-        /*,
-        "rules" => [
-            new RequestPathRule([
-                "path" => "/",
-                "ignore" => []
-            ]),
-            new RequestPathRule([
-                "path" => "/",
-                "ignore" => []
-            ]),
-            new AuthorizeRule([
-                "userrole" => "guest",
-                "editorpath" => ["/"],
-                "adminpath" => ["/users"],
-                "ignore" => ["/login"]
-            ],
-            )
-        ]*/
-        // "before" => function ($request, $arguments) use ($container) {
-        //     $container["token"]->populate($arguments["decoded"]);
-        // }
+       
     ]));
     
-    /*
-        $app->add(new Tuupola\Middleware\JwtAuthentication([
-            "rules" => [
-                new Tuupola\Middleware\JwtAuthentication\RequestPathRule([
-                    "path" => "/",
-                    "ignore" => []
-                ]),
-                new Tuupola\Middleware\JwtAuthentication\RequestMethodRule([
-                    "ignore" => ["OPTIONS"]
-                ])
-            ]
-        ]));
-        */
+
 };
