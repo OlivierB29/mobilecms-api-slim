@@ -77,7 +77,6 @@ abstract class FileAction extends RestAction
         if (!empty($this->getProperties()->getString('imagedriver'))) {
             $this->imagedriver = $this->getProperties()->getString('imagedriver');
         }
-        
     }
 
 

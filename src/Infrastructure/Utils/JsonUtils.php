@@ -139,7 +139,7 @@ class JsonUtils
      * param  $source = {"id":"1", "foo":"pub" , "hello":"world"}
      * param  $dest = {"id":"1", "foo":"bar"}
      */
-    public static function copy($source,  $dest)
+    public static function copy($source, $dest)
     {
         foreach ($dest as $key => $value) {
             if (isset($source->{$key})) {
@@ -155,7 +155,7 @@ class JsonUtils
      * param \stdClass $source = {"id":"1", "foo":"pub" , "hello":"world"}
      * param \stdClass $dest = {"id":"1", "foo":"bar"}
      */
-    public static function replace($source,  $dest)
+    public static function replace($source, $dest)
     {
         foreach ($source as $key => $value) {
             $dest->{$key} = $source->{$key};
