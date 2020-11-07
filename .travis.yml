@@ -6,9 +6,10 @@ matrix:
   include:
   - php: 7.3
   env: ANALYSIS='true'
+ - php: 7.4
 
 # imagick fails with 7.4   
-# - php: 7.4
+
   
 
 before_install:
@@ -22,7 +23,7 @@ before_script:
 - composer install -n
 
 script:
-- if [[ "$ANALYSIS" == 'true' ]]; then vendor/bin/phpunit --coverage-clover clover.xml ; fi
+- vendor/bin/phpunit --coverage-clover clover.xml
 - if [[ "$ANALYSIS" == 'true' ]]; then vendor/bin/phpstan analyse src ; fi
 
 after_success:
