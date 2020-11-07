@@ -1,6 +1,7 @@
 <?php namespace App\Infrastructure\Utils;
 
 /**
+ * Image resize util and image information
  */
 class ImageUtils
 {
@@ -9,6 +10,9 @@ class ImageUtils
     */
     private $quality = 100;
 
+    /**
+     * image driver
+     */
     private $driver = 'imagick';
 
     /**
@@ -207,8 +211,11 @@ class ImageUtils
         $this->driver = $newval;
     }
 
-    // ---------------------------------------------------------
-
+    /**
+     * Detect image type by extension
+     * @param string $file filename
+     * @return bool true if image 
+     */
     public function isImage($file)
     {
         $result = false;
