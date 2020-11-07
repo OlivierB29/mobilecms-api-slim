@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace App\Application\Response;
 
-
 use Slim\Psr7\Headers;
 use Slim\Psr7\Response;
 use Slim\Psr7\Stream;
@@ -25,7 +24,6 @@ class UnauthorizedResponse extends Response
 {
     public function __construct($message, $status = 401)
     {
-
         $handle = fopen("php://temp", "wb+");
         $body = new Stream($handle);
         $body->write($message);

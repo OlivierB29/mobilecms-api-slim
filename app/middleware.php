@@ -34,11 +34,8 @@ return function (App $app) {
         "attribute" => false,
         "relaxed" => ["192.168.1.10", "127.0.0.1", "localhost"],
         "error" => function ($response, $arguments) {
-
             return $response;
         }
        
     ]));
-    
-
 };

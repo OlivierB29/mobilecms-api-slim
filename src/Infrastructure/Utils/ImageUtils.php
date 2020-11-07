@@ -214,7 +214,7 @@ class ImageUtils
     /**
      * Detect image type by extension
      * @param string $file filename
-     * @return bool true if image 
+     * @return bool true if image
      */
     public function isImage($file)
     {
