@@ -180,7 +180,7 @@ final class FileApiTest extends AuthApiTest
         $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
         $filename = 'testupload.pdf';
         // mock file
-        $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . '123456789.pdf';
+        $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . 'upload_tmp123456789.pdf';
         copy('tests-data/fileapi/save/' . $filename, $mockUploadedFile);
         $files = [
         ['name'=>$filename,'type'=>'application/pdf','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>24612]
@@ -208,7 +208,7 @@ final class FileApiTest extends AuthApiTest
         $this->path = $this->getApi() . '/fileapi/basicupload' . $record;
         $filename = 'testupload.jpg';
         // mock file
-        $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . 'testupload.jpg';
+        $mockUploadedFile = realpath('tests-data/fileapi/save/') . '/' . 'upload_tmp123456.jpg';
         copy('tests-data/fileapi/save/' . $filename, $mockUploadedFile);
         $files = [
         ['name'=>$filename,'type'=>'image/jpeg','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>146955]

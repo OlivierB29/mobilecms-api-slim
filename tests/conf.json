@@ -3,6 +3,7 @@
   "privatedir": "/private",
   "media": "/media",
   "thumbnailsizes":[150, 300, 672, 768, 1024],
+  "imagedriver": "gd",
   "fileextensions":["jpg","jpeg","png","gif","pdf","docx","xlsx","pptx","odt","ods","odp","mp4","m4v"],
   "imagequality":97,
   "jwt": "oldphp-jwt",

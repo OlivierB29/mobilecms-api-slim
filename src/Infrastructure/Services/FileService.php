@@ -145,7 +145,7 @@ class FileService extends AbstractService
         int $quality,
         array $defaultPdfsizes,
         int $pdfQuality,
-        bool $imagick = false
+        string $driver = 'gd'
     ): Response {
         $response = $this->getDefaultResponse();
         $destdir = $this->getRecordDirectoryWithoutRecord($mediadir, $datatype, $id);
@@ -154,7 +154,7 @@ class FileService extends AbstractService
         $result = [];
         $utils = new ImageUtils();
         $utils->setQuality($quality);
-        $utils->setImagick($imagick);
+        $utils->setDriver($driver);
         foreach ($files as $formKey => $file) {
             // /var/www/html/media/calendar/1
 

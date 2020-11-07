@@ -14,7 +14,7 @@ final class ImagickTest extends TestCase
         $dest = 'tests-data/imagick/baseball-field-1149153_1024.jpg';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->resize($src, $dest, 1024);
         $this->assertTrue(!empty($result));
         $this->assertTrue(\file_exists($dest));
@@ -26,7 +26,7 @@ final class ImagickTest extends TestCase
         $dest = 'tests-data/imagick/baseball-field-1149153_8000.jpg';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->resize($src, $dest, 8000);
         $this->assertTrue(empty($result));
         $this->assertFalse(\file_exists($dest));
@@ -38,7 +38,7 @@ final class ImagickTest extends TestCase
         $dest = 'tests-data/imagick/baseball-field-1149153_1024.png';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->resize($src, $dest, 1024);
         $this->assertTrue(!empty($result));
         $this->assertTrue(\file_exists($dest));
@@ -50,7 +50,7 @@ final class ImagickTest extends TestCase
         $dest = 'tests-data/imagick/baseball-field-1149153_8000.png';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->resize($src, $dest, 8000);
         $this->assertTrue(empty($result));
         $this->assertFalse(\file_exists($dest));
@@ -63,7 +63,7 @@ final class ImagickTest extends TestCase
         $dir = 'tests-data/imagick/thumbnails';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->multipleResize($src, $dir, $sizes);
 
         $this->assertTrue(count($result) === count($sizes));
@@ -77,7 +77,7 @@ final class ImagickTest extends TestCase
         $dir = 'tests-data/imagick/thumbnails';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(true);
+        $u->setDriver('imagick');
         $result = $u->multipleResize($src, $dir, $sizes);
 
         $this->assertTrue(count($result) === 5);

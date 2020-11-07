@@ -41,7 +41,7 @@ abstract class FileAction extends RestAction
 
     protected $imagequality = 100;
 
-    protected $imagick = false;
+    protected $imagedriver = 'gd';
 
 
 
@@ -75,7 +75,7 @@ abstract class FileAction extends RestAction
         $this->fileExtensions = $this->getConf()->{'fileextensions'};
         $this->imagequality = $this->getProperties()->getInteger('imagequality', 100);
 
-        $this->imagick = $this->getProperties()->getBoolean('imagick', false);
+        $this->imagedriver = $this->getProperties()->getString('imagedriver', 'gd');
     }
 
 

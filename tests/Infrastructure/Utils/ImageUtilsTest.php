@@ -15,7 +15,7 @@ final class ImageUtilsTest extends TestCase
         $dest = 'tests-data/imagesutils/baseball-field-1149153_1024.jpg';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(false);
+        $u->setDriver('gd');
         $result = $u->resize($src, $dest, 1024);
         $this->assertTrue(!empty($result));
         $this->assertTrue(\file_exists($dest));
@@ -27,7 +27,7 @@ final class ImageUtilsTest extends TestCase
         $dest = 'tests-data/imagesutils/baseball-field-1149153_1000.jpg';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(false);
+        $u->setDriver('gd');
         $result = $u->resize($src, $dest, 8000);
         $this->assertTrue(empty($result));
         $this->assertFalse(\file_exists($dest));
@@ -39,7 +39,7 @@ final class ImageUtilsTest extends TestCase
         $dest = 'tests-data/imagesutils/baseball-field-1149153_320.png';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(false);
+        $u->setDriver('gd');
         $result = $u->resize($src, $dest, 1024);
         $this->assertTrue(!empty($result));
         $this->assertTrue(\file_exists($dest));
@@ -62,7 +62,7 @@ final class ImageUtilsTest extends TestCase
         $dir = 'tests-data/imagesutils/thumbnails';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(false);
+        $u->setDriver('gd');
         $result = $u->multipleResize($src, $dir, $sizes);
 
         $this->assertTrue(count($result) === count($sizes));
@@ -76,7 +76,7 @@ final class ImageUtilsTest extends TestCase
         $dir = 'tests-data/imagesutils/thumbnails';
         $u = new ImageUtils();
         $u->setQuality(75);
-        $u->setImagick(false);
+        $u->setDriver('gd');
         $result = $u->multipleResize($src, $dir, $sizes);
 
         $this->assertTrue(count($result) === 5);

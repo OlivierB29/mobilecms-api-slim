@@ -29,7 +29,8 @@ class ThumbnailsAction extends FileAction
             $this->thumbnailsizes,
             $this->imagequality,
             $this->pdfthumbnailsizes,
-            $this->pdfimagequality
+            $this->pdfimagequality,
+            $this->imagedriver
         );
 
 
