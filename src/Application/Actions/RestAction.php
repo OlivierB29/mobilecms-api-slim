@@ -161,6 +161,4 @@ abstract class RestAction extends Action
             return $input;
         }
     }
-
-
 }
