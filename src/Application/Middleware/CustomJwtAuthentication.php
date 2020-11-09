@@ -152,13 +152,14 @@ class CustomJwtAuthentication implements MiddlewareInterface
         }
         // CUSTOM end
 
+
         /* If rules say we should not authenticate call next and return. */
         if (false === $this->shouldAuthenticate($request)) {
             return $handler->handle($request);
         }
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
-        
+
         if (!empty($scheme) && !empty($host) && "https" !== $scheme && true === $this->options["secure"]) {
             if (!in_array($host, $this->options["relaxed"])) {
                 $message = sprintf(
@@ -168,7 +169,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
                 throw new RuntimeException($message);
             }
         }
-        
+
         /* If token cannot be found or decoded return with 401 Unauthorized. */
         try {
             $token = $this->fetchToken($request);
@@ -184,17 +185,30 @@ class CustomJwtAuthentication implements MiddlewareInterface
             if (!$permitted) {
                 throw new HttpForbiddenException($request, "operation not permitted");
             }
-            // CUSTOM end
-        } catch (RuntimeException | DomainException $exception) {
-            $response = (new ResponseFactory)->createResponse(401);
+            
+        } catch ( DomainException $exception) {
+            $this->log(LogLevel::WARNING,'Http401_CustomJwt_process1');
+
+            $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
             return $this->processError($response, [
                 "message" => $exception->getMessage(),
                 "uri" => (string)$request->getUri()
             ]);
         }
-        // CUSTOM start
+        catch (RuntimeException  $exception) {
+            $this->log(LogLevel::WARNING,'Http401_CustomJwt_process2');
+
+            $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
+            return $this->processError($response, [
+                "message" => $exception->getMessage(),
+                "uri" => (string)$request->getUri()
+            ]);
+        }
+
         catch (HttpForbiddenException $exception) {
-            $response = (new ResponseFactory)->createResponse(403);
+            $response = (new ResponseFactory)->createResponse(403, $exception->getMessage());
+            $this->log(LogLevel::WARNING,'Http403_CustomJwt_process');
+
             return $this->processError($response, [
                 "message" => $exception->getMessage(),
                 "uri" => (string)$request->getUri()
@@ -300,6 +314,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function fetchToken(ServerRequestInterface $request): string
     {
         /* Check for token in header. */
+
         $header = $request->getHeaderLine($this->options["header"]);
 
         if (false === empty($header)) {
@@ -319,7 +334,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             }
             return $cookieParams[$this->options["cookie"]];
         };
-
+        
         /* If everything fails log and throw. */
         $this->log(LogLevel::WARNING, "Token not found");
         throw new RuntimeException("Token not found.");
@@ -482,6 +497,8 @@ class CustomJwtAuthentication implements MiddlewareInterface
     {
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
+        } else {
+            error_log($message);
         }
     }
 

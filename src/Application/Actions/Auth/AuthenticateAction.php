@@ -34,6 +34,7 @@ class AuthenticateAction extends AuthAction
             unset($logindata);
             // free variables before response
         } catch (\Exception $e) {
+            error_log('Http401_AuthenticateAction');
             $response->setError(401, $e->getMessage());
             // @codeCoverageIgnoreStart
         } finally {

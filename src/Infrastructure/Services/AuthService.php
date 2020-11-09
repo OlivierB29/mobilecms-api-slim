@@ -266,6 +266,7 @@ class AuthService
                 $response->setError(403, 'wrong role');
             }
         } else {
+            error_log('Http401_AuthService_verifyToken');
             $response->setError(401, 'verifyToken false');
         }
 

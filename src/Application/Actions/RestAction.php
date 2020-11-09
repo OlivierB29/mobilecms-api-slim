@@ -162,26 +162,5 @@ abstract class RestAction extends Action
         }
     }
 
-    /*
-        protected function slimException(ServerRequestInterface $request, RestResponse $response) {
-            switch ($response->getCode()) {
-                case 200:
-                    break;
-                case 400:
-                  throw new HttpBadRequestException($request, $response->getError());
-                  break;
-                case 401:
-                  throw new HttpUnauthorizedException($request, $response->getError());
-                  break;
-                case 403:
-                    throw new HttpForbiddenException($request, $response->getError());
-                  break;
-                case 404:
-                    throw new HttpNotFoundException($request, $response->getError());
-                break;
-                default:
-                throw new HttpUnauthorizedException($request, $response->getError());;
-              }
-        }
-        */
+
 }
