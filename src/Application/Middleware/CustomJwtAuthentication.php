@@ -185,29 +185,25 @@ class CustomJwtAuthentication implements MiddlewareInterface
             if (!$permitted) {
                 throw new HttpForbiddenException($request, "operation not permitted");
             }
-            
-        } catch ( DomainException $exception) {
-            $this->log(LogLevel::WARNING,'Http401_CustomJwt_process1');
+        } catch (DomainException $exception) {
+            $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process1');
 
             $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
             return $this->processError($response, [
                 "message" => $exception->getMessage(),
                 "uri" => (string)$request->getUri()
             ]);
-        }
-        catch (RuntimeException  $exception) {
-            $this->log(LogLevel::WARNING,'Http401_CustomJwt_process2');
+        } catch (RuntimeException  $exception) {
+            $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process2');
 
             $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
             return $this->processError($response, [
                 "message" => $exception->getMessage(),
                 "uri" => (string)$request->getUri()
             ]);
-        }
-
-        catch (HttpForbiddenException $exception) {
+        } catch (HttpForbiddenException $exception) {
             $response = (new ResponseFactory)->createResponse(403, $exception->getMessage());
-            $this->log(LogLevel::WARNING,'Http403_CustomJwt_process');
+            $this->log(LogLevel::WARNING, 'Http403_CustomJwt_process');
 
             return $this->processError($response, [
                 "message" => $exception->getMessage(),
