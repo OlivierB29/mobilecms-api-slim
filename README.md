@@ -1,7 +1,7 @@
 
 [![Build Status](https://travis-ci.org/OlivierB29/mobilecms-api-slim.svg?branch=master)](https://travis-ci.org/OlivierB29/mobilecms-api-slim)
 [![StyleCI](https://styleci.io/repos/300000877/shield?style=flat)](https://styleci.io/repos/300000877)
-![compatible](https://img.shields.io/badge/PHP%20%3E=7.3-Compatible-brightgreen.svg]
+![compatible](https://img.shields.io/badge/PHP%20%3E=7.3-Compatible-brightgreen.svg)
 
 # mobilecms-api-slim
 REST API written in PHP, for managing JSON files and images, with Slim 4.5
