@@ -9,9 +9,9 @@ class PdfUtils
     */
     private $quality = 80;
 
-     /**
-     * image driver
-     */
+    /**
+    * image driver
+    */
     private $driver = 'imagick';
 
     /**
@@ -69,7 +69,6 @@ class PdfUtils
         unset($file_info);
 
         if ($this->driver === 'imagick') {
-
             if ('application/pdf' === $mime_type) {
                 $im     = new \Imagick(\realpath($source));
                 $im->setIteratorIndex(0);
