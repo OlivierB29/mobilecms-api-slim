@@ -192,6 +192,7 @@ class FileService extends AbstractService
                         }
                         // future version with PDF preview : https://gist.github.com/umidjons/11037635
                         $pdfUtils = new PdfUtils();
+                        $pdfUtils->setDriver($driver);
                         $fileResponse = $pdfUtils->pdfInfo($filePath);
                         $pdfUtils->setQuality($pdfQuality);
                         $thumbnails = $pdfUtils->multipleResize($filePath, $thumbdir, $sizes);

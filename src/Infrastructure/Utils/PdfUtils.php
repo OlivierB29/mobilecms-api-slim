@@ -9,6 +9,11 @@ class PdfUtils
     */
     private $quality = 80;
 
+     /**
+     * image driver
+     */
+    private $driver = 'imagick';
+
     /**
     * Create a list of thumbnails
     * @param string $file : file path
@@ -63,36 +68,40 @@ class PdfUtils
         $mime_type = $file_info->buffer(\file_get_contents($source));
         unset($file_info);
 
-        if ('application/pdf' === $mime_type) {
-            $im     = new \Imagick(\realpath($source));
-            $im->setIteratorIndex(0);
-            $im->setCompression(\Imagick::COMPRESSION_JPEG);
-            $im->setCompressionQuality($this->quality);
+        if ($this->driver === 'imagick') {
 
-            $ratio_orig = $im->getImageWidth()/$im->getImageHeight();
-            $height = \intval(\round($width/$ratio_orig, 0, PHP_ROUND_HALF_UP));
-
-
-            $im->setImageFormat('jpeg');
-            //https://stackoverflow.com/questions/41585848/imagickflattenimages-method-is-deprecated-and-its-use-should-be-avoided
-            $im->setImageAlphaChannel(11); // Imagick::ALPHACHANNEL_REMOVE
-            $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
-            $im->setImageColorspace(255); // prevent image colors from inverting
-            $im->resizeImage($width, $height, \Imagick::FILTER_LANCZOS, 1);
-            $im->writeimage($target);
-            $im->clear();
-            $im->destroy();
-
-
-
-
-
-            $result = \json_decode('{}');
-            $result->{'width'} = (string)$width;
-            $result->{'height'} = (string)$height;
-
-            $result->{'url'} = \basename($target);
+            if ('application/pdf' === $mime_type) {
+                $im     = new \Imagick(\realpath($source));
+                $im->setIteratorIndex(0);
+                $im->setCompression(\Imagick::COMPRESSION_JPEG);
+                $im->setCompressionQuality($this->quality);
+    
+                $ratio_orig = $im->getImageWidth()/$im->getImageHeight();
+                $height = \intval(\round($width/$ratio_orig, 0, PHP_ROUND_HALF_UP));
+    
+    
+                $im->setImageFormat('jpeg');
+                //https://stackoverflow.com/questions/41585848/imagickflattenimages-method-is-deprecated-and-its-use-should-be-avoided
+                $im->setImageAlphaChannel(11); // Imagick::ALPHACHANNEL_REMOVE
+                $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
+                $im->setImageColorspace(255); // prevent image colors from inverting
+                $im->resizeImage($width, $height, \Imagick::FILTER_LANCZOS, 1);
+                $im->writeimage($target);
+                $im->clear();
+                $im->destroy();
+    
+    
+    
+    
+    
+                $result = \json_decode('{}');
+                $result->{'width'} = (string)$width;
+                $result->{'height'} = (string)$height;
+    
+                $result->{'url'} = \basename($target);
+            }
         }
+
 
 
         return $result;
@@ -122,5 +131,14 @@ class PdfUtils
     public function setQuality(int $newval)
     {
         $this->quality = $newval;
+    }
+
+    /**
+     *
+     * @param string $newval enable imagick
+     */
+    public function setDriver(string $newval)
+    {
+        $this->driver = $newval;
     }
 }
