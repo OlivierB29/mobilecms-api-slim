@@ -5,6 +5,7 @@ dist: trusty
 matrix:
   include:
   - php: 7.3
+  - php: 8.0
     env: ANALYSIS='true'
 
 # imagick fails with 7.4   
