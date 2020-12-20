@@ -159,7 +159,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
         }
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
-
+        // CUSTOM start
         if (!empty($scheme) && !empty($host) && "https" !== $scheme && true === $this->options["secure"]) {
             if (!in_array($host, $this->options["relaxed"])) {
                 $message = sprintf(
@@ -173,9 +173,10 @@ class CustomJwtAuthentication implements MiddlewareInterface
         /* If token cannot be found or decoded return with 401 Unauthorized. */
         try {
             $token = $this->fetchToken($request);
+            // CUSTOM start
             $jsonUser = $this->decodeToken($token);
             $decoded = $jsonUser->{'decoded'};
-            // CUSTOM start
+            
 
 
             $authRule = new AuthorizeRule($authorizeOptions);
@@ -310,7 +311,6 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function fetchToken(ServerRequestInterface $request): string
     {
         /* Check for token in header. */
-
         $header = $request->getHeaderLine($this->options["header"]);
 
         if (false === empty($header)) {
@@ -393,7 +393,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $method = str_replace(" ", "", $method);
             if (method_exists($this, $method)) {
                 /* Try to use setter */
-
+                /** @phpstan-ignore-next-line */
                 call_user_func([$this, $method], $value);
             } else {
                 /* Or fallback to setting option directly */
@@ -455,7 +455,6 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function secret($secret): void
     {
-        /** @phpstan-ignore-next-line */
         if (false === is_array($secret) && false === is_string($secret) && ! $secret instanceof \ArrayAccess) {
             throw new InvalidArgumentException(
                 'Secret must be either a string or an array of "kid" => "secret" pairs'
@@ -493,9 +492,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
     {
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
-        } else {
+        } else { // CUSTOM start
             error_log($message);
-        }
+        } //CSUTOM end
     }
 
     /**
