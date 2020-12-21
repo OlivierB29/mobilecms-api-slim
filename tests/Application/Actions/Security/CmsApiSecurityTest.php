@@ -28,8 +28,6 @@ final class CmsApiSecurityTest extends AuthApiTest
 
     public function testPostXssHtml1()
     {
-
-        
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
@@ -49,8 +47,6 @@ final class CmsApiSecurityTest extends AuthApiTest
 
     public function testPostXssHtml2()
     {
-
-        
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
@@ -69,8 +65,6 @@ final class CmsApiSecurityTest extends AuthApiTest
     }
     public function testPostXssHtml3()
     {
-
-        
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
@@ -91,7 +85,7 @@ final class CmsApiSecurityTest extends AuthApiTest
     {
 
 // TODO
-// Double Open Angle Brackets <iframe src=http://xss.rocks/scriptlet.html < , 
+        // Double Open Angle Brackets <iframe src=http://xss.rocks/scriptlet.html < ,
 
         
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
@@ -112,8 +106,6 @@ final class CmsApiSecurityTest extends AuthApiTest
     }
     public function testPostXssHtml5()
     {
-
-        
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
@@ -129,12 +121,10 @@ final class CmsApiSecurityTest extends AuthApiTest
         $this->assertTrue($response->getResult() != null && $response->getResult() != '');
 
         //TODO assert result without HTML
-    } 
+    }
     
     public function testPostXssHtml6()
     {
-
-        
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
 
@@ -150,14 +140,14 @@ final class CmsApiSecurityTest extends AuthApiTest
         $this->assertTrue($response->getResult() != null && $response->getResult() != '');
 
         //TODO assert result without HTML
-    } 
+    }
     
     public function testPostXssHtml7()
     {
 
         //
-        // ,  Extraneous Open Brackets <<SCRIPT>alert(\"XSS\");//\\<</SCRIPT> 
-        // Half Open HTML/JavaScript XSS Vector <IMG SRC=\"`('XSS')\"` 
+        // ,  Extraneous Open Brackets <<SCRIPT>alert(\"XSS\");//\\<</SCRIPT>
+        // Half Open HTML/JavaScript XSS Vector <IMG SRC=\"`('XSS')\"`
 
         $this->path = $this->getApi() . '/cmsapi/content/calendar';
 
@@ -175,5 +165,4 @@ final class CmsApiSecurityTest extends AuthApiTest
 
         //TODO assert result without HTML
     }
-
 }
