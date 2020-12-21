@@ -1,0 +1,16 @@
+{
+  "id": "htmlxss4",
+  "type": "calendar",
+  "date": "2015-09-02",
+  "activity": "activitya",
+  "title": "some seminar of activity A",
+  "organization": "Some org",
+  "description":
+" Escaping JavaScript Escapes </script><script>alert('XSS');</script> , End Title Tag </TITLE><SCRIPT>alert(\"XSS\");</SCRIPT>  , INPUT Image <INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\"> , BODY Image <BODY BACKGROUND=\"javascript:alert('XSS')\">",
+  "url": "",
+  "location": "",
+  "startdate": "",
+  "enddate": "",
+  "updated": "",
+  "updatedby": ""
+}

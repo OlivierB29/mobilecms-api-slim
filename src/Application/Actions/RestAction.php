@@ -174,4 +174,5 @@ abstract class RestAction extends Action
                 $body = \json_decode($clean_html);*/
        return  \json_decode(strip_tags(\json_encode($input)));
     }
+
 }

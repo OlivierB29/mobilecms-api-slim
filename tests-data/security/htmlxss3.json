@@ -1,0 +1,16 @@
+{
+  "id": "htmlxss3",
+  "type": "calendar",
+  "date": "2015-09-02",
+  "activity": "activitya",
+  "title": "some seminar of activity A",
+  "organization": "Some org",
+  "description":
+"Embedded Tab <IMG SRC=\"jav\tascript:alert('XSS');\"> , Embedded Encoded Tab <IMG SRC=\"jav&#x09;ascript:alert('XSS');\"> , Embedded Newline to Break-up XSS <IMG SRC=\"jav&#x0A;ascript:alert('XSS');\"> , Null breaks up JavaScript Directive TODO, Spaces and Meta Chars Before the JavaScript in Images for XSS <IMG SRC=\" &#14; javascript:alert('XSS');\">",
+  "url": "",
+  "location": "",
+  "startdate": "",
+  "enddate": "",
+  "updated": "",
+  "updatedby": ""
+}

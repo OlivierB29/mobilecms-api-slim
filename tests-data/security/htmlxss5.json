@@ -1,0 +1,16 @@
+{
+  "id": "htmlxss5",
+  "type": "calendar",
+  "date": "2015-09-02",
+  "activity": "activitya",
+  "title": "some seminar of activity A",
+  "organization": "Some org",
+  "description":
+"VBscript in an Image <IMG SRC='vbscript:msgbox(\"XSS\")'> , SVG Object Tag <svg/onload=alert('XSS')> , ECMAScript 6 Set.constructor`alert\\x28document.domain\\x29",
+  "url": "",
+  "location": "",
+  "startdate": "",
+  "enddate": "",
+  "updated": "",
+  "updatedby": ""
+}

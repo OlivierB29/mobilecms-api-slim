@@ -1,0 +1,16 @@
+{
+  "id": "htmlxss7",
+  "type": "calendar",
+  "date": "2015-09-02",
+  "activity": "activitya",
+  "title": "some seminar of activity A",
+  "organization": "Some org",
+  "description":
+" Non-alpha-non-digit XSS <BODY onload!#$%&()*~+-_.,:;?@[/|\\]^`=alert(\"XSS\")> , No Closing Script Tags <SCRIPT SRC=http://xss.rocks/xss.js?< B >,  Protocol Resolution in Script Tags <SCRIPT SRC=//xss.rocks/.j> ,    ",
+  "url": "",
+  "location": "",
+  "startdate": "",
+  "enddate": "",
+  "updated": "",
+  "updatedby": ""
+}
