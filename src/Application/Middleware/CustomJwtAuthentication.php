@@ -393,7 +393,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $method = str_replace(" ", "", $method);
             if (method_exists($this, $method)) {
                 /* Try to use setter */
-                /** @phpstan-ignore-next-line */
+
                 call_user_func([$this, $method], $value);
             } else {
                 /* Or fallback to setting option directly */
@@ -455,6 +455,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function secret($secret): void
     {
+        /** @phpstan-ignore-next-line */
         if (false === is_array($secret) && false === is_string($secret) && ! $secret instanceof \ArrayAccess) {
             throw new InvalidArgumentException(
                 'Secret must be either a string or an array of "kid" => "secret" pairs'
