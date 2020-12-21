@@ -493,9 +493,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
     {
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
-        } else { // CUSTOM start
-            error_log($message);
-        } //CSUTOM end
+        }
     }
 
     /**
