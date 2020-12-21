@@ -161,4 +161,17 @@ abstract class RestAction extends Action
             return $input;
         }
     }
+
+    protected function xsshtml($input) {
+        return strip_tags($input);
+    }
+
+    protected function xssjson($input) {
+                      /*  $dirty_html = \json_encode($this->getRequestBody());
+                $config = \HTMLPurifier_Config::createDefault();
+                $purifier = new \HTMLPurifier($config);            
+                $clean_html = $purifier->purify($dirty_html);
+                $body = \json_decode($clean_html);*/
+       return  \json_decode(strip_tags(\json_encode($input)));
+    }
 }

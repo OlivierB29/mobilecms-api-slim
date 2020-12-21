@@ -17,7 +17,8 @@ class ContentPostAction extends CmsAction
 
                 // step 1 : update Record
 
-        $body = $this->getRequestBody();
+
+        $body = $this->xssjson($this->getRequestBody());
         $putResponse = $this->getService()->post($this->getParam('type'), self::ID, $body);
         $myobjectJson = $putResponse->getResult();
         unset($putResponse);
