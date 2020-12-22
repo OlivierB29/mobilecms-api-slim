@@ -7,7 +7,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Application\Actions\RestAction;
 
-
 class DebugAction extends RestAction
 {
 

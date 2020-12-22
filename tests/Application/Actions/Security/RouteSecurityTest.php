@@ -3,9 +3,7 @@
 declare(strict_types=1);
 namespace Tests\Application\Actions\Security;
 
-
 use Tests\ApiTest;
-
 
 final class RouteSecurityTest extends ApiTest
 {

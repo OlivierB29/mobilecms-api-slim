@@ -56,7 +56,6 @@ return function (App $app) {
     });
 
     $app->get('/', function (Request $request, Response $response) {
-
         $response->getBody()->write('');
         return $response;
     });
@@ -77,7 +76,6 @@ return function (App $app) {
 
     $app->group(ApiConstants::API . '/debugapi', function (Group $group) {
         $group->get('', DebugAction::class);
-
     });
 
     $app->group(ApiConstants::API . '/cmsapi/content', function (Group $group) {

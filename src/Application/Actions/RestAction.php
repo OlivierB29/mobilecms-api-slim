@@ -181,7 +181,7 @@ abstract class RestAction extends Action
     {
         $result = \strip_tags($input);
         $result = $this->xss_clean($result);
-      //  $result = htmlspecialchars($result, ENT_QUOTES, 'UTF-8');;
+        //  $result = htmlspecialchars($result, ENT_QUOTES, 'UTF-8');;
         return $result;
     }
 
