@@ -181,6 +181,7 @@ abstract class RestAction extends Action
     {
         $result = \strip_tags($input);
         $result = $this->xss_clean($result);
+      //  $result = htmlspecialchars($result, ENT_QUOTES, 'UTF-8');;
         return $result;
     }
 
@@ -217,5 +218,19 @@ abstract class RestAction extends Action
 
         // we are done...
         return $data;
+    }
+
+    private function cleanInputs($data)
+    {
+        $clean_input = [];
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                $clean_input[$k] = $this->cleanInputs($v);
+            }
+        } else {
+            $clean_input = trim($this->striptags($data));
+        }
+
+        return $clean_input;
     }
 }

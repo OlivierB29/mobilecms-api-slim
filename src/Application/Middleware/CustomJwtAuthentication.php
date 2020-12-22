@@ -105,7 +105,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
         "userrole" => "",
         "editorpath" => [ApiConstants::API . "/cmsapi", ApiConstants::API . "/fileapi"],
         "adminpath" => [ApiConstants::API . "/adminapi"],
-        "ignore" => [ApiConstants::API . "/authapi", "/debugapi"]
+        "ignore" => [ApiConstants::API . "/authapi", ApiConstants::API . "/debugapi"]
     ];
 
     //CUSTOM end

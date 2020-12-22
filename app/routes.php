@@ -15,7 +15,8 @@ use App\Application\Actions\Cms\ContentDeleteByIdAction;
 use App\Application\Actions\File\BasicUploadGetAction;
 use App\Application\Actions\File\BasicUploadPostAction;
 use App\Application\Actions\File\DeleteAction;
-use App\Application\Actions\File\DeleteFilesAction;
+
+use App\Application\Actions\Misc\DebugAction;
 
 use App\Application\Actions\File\ThumbnailsAction;
 
@@ -74,6 +75,10 @@ return function (App $app) {
         $group->post('/register', RegisterAction::class);
     });
 
+    $app->group(ApiConstants::API . '/debugapi', function (Group $group) {
+        $group->get('', DebugAction::class);
+
+    });
 
     $app->group(ApiConstants::API . '/cmsapi/content', function (Group $group) {
         $group->get('/{type}/{id}', ContentGetByIdAction::class);
