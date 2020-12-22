@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Application\Actions\User\ListUsersAction;
-use App\Application\Actions\User\ViewUserAction;
 
 
 use App\Application\Actions\Cms\IndexGetAction;
@@ -57,16 +55,14 @@ return function (App $app) {
     });
 
     $app->get('/', function (Request $request, Response $response) {
+
         $response->getBody()->write('');
         return $response;
     });
     $app->group(ApiConstants::API . '/cmsapi/status', function (Group $group) {
         $group->get('', StatusGetAction::class);
     });
-    $app->group('/debugapi', function (Group $group) {
-        $group->get('', ListUsersAction::class);
-        $group->get('/{id}', ViewUserAction::class);
-    });
+
 
     $app->group(ApiConstants::API . '/authapi', function (Group $group) {
         $group->get('/publicinfo/{id}', PublicInfoAction::class);

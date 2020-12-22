@@ -25,43 +25,43 @@ final class RouteSecurityTest extends ApiTest
     }
 
 
-    public function testXssByGuest1()
+    public function testXssRoute1()
     {
         $xss = '<script>alert("foo")</script>';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi() . '/authapi/publicinfo' . '?' . $xss;
 
-        $response = $this->request('GET', $this->path);
+        $response = $this->request('POST', $this->path);
 
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(400, $response->getCode());
         $this->assertTrue($response != null);
 
 //        $this->assertJsonStringEqualsJsonString('{"error":"wrong role"}', $response->getEncodedResult());
     }
 
-    public function testXssByGuest2()
+    public function testXssRoute2()
     {
         $xss = 'foo=bar';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi() . '/authapi/publicinfo' . '?' . $xss;
 
-        $response = $this->request('GET', $this->path);
+        $response = $this->request('POST', $this->path);
 
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(400, $response->getCode());
         $this->assertTrue($response != null);
 
 //        $this->assertJsonStringEqualsJsonString('{"error":"wrong role"}', $response->getEncodedResult());
     }
     
-    public function testXssByGuest3()
+    public function testXssRoute3()
     {
         $xss = 'request=phpinfo()';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi() . '/authapi/publicinfo' . '?' . $xss;
 
-        $response = $this->request('GET', $this->path);
+        $response = $this->request('POST', $this->path);
 
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(400, $response->getCode());
         $this->assertTrue($response != null);
 
 //        $this->assertJsonStringEqualsJsonString('{"error":"wrong role"}', $response->getEncodedResult());
