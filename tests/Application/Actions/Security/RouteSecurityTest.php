@@ -22,7 +22,6 @@ final class RouteSecurityTest extends ApiTest
     protected function setUp(): void
     {
         parent::setUp();
-
     }
 
 
