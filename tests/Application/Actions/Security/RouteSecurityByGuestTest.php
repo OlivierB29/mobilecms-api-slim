@@ -10,7 +10,7 @@ use App\Application\Handlers\HttpErrorHandler;
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
 
-use Tests\ApiTest;
+use Tests\AuthApiTest;
 use App\Infrastructure\Utils\Properties;
 
 use App\Infrastructure\Utils\FileUtils;
