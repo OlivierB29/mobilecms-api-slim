@@ -6,11 +6,10 @@ namespace App\Application\Actions;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpInternalServerErrorException;
+
 
 use App\Application\Actions\Action;
-use App\Infrastructure\Services\ContentService;
+
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response as RestResponse;
 
@@ -126,14 +125,15 @@ abstract class RestAction extends Action
         $postformdata = $this->getProperties()->getString('postformdata');
 
         if ($postformdata === 'post') {
-            return $_POST;
+            return $this->striptags($_POST);
         }
         if ($postformdata === 'parsedbody') {
-            return  $this->request->getParsedBody();
+            return  $this->xssjson($this->request->getParsedBody());
         }
 
         if ($postformdata === 'phpinput') {
-            $input = json_decode(file_get_contents('php://input'));
+            
+            $input = json_decode($this->striptags(file_get_contents('php://input')));
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new HttpBadRequestException($this->request, 'Malformed JSON input.');
@@ -181,7 +181,7 @@ abstract class RestAction extends Action
     {
         $result = \strip_tags($input);
         $result = $this->xss_clean($result);
-        //  $result = htmlspecialchars($result, ENT_QUOTES, 'UTF-8');;
+        $result = \htmlspecialchars($result, ENT_NOQUOTES, 'UTF-8');;
         return $result;
     }
 
