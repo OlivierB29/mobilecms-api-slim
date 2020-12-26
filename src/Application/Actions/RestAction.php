@@ -132,7 +132,6 @@ abstract class RestAction extends Action
         }
 
         if ($postformdata === 'phpinput') {
-            
             $input = json_decode($this->striptags(file_get_contents('php://input')));
 
             if (json_last_error() !== JSON_ERROR_NONE) {
@@ -181,7 +180,8 @@ abstract class RestAction extends Action
     {
         $result = \strip_tags($input);
         $result = $this->xss_clean($result);
-        $result = \htmlspecialchars($result, ENT_NOQUOTES, 'UTF-8');;
+        $result = \htmlspecialchars($result, ENT_NOQUOTES, 'UTF-8');
+        ;
         return $result;
     }
 
