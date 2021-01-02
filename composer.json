@@ -53,6 +53,6 @@
     "scripts": {
         "start": "php -S localhost:8080 -t public",
         "test": "phpunit",
-        "dist": "rm -rf vendor dist && composer install --no-dev && mkdir dist && cp -R public app src vendor dist"
+        "dist": "rm -rf vendor dist && php ~/bin/composer.phar install --no-dev && mkdir dist && cp -R public app src vendor dist"
     }
 }
