@@ -6,6 +6,6 @@
 
     
     "role": "admin",
-    "clientalgorithm": "hashmacbase64",
+    "clientalgorithm": "none",
     "newpasswordrequired": "false"
 }
