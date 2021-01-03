@@ -372,7 +372,7 @@ final class AuthenticationApiTest extends ApiTest
         $userObject = $response->getResult();
 
         $this->assertTrue($userObject->{'name'} === 'editor@example.com');
-        $this->assertTrue($userObject->{'clientalgorithm'} === 'hashmacbase64');
+        $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
         $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
     }
 
@@ -396,7 +396,7 @@ final class AuthenticationApiTest extends ApiTest
         $userObject = $response->getResult();
 
         $this->assertTrue($userObject->{'name'} === 'editor@example.com');
-        $this->assertTrue($userObject->{'clientalgorithm'} === 'hashmacbase64');
+        $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
         $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
     }
 
