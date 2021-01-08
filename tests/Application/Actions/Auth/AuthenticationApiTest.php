@@ -14,12 +14,24 @@ use Tests\ApiTest;
 use App\Infrastructure\Utils\Properties;
 
 use App\Infrastructure\Utils\FileUtils;
+use App\Infrastructure\Services\ThrottleService;
 
 final class AuthenticationApiTest extends ApiTest
 {
+
+    private $throttle;
+
     protected function setUp(): void
     {
         parent::setUp();
+        $this->throttle = new ThrottleService($this->getPrivateDirPath() . '/users');
+        
+        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        }
+        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        }
     }
 
 

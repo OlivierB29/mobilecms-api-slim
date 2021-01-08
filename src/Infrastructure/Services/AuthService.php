@@ -1,11 +1,13 @@
 <?php namespace App\Infrastructure\Services;
 
 use  App\Infrastructure\Utils\JsonUtils;
+use  App\Infrastructure\Utils\NetUtils;
 use  App\Infrastructure\Rest\Response;
 use  App\Infrastructure\Rest\JwtToken;
 use App\Infrastructure\Utils\Properties;
 use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
+use App\Infrastructure\Services\ThrottleService;
 
 /*
  * Inspired by http://fr.wikihow.com/cr%C3%A9er-un-script-de-connexion-s%C3%A9curis%C3%A9e-avec-PHP-et-MySQL
@@ -28,6 +30,8 @@ class AuthService
     private $databasedir;
 
     private $service;
+
+    private $throttle;
 
     /*
      * Available hash : hash_algos()
@@ -57,6 +61,7 @@ class AuthService
     {
         $this->databasedir = $databasedir;
         $this->service = new UserService($databasedir);
+        $this->throttle = new ThrottleService($databasedir);
         $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
 
@@ -102,7 +107,7 @@ class AuthService
      *
      * @return Response object
      */
-    public function getToken($emailParam, $password): Response
+    public function getToken($emailParam, $password, $captchaAnswer = null): Response
     {
         // initialize Response
         $response = new Response();
@@ -119,7 +124,22 @@ class AuthService
 
         // user found
 
-        if (password_verify($password, $user->{'password'})) {
+        // captcha required ?
+        $captchaObj = $this->throttle->getCaptcha($email);
+
+        $captchaValidated = false;
+        if ($captchaObj != null) {
+            if ($captchaObj->{'answer'} === $captchaAnswer) {
+                $captchaValidated = true;
+            } else {
+                $response->setCode(402);
+            }
+        } else {
+            $captchaValidated = true;
+        }
+
+        // password
+        if ($captchaValidated  && password_verify($password, $user->{'password'})) {
             $token = null;
             $jwt = new JwtToken();
             if ('php-jwt' === $this->jwtImpl) {
@@ -139,7 +159,7 @@ class AuthService
             }
 
 
-            
+            $this->throttle->archiveOldFailed($user->{'email'});
             $response->setCode(200);
             $userResponse = json_decode('{}');
             $userResponse->{'name'} = $user->{'name'};
@@ -157,6 +177,18 @@ class AuthService
         } else {
             // incorrect password
             $loginmsg = 'wrong password';
+            $failed = $this->throttle->saveFailedLogin($user->{'email'});
+
+            $userResponse = json_decode('{}');
+            $userResponse->{'name'} = $user->{'name'};
+            $userResponse->{'username'} = $user->{'name'};
+            $userResponse->{'email'} = $user->{'email'};
+            $newCaptcha = $this->throttle->createCaptcha($user->{'email'});
+            if ($newCaptcha != null) {
+                $userResponse->{'captcha'} =  $newCaptcha->{'question'};
+            }
+            
+            $response->setResult($userResponse);
         }
 
         return $response;
@@ -335,8 +367,14 @@ class AuthService
             $user = $this->service->getJsonUser($email);
             if (isset($user)) {
                 // do not send private info such as password ...
-                $info = json_decode('{"name":"", "clientalgorithm":"", "newpasswordrequired":""}');
+                $info = json_decode('{"name":"", "clientalgorithm":"", "newpasswordrequired":"", "captcha":""}');
+
                 JsonUtils::copy($user, $info);
+                $captchaObj2 = $this->throttle->getCaptcha($email);
+                if ($captchaObj2 != null) {
+                    $info->{'captcha'} = $captchaObj2->{'question'};
+                }
+
                 $response->setResult($info);
                 $response->setCode(200);
             }
@@ -518,4 +556,8 @@ class AuthService
     {
         $this->jwtImpl = $jwt;
     }
+
+  
+
+
 }

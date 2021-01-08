@@ -14,6 +14,13 @@ Assume `www/html/` is the web root context.
 With a default Ubuntu, you may need : 
 `sudo apt install php-xdebug libapache2-mod-php php-gd php-mbstring php-xml php-imagick`
 
+
+# VS Code Debugging
+Install and enable in php.ini :
+https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
+
+Ubuntu 20.04 : XDebug v2.x.x
+
 # FAQ
 
 - Why not using a true CMS on a web hosting package ?

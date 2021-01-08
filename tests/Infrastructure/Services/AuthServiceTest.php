@@ -5,14 +5,23 @@ namespace Tests\Infrastructure\Services;
 
 use PHPUnit\Framework\TestCase;
 use \App\Infrastructure\Services\AuthService;
-
+use \App\Infrastructure\Services\ThrottleService;
 final class AuthServiceTest extends TestCase
 {
     private $service;
+    private $throttle;
 
     protected function setUp(): void
     {
         $this->service = new AuthService('tests-data/userservice');
+        $this->throttle = new ThrottleService('tests-data/userservice');
+
+        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        }
+        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        }
     }
 
 
@@ -87,6 +96,13 @@ final class AuthServiceTest extends TestCase
 
     public function testLoginOk()
     {
+        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        }
+
+        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        }
         $result = $this->service->login('test@example.com', 'Sample#123456');
 
         $this->assertTrue('' === $result);
@@ -94,6 +110,13 @@ final class AuthServiceTest extends TestCase
 
     public function testGetToken()
     {
+        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        }
+        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        }
+
         $result = $this->service->getToken('test@example.com', 'Sample#123456');
         $this->assertTrue($result->getCode() === 200);
         $this->assertTrue(null != $result->getResult());
@@ -181,7 +204,7 @@ final class AuthServiceTest extends TestCase
     {
         $result = $this->service->getToken('test@example.com', 'Sample#1234567');
         $this->assertTrue($result->getCode() === 401);
-        $this->assertTrue($result->getEncodedResult() === '{}');
+        $this->assertTrue($result->getEncodedResult() !== '');
     }
 
     public function testWrongLogin1()
