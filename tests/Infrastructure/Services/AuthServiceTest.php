@@ -6,6 +6,7 @@ namespace Tests\Infrastructure\Services;
 use PHPUnit\Framework\TestCase;
 use \App\Infrastructure\Services\AuthService;
 use \App\Infrastructure\Services\ThrottleService;
+
 final class AuthServiceTest extends TestCase
 {
     private $service;
@@ -16,10 +17,10 @@ final class AuthServiceTest extends TestCase
         $this->service = new AuthService('tests-data/userservice');
         $this->throttle = new ThrottleService('tests-data/userservice');
 
-        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
             \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
         }
-        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
             \unlink($this->throttle->getCaptchaFileName("test@example.com"));
         }
     }
@@ -96,11 +97,11 @@ final class AuthServiceTest extends TestCase
 
     public function testLoginOk()
     {
-        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
             \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
         }
 
-        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
             \unlink($this->throttle->getCaptchaFileName("test@example.com"));
         }
         $result = $this->service->login('test@example.com', 'Sample#123456');
@@ -110,10 +111,10 @@ final class AuthServiceTest extends TestCase
 
     public function testGetToken()
     {
-        if(\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
             \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
         }
-        if(\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
+        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
             \unlink($this->throttle->getCaptchaFileName("test@example.com"));
         }
 
