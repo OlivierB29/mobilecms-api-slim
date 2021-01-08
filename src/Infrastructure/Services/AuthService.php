@@ -556,8 +556,4 @@ class AuthService
     {
         $this->jwtImpl = $jwt;
     }
-
-  
-
-
 }

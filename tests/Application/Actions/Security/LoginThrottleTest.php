@@ -33,8 +33,7 @@ final class LoginThrottleTest extends ApiTest
 
     public function testCreateCaptcha()
     {
-
-        if(\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
+        if (\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
             \unlink($this->service->getLoginHistoryFileName("captchatest@example.com"));
         }
 
@@ -74,16 +73,13 @@ final class LoginThrottleTest extends ApiTest
         $captcha = JsonUtils::readJsonFile($captachaFile);
 
         $this->assertTrue($userObject->{'captcha'} === $captcha->{'question'});
-
-
     }
 
 
 
     public function testValidateCaptcha()
     {
-
-        if(\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
+        if (\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
             \unlink($this->service->getLoginHistoryFileName("captchatest@example.com"));
         }
 
@@ -122,7 +118,7 @@ final class LoginThrottleTest extends ApiTest
 
         // Authenticate and control captcha
         $this->path = $this->getApi() . '/authapi/authenticate';
-        $recordStr = '{ "email": "captchatest@example.com", "password":"Sample#123456", "captchaanswer":"'.$captcha->{'answer'}.'"}';
+        $recordStr = '{ "email": "captchatest@example.com", "password":"Sample#123456", "captchaanswer":"' . $captcha->{'answer'} . '"}';
 
         
 
@@ -140,6 +136,5 @@ final class LoginThrottleTest extends ApiTest
 
         $this->assertTrue($userObject->{'email'} === 'captchatest@example.com');
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
-
     }
 }
