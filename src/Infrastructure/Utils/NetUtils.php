@@ -6,13 +6,6 @@
 class NetUtils
 {
 
-    /**
-     * Constructor.
-     */
-    public function __construct(string $rootdir)
-    {
-        $this->rootdir = $rootdir;
-    }
 
 
     public static function getClientIp(): string

@@ -20,22 +20,27 @@ use  App\Infrastructure\Utils\JsonUtils;
 final class LoginThrottleTest extends ApiTest
 {
     protected $requestparams = '?timestamp=1599654646';
-    protected $service ;
+    protected $throttle ;
 
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new ThrottleService($this->getPrivateDirPath() . '/users');
+        $this->throttle = new ThrottleService($this->getPrivateDirPath() . '/users');
+
+        if (\file_exists($this->throttle->getLoginHistoryFileName("captchatest@example.com"))) {
+            \unlink($this->throttle->getLoginHistoryFileName("captchatest@example.com"));
+        }
+        if (\file_exists($this->throttle->getCaptchaFileName("captchatest@example.com"))) {
+            \unlink($this->throttle->getCaptchaFileName("captchatest@example.com"));
+        }
     }
 
     
 
     public function testCreateCaptcha()
     {
-        if (\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
-            \unlink($this->service->getLoginHistoryFileName("captchatest@example.com"));
-        }
+
 
         $this->path = $this->getApi() . '/authapi/authenticate';
 
@@ -47,12 +52,12 @@ final class LoginThrottleTest extends ApiTest
         $recordStr = '{ "user": "captchatest@example.com", "password":"wrong2"}';
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
-        $this->assertEquals(402, $response->getCode());
+        $this->assertEquals(401, $response->getCode());
 
         $recordStr = '{ "user": "captchatest@example.com", "password":"wrong3"}';
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
-        $this->assertEquals(402, $response->getCode());
+        $this->assertEquals(401, $response->getCode());
 
 
 
@@ -69,7 +74,7 @@ final class LoginThrottleTest extends ApiTest
         
  
 
-        $captachaFile = $this->service->getCaptchaFileName("captchatest@example.com");
+        $captachaFile = $this->throttle->getCaptchaFileName("captchatest@example.com");
         $captcha = JsonUtils::readJsonFile($captachaFile);
 
         $this->assertTrue($userObject->{'captcha'} === $captcha->{'question'});
@@ -79,9 +84,7 @@ final class LoginThrottleTest extends ApiTest
 
     public function testValidateCaptcha()
     {
-        if (\file_exists($this->service->getLoginHistoryFileName("captchatest@example.com"))) {
-            \unlink($this->service->getLoginHistoryFileName("captchatest@example.com"));
-        }
+
 
         $this->path = $this->getApi() . '/authapi/authenticate';
 
@@ -93,7 +96,7 @@ final class LoginThrottleTest extends ApiTest
         $recordStr = '{ "user": "captchatest@example.com", "password":"wrong2"}';
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
-        $this->assertEquals(402, $response->getCode());
+        $this->assertEquals(401, $response->getCode());
 
 
 
@@ -110,7 +113,7 @@ final class LoginThrottleTest extends ApiTest
         
  
 
-        $captachaFile = $this->service->getCaptchaFileName("captchatest@example.com");
+        $captachaFile = $this->throttle->getCaptchaFileName("captchatest@example.com");
         $captcha = JsonUtils::readJsonFile($captachaFile);
 
         $this->assertTrue($userObject->{'captcha'} === $captcha->{'question'});

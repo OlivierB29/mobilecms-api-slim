@@ -132,7 +132,7 @@ class AuthService
             if ($captchaObj->{'answer'} === $captchaAnswer) {
                 $captchaValidated = true;
             } else {
-                $response->setCode(402);
+                $response->setCode(401);
             }
         } else {
             $captchaValidated = true;
