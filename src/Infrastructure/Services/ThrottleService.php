@@ -100,7 +100,7 @@ class ThrottleService
             $failedList = [];
         }
         
-        if(\file_exists($this->getCaptchaFileName($user))) {
+        if (\file_exists($this->getCaptchaFileName($user))) {
             \unlink($this->getCaptchaFileName($user));
         }
 

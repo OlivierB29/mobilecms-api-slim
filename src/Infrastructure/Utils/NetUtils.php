@@ -5,9 +5,6 @@
  */
 class NetUtils
 {
-
-
-
     public static function getClientIp(): string
     {
         $ipaddress = '';

@@ -182,11 +182,11 @@ class AuthService
             $userResponse->{'role'} = $user->{'role'};
             $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
             $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
-/*
-            if ($user->{'newpasswordrequired'} !== 'true') {
-                $userResponse->{'token'} = $token;
-            }
-*/
+            /*
+                        if ($user->{'newpasswordrequired'} !== 'true') {
+                            $userResponse->{'token'} = $token;
+                        }
+            */
             $userResponse->{'token'} = $token;
 
             $response->setResult($userResponse);

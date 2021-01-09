@@ -40,8 +40,6 @@ final class LoginThrottleTest extends ApiTest
 
     public function testCreateCaptcha()
     {
-
-
         $this->path = $this->getApi() . '/authapi/authenticate';
 
         $recordStr = '{ "user": "captchatest@example.com", "password":"wrong1"}';
@@ -84,8 +82,6 @@ final class LoginThrottleTest extends ApiTest
 
     public function testValidateCaptcha()
     {
-
-
         $this->path = $this->getApi() . '/authapi/authenticate';
 
         $recordStr = '{ "user": "captchatest@example.com", "password":"wrong1"}';

@@ -2,8 +2,6 @@
 
   class CaptchaUtils
   {
-
-  
       public static function captcha(): \stdClass
       {
           $result = \json_decode('{}');
