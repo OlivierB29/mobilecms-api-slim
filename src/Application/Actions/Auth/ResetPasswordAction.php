@@ -60,6 +60,11 @@ class ResetPasswordAction extends AuthAction
                     $response->setCode(200);
                 }
                 // @codeCoverageIgnoreEnd
+            } elseif ($this->getProperties()->getBoolean('debugnotifications', true)) {
+                $tmpResponse = $response->getResult();
+                // test only
+                $tmpResponse->{'notification'} = json_encode($notificationBody);
+                $response->setResult($tmpResponse);
             } else {
                 error_log("New password is: " . $clearPassword);
             } 

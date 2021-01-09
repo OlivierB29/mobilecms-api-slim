@@ -104,7 +104,7 @@ final class AuthServiceTest extends TestCase
         if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
             \unlink($this->throttle->getCaptchaFileName("test@example.com"));
         }
-        $result = $this->service->login('test@example.com', 'Sample#123456');
+        $result = $this->service->login('test@example.com', 'Sample#123456', null);
 
         $this->assertTrue('' === $result);
     }
@@ -210,13 +210,13 @@ final class AuthServiceTest extends TestCase
 
     public function testWrongLogin1()
     {
-        $result = $this->service->login('test@example.com', 'wrongpass');
+        $result = $this->service->login('test@example.com', 'wrongpass', null);
         $this->assertTrue($result !== null);
     }
 
     public function testWrongLogin2()
     {
-        $result = $this->service->login('test@example.com', 'Sample#12345');
+        $result = $this->service->login('test@example.com', 'Sample#12345', null);
         $this->assertTrue($result !== null);
     }
 
@@ -246,12 +246,12 @@ final class AuthServiceTest extends TestCase
 
         //change password
         $newPassword = 'somethingnew';
-        $createresult = $this->service->changePassword($email, $oldPassword, $newPassword);
+        $createresult = $this->service->changePassword($email, $oldPassword, $newPassword, null);
 
         $this->assertTrue($createresult->getCode() === 200);
 
         //login
-        $result = $this->service->login($email, $newPassword);
+        $result = $this->service->login($email, $newPassword, null);
         $this->assertTrue('' === $result);
     }
 
@@ -268,7 +268,7 @@ final class AuthServiceTest extends TestCase
 
         //change password
         $newPassword = 'somethingnew';
-        $createresult = $this->service->changePassword($email, $oldPassword, $newPassword);
+        $createresult = $this->service->changePassword($email, $oldPassword, $newPassword, null);
 
         $this->assertTrue($createresult->getCode() === 401);
     }

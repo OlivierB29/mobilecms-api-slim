@@ -15,6 +15,6 @@
   "errorlog": "true",
   "enablemail": "false",
   "mailsender": "sendmail@example.org",
-  "debugnotifications": "true"
+  "debugnotifications": "false"
 
 }
