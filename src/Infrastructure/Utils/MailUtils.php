@@ -1,6 +1,7 @@
 <?php namespace App\Infrastructure\Utils;
 
 use App\ApiConstants;
+
 /**
  * Mail Utility.
  */

@@ -67,7 +67,7 @@ class ResetPasswordAction extends AuthAction
                 $response->setResult($tmpResponse);
             } else {
                 error_log("New password is: " . $clearPassword);
-            } 
+            }
         }
 
         unset($logindata);
@@ -90,6 +90,4 @@ class ResetPasswordAction extends AuthAction
         }
         return $result;
     }
-
-
 }
