@@ -22,7 +22,10 @@ class ChangePasswordAction extends AuthAction
 
         $service = new AuthService($this->getPrivateDirPath() . '/users');
 
-
+        $captchaanswer = null;
+        if (isset($logindata->{'captchaanswer'})) {
+            $captchaanswer = $logindata->{'captchaanswer'};
+        }
        
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}
@@ -35,9 +38,10 @@ class ChangePasswordAction extends AuthAction
         $response = $service->changePassword(
             $this->getUser($logindata),
             $logindata->{'password'},
-            $logindata->{'newpassword'}
+            $logindata->{'newpassword'},
+            $captchaanswer
         );
-
+        
         unset($logindata);
         
 

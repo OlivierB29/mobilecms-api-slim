@@ -1,5 +1,6 @@
 <?php namespace App\Infrastructure\Utils;
 
+use App\ApiConstants;
 /**
  * Mail Utility.
  */
@@ -31,7 +32,7 @@ class MailUtils
      */
     public function getNewPassword(string $subject, string $password, string $clientinfo) : string
     {
-        $message = file_get_contents($this->rootdir . '/api/v1/mail/newpassword.html');
+        $message = file_get_contents($this->rootdir . '/api' . ApiConstants::VERSION . '/mail/newpassword.html');
         $message = str_replace('%subject%', $subject, $message);
         $message = str_replace('%password%', $password, $message);
         $message = str_replace('%clientinfo%', $clientinfo, $message);

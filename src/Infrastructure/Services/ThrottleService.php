@@ -99,6 +99,10 @@ class ThrottleService
             $history = \json_decode('{}');
             $failedList = [];
         }
+        
+        if(\file_exists($this->getCaptchaFileName($user))) {
+            \unlink($this->getCaptchaFileName($user));
+        }
 
 
         $history->{'failed'} = [];

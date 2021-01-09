@@ -6,7 +6,7 @@ namespace App\Application\Actions\Auth;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Utils\MailUtils;
-
+use App\Infrastructure\Utils\NetUtils;
 use App\Infrastructure\Services\AuthService;
 
 class ResetPasswordAction extends AuthAction
@@ -47,7 +47,7 @@ class ResetPasswordAction extends AuthAction
 
             if ($this->getProperties()->getBoolean('enablemail', true)) {
                 // @codeCoverageIgnoreStart
-                $CR_Mail = @mail(
+                $CR_Mail = mail(
                     $email,
                     'new password',
                     $notificationBody,
@@ -60,12 +60,9 @@ class ResetPasswordAction extends AuthAction
                     $response->setCode(200);
                 }
                 // @codeCoverageIgnoreEnd
-            } elseif ($this->getProperties()->getBoolean('debugnotifications', true)) {
-                $tmpResponse = $response->getResult();
-                // test only
-                $tmpResponse->{'notification'} = json_encode($notificationBody);
-                $response->setResult($tmpResponse);
-            }
+            } else {
+                error_log("New password is: " . $clearPassword);
+            } 
         }
 
         unset($logindata);
@@ -80,7 +77,7 @@ class ResetPasswordAction extends AuthAction
      */
     private function getClientInfo(): string
     {
-        $result = $this->getClientIp() . ' ';
+        $result = NetUtils::getClientIp() . ' ';
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             // @codeCoverageIgnoreStart
             $result .= $_SERVER['HTTP_USER_AGENT'];
@@ -90,32 +87,4 @@ class ResetPasswordAction extends AuthAction
     }
 
 
-    /**
-     * Get IP address.
-     *
-     * @return string IP address
-     */
-    private function getClientIp(): string
-    {
-        $ipaddress = '';
-        // @codeCoverageIgnoreStart
-        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
-            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
-            $ipaddress = $_SERVER['HTTP_FORWARDED'];
-        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            $ipaddress = $_SERVER['REMOTE_ADDR'];
-        // @codeCoverageIgnoreEnd
-        } else {
-            $ipaddress = 'UNKNOWN';
-        }
-
-        return $ipaddress;
-    }
 }

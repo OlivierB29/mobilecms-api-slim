@@ -75,7 +75,7 @@ class AuthService
      *
      * @return string return an empty string if success.
      */
-    public function login($emailParam, $password)
+    public function login($emailParam, $password, $captchaAnswer)
     {
         $loginmsg = '';
 
@@ -85,9 +85,23 @@ class AuthService
         // return the existing user
         $user = $this->service->getJsonUser($email);
 
+        // captcha required ?
+        $captchaObj = $this->throttle->getCaptcha($email);
+        $captchaValidated = false;
+        if ($captchaObj != null) {
+            if ($captchaObj->{'answer'} === $captchaAnswer) {
+                $captchaValidated = true;
+            } else {
+                $response->setCode(401);
+            }
+        } else {
+            $captchaValidated = true;
+            $this->throttle->archiveOldFailed($user->{'email'});
+        }
+
         // user found
         if (!empty($user)) {
-            if (password_verify($password, $user->{'password'})) {
+            if ($captchaValidated && password_verify($password, $user->{'password'})) {
                 // success
                 $loginmsg = '';
             } else {
@@ -126,7 +140,6 @@ class AuthService
 
         // captcha required ?
         $captchaObj = $this->throttle->getCaptcha($email);
-
         $captchaValidated = false;
         if ($captchaObj != null) {
             if ($captchaObj->{'answer'} === $captchaAnswer) {
@@ -136,6 +149,7 @@ class AuthService
             }
         } else {
             $captchaValidated = true;
+            $this->throttle->archiveOldFailed($user->{'email'});
         }
 
         // password
@@ -159,7 +173,7 @@ class AuthService
             }
 
 
-            $this->throttle->archiveOldFailed($user->{'email'});
+            
             $response->setCode(200);
             $userResponse = json_decode('{}');
             $userResponse->{'name'} = $user->{'name'};
@@ -168,7 +182,11 @@ class AuthService
             $userResponse->{'role'} = $user->{'role'};
             $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
             $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
-
+/*
+            if ($user->{'newpasswordrequired'} !== 'true') {
+                $userResponse->{'token'} = $token;
+            }
+*/
             $userResponse->{'token'} = $token;
 
             $response->setResult($userResponse);
@@ -203,7 +221,7 @@ class AuthService
      *
      * @return Response object
      */
-    public function changePassword($emailParam, $password, $newPassword): Response
+    public function changePassword($emailParam, $password, $newPassword, $captchaanswer): Response
     {
         // initialize Response
         $response = new Response();
@@ -221,7 +239,10 @@ class AuthService
         $user = $this->service->getJsonUser($email);
 
 
-        if ($this->login($email, $password) === '') {
+
+        // check login sent by mail
+        if ($this->login($email, $password, $captchaanswer) === '') {
+            //update with new password
             $updateMsg = $this->createUser('', $email, $newPassword, 'update');
 
             // return the existing user
@@ -229,6 +250,7 @@ class AuthService
             $user->{'clientalgorithm'} = 'hashmacbase64';
             $user->{'newpasswordrequired'} = 'false';
             JsonUtils::writeJsonFile($this->service->getJsonUserFile($email), $user);
+
 
             if (empty($updateMsg)) {
                 $response = $this->getPublicInfo($email);
@@ -338,7 +360,10 @@ class AuthService
             $user = $this->service->getJsonUser($email);
             $user->{'clientalgorithm'} = 'none';
             $user->{'newpasswordrequired'} = 'true';
+
             JsonUtils::writeJsonFile($this->service->getJsonUserFile($email), $user);
+
+            $this->throttle->archiveOldFailed($emailParam);
 
             if (empty($updateMsg)) {
                 $response = $this->getPublicInfo($email);
@@ -370,7 +395,7 @@ class AuthService
                 $info = json_decode('{"name":"", "clientalgorithm":"", "newpasswordrequired":"", "captcha":""}');
 
                 JsonUtils::copy($user, $info);
-                $captchaObj2 = $this->throttle->getCaptcha($email);
+                $captchaObj2 = $this->throttle->createCaptcha($email);
                 if ($captchaObj2 != null) {
                     $info->{'captcha'} = $captchaObj2->{'question'};
                 }
