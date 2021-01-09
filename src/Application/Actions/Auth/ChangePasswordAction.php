@@ -22,15 +22,17 @@ class ChangePasswordAction extends AuthAction
 
         $service = new AuthService($this->getPrivateDirPath() . '/users');
 
-        $captchaanswer = null;
-        if (isset($logindata->{'captchaanswer'})) {
-            $captchaanswer = $logindata->{'captchaanswer'};
-        }
        
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}
 
         $logindata = $this->getRequestBody();
+
+
+        $captchaanswer = null;
+        if (isset($logindata->{'captchaanswer'})) {
+            $captchaanswer = $logindata->{'captchaanswer'};
+        }
 
         //TODO : user contains either email of name
 
