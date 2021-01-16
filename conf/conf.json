@@ -13,8 +13,16 @@
   "https": "false",
   "debugapiexceptions": "true",
   "errorlog": "true",
+  
   "enablemail": "false",
-  "mailsender": "sendmail@example.org",
-  "debugnotifications": "true"
+  "debugnotifications": "true",
 
+  "enablesmtp":"false",
+  "mailsender": "no-reply@domain.org",
+  "smtphost": "localhost",
+  "smtpport":465,
+  "smtpsecure": "ssl",
+  "smtpusername": "no-reply@domain.org",
+  "smtppassword": "password"
+  
 }

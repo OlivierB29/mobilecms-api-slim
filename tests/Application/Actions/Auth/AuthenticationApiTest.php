@@ -307,10 +307,10 @@ final class AuthenticationApiTest extends ApiTest
         $this->assertTrue($userObject->{'newpasswordrequired'} === 'true');
  
 
-        $this->assertStringContainsString('DOCTYPE', $userObject->{'notification'});
-        $this->assertStringContainsString('meta charset', $userObject->{'notification'});
-        $this->assertStringContainsString('Password', $userObject->{'notification'});
-        $this->assertStringContainsString('Connection info', $userObject->{'notification'});
+
+        $this->assertStringContainsString('password', $userObject->{'notification'});
+        $this->assertStringContainsString('connection info', $userObject->{'notification'});
+        $this->assertStringContainsString('date', $userObject->{'notification'});
 
         // delete file
         unlink($this->getPrivateDirPath() . '/users/' . $userFile);

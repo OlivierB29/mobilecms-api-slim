@@ -1,7 +1,12 @@
 # Requirements
-- PHP 7.2
-- Slim framework 4.5
-- Imagick
+- php-xdebug
+- php-imagick
+- php-gd
+- php-mbstring
+
+# Dev requirements
+- php-xdebug
+- libapache2-mod-php
 
 # Directory structure
 Assume `www/html/` is the web root context.
@@ -10,10 +15,14 @@ Assume `www/html/` is the web root context.
 - `www/html/api` : PHP files for API
 - `www/private` : private directory (users)
 
-# Development server on Ubuntu
+
+# Development with Composer
+- `composer start`
+- `php composer.phar start`
+
+# Server on Ubuntu
 With a default Ubuntu, you may need : 
 `sudo apt install php-xdebug libapache2-mod-php php-gd php-mbstring php-xml php-imagick`
-
 
 # VS Code Debugging
 Install and enable in php.ini :

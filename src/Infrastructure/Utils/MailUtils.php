@@ -31,12 +31,24 @@ class MailUtils
      *
      * @return string notification content
      */
-    public function getNewPassword(string $subject, string $password, string $clientinfo) : string
+    public function getNewPassword(string $subject, string $password, string $clientinfo, string $date) : string
     {
-        $message = file_get_contents($this->rootdir . '/api' . ApiConstants::VERSION . '/mail/newpassword.html');
+        $message = file_get_contents(__DIR__ . '/mail/newpassword.html');
         $message = str_replace('%subject%', $subject, $message);
         $message = str_replace('%password%', $password, $message);
         $message = str_replace('%clientinfo%', $clientinfo, $message);
+        $message = str_replace('%currentdate%', $date, $message);
+
+        return $message;
+    }
+
+    public function getNewTextPassword(string $subject, string $password, string $clientinfo, string $date) : string
+    {
+        $message = file_get_contents(__DIR__ . '/mail/newpassword.txt');
+        $message = str_replace('%subject%', $subject, $message);
+        $message = str_replace('%password%', $password, $message);
+        $message = str_replace('%clientinfo%', $clientinfo, $message);
+        $message = str_replace('%currentdate%', $date, $message);
 
         return $message;
     }
@@ -62,5 +74,16 @@ class MailUtils
 
 
         return $headers;
+    }
+
+    public function getFrom($from) : string
+    {
+        if (empty($from)) {
+            // @codeCoverageIgnoreStart
+            $from = 'no-reply@' . $_SERVER['HTTP_HOST'];
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $from;
     }
 }
