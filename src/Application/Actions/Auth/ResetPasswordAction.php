@@ -91,7 +91,7 @@ class ResetPasswordAction extends AuthAction
     private function mail($from, $toAddress, $toName, $title, $htmlBody, $textBody) {
         //Create a new PHPMailer instance
 $mail = new PHPMailer();
-if ('true' === getConf()->{'enablesmtp'}) {
+if ('true' === $this->getConf()->{'enablesmtp'}) {
     $mail->isSMTP(); // use smtp
     $mail->Host = $this->getConf()->{'smtphost'}; // host
     $mail->SMTPAuth = true; // auth
