@@ -14,6 +14,5 @@ final class MailUtilsTest extends TestCase
         $u = new MailUtils('');
         $result = $u->getFrom('foo@bar.org');
         $this->assertTrue(strpos($result, 'foo@bar.org') !== false);
-
     }
 }
