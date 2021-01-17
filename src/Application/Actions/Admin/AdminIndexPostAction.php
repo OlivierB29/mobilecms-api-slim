@@ -7,6 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
 
+/**
+ * Recreate user index
+ */
 class AdminIndexPostAction extends AdminAction
 {
 

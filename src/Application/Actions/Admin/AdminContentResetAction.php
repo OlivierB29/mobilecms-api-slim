@@ -9,6 +9,9 @@ use App\Infrastructure\Services\ContentService;
 
 use App\Infrastructure\Services\AuthService;
 
+/**
+ * Reset password
+ */
 class AdminContentResetAction extends AdminAction
 {
 

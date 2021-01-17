@@ -1,12 +1,14 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
+use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Get minimal information of an account
+ */
 class PublicInfoAction extends AuthAction
 {
 
@@ -22,12 +24,8 @@ class PublicInfoAction extends AuthAction
 
         $service = new AuthService($this->getPrivateDirPath() . '/users');
 
-
-            
-
         $response = $service->getPublicInfo($this->getParam('id'));
-  
-        
+
         return $this->withResponse($response);
     }
 }

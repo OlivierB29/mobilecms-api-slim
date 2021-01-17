@@ -1,13 +1,11 @@
 <?php namespace App\Infrastructure\Services;
 
-use  App\Infrastructure\Utils\JsonUtils;
-use  App\Infrastructure\Utils\NetUtils;
-use  App\Infrastructure\Rest\Response;
-use  App\Infrastructure\Rest\JwtToken;
+use App\Infrastructure\Rest\JwtToken;
+use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Services\ThrottleService;
+use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\Properties;
 use Firebase\JWT\JWT;
-use Firebase\JWT\SignatureInvalidException;
-use App\Infrastructure\Services\ThrottleService;
 
 /*
  * Inspired by http://fr.wikihow.com/cr%C3%A9er-un-script-de-connexion-s%C3%A9curis%C3%A9e-avec-PHP-et-MySQL
@@ -64,7 +62,6 @@ class AuthService
         $this->throttle = new ThrottleService($databasedir);
         $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
-
 
     /**
      * Authenticate
@@ -153,16 +150,16 @@ class AuthService
         }
 
         // password
-        if ($captchaValidated  && password_verify($password, $user->{'password'})) {
+        if ($captchaValidated && password_verify($password, $user->{'password'})) {
             $token = null;
             $jwt = new JwtToken();
             if ('php-jwt' === $this->jwtImpl) {
                 $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
-                
+
                 $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
             } else {
                 // old jwt impl
-  
+
                 $token = $jwt->createTokenFromUser(
                     $user->{'name'},
                     $user->{'email'},
@@ -172,8 +169,6 @@ class AuthService
                 unset($jwt);
             }
 
-
-            
             $response->setCode(200);
             $userResponse = json_decode('{}');
             $userResponse->{'name'} = $user->{'name'};
@@ -183,10 +178,10 @@ class AuthService
             $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
             $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
             /*
-                        if ($user->{'newpasswordrequired'} !== 'true') {
-                            $userResponse->{'token'} = $token;
-                        }
-            */
+            if ($user->{'newpasswordrequired'} !== 'true') {
+            $userResponse->{'token'} = $token;
+            }
+             */
             $userResponse->{'token'} = $token;
 
             $response->setResult($userResponse);
@@ -203,9 +198,9 @@ class AuthService
             $userResponse->{'email'} = $user->{'email'};
             $newCaptcha = $this->throttle->createCaptcha($user->{'email'});
             if ($newCaptcha != null) {
-                $userResponse->{'captcha'} =  $newCaptcha->{'question'};
+                $userResponse->{'captcha'} = $newCaptcha->{'question'};
             }
-            
+
             $response->setResult($userResponse);
         }
 
@@ -231,14 +226,11 @@ class AuthService
 
         $loginmsg = 'Wrong login';
 
-
         // if someone forgot to do this before
         $email = strtolower($emailParam);
 
         // return the existing user
         $user = $this->service->getJsonUser($email);
-
-
 
         // check login sent by mail
         if ($this->login($email, $password, $captchaanswer) === '') {
@@ -250,7 +242,6 @@ class AuthService
             $user->{'clientalgorithm'} = 'hashmacbase64';
             $user->{'newpasswordrequired'} = 'false';
             JsonUtils::writeJsonFile($this->service->getJsonUserFile($email), $user);
-
 
             if (empty($updateMsg)) {
                 $response = $this->getPublicInfo($email);
@@ -269,7 +260,6 @@ class AuthService
     {
         $jwt = new JwtToken();
 
-       
         return $this->service->getJsonUser($jwt->getUserFromToken($token));
     }
 
@@ -326,7 +316,6 @@ class AuthService
 
         return $response;
     }
-
 
     /**
      * Authenticate and return a User object with a token.
@@ -405,7 +394,6 @@ class AuthService
             }
         }
 
-
         return $response;
     }
 
@@ -426,7 +414,7 @@ class AuthService
      *
      * @return Response object
      */
-    protected function getDefaultResponse() : Response
+    protected function getDefaultResponse(): Response
     {
         $response = new Response();
         $response->setCode(400);
@@ -434,8 +422,6 @@ class AuthService
 
         return $response;
     }
-
-
 
     /**
      * Control if the current user has access to API.
@@ -460,8 +446,6 @@ class AuthService
 
         return $result;
     }
-
-
 
     /**
      * Control if the current user has access to an editor API.
@@ -551,7 +535,6 @@ class AuthService
             }
         }
 
-
         if (empty($error_msg)) {
             // create a random for this user
             // http://php.net/manual/fr/function.random-bytes.php
@@ -561,7 +544,7 @@ class AuthService
             // store a salted password
 
             $options = [
-                    'cost' => $this->passwordHashCost,
+                'cost' => $this->passwordHashCost,
             ];
             $saltpassword = password_hash($password, PASSWORD_BCRYPT, $options);
 

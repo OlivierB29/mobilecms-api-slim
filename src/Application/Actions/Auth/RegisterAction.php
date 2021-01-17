@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class RegisterAction extends AuthAction
 {
@@ -20,7 +19,6 @@ class RegisterAction extends AuthAction
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
         $service = new AuthService($this->getPrivateDirPath() . '/users');
-
 
         // register and create a user
 
@@ -39,7 +37,6 @@ class RegisterAction extends AuthAction
         } else {
             $response->setError(400, 'Bad user parameters');
         }
-        
 
         return $this->withResponse($response);
     }

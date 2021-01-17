@@ -7,6 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
 
+/**
+ * Delete a user
+ */
 class AdminContentDeleteAction extends AdminAction
 {
 

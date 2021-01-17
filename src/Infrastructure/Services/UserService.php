@@ -33,7 +33,6 @@ class UserService
         $this->databasedir = $databasedir;
     }
 
-
     public function getAllUsers(): Response
     {
         $response = $this->getDefaultResponse();
@@ -60,9 +59,6 @@ class UserService
 
         return $response;
     }
-
-
-
 
     /**
      * Return the json user file eg : foobar@example.org.json.
@@ -153,13 +149,12 @@ class UserService
         return $result;
     }
 
-
     /**
      * Initialize a default Response object.
      *
      * @return Response object
      */
-    protected function getDefaultResponse() : Response
+    protected function getDefaultResponse(): Response
     {
         $response = new Response();
         $response->setCode(400);
@@ -167,7 +162,6 @@ class UserService
 
         return $response;
     }
-
 
     /**
      * Create a new user file.

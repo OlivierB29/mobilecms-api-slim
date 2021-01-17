@@ -7,6 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\JsonUtils;
 
+/**
+ * Get type description
+ */
 class MetadataAction extends AdminAction
 {
 

@@ -1,26 +1,27 @@
 <?php namespace App\Infrastructure\Utils;
 
 /**
+ * PDF thumbnail and resize utility
  */
 class PdfUtils
 {
     /**
-    * default image quality
-    */
+     * default image quality
+     */
     private $quality = 80;
 
     /**
-    * image driver
-    */
+     * image driver
+     */
     private $driver = 'imagick';
 
     /**
-    * Create a list of thumbnails
-    * @param string $file : file path
-    * @param string $dir : directory containing resized files
-    * @param array $sizes : array of new resized widths
-    * @return array created files
-    */
+     * Create a list of thumbnails
+     * @param string $file : file path
+     * @param string $dir : directory containing resized files
+     * @param array $sizes : array of new resized widths
+     * @return array created files
+     */
     public function multipleResize(string $file, string $dir, array $sizes)
     {
         $result = [];
@@ -35,13 +36,10 @@ class PdfUtils
 
         foreach ($sizes as $width) {
             // base name : foo.pdf
-            $resizedFileName = $fileName . '-' . (string)$width . '.' . $extension;
+            $resizedFileName = $fileName . '-' . (string) $width . '.' . $extension;
 
             // file name : foobar/foo-320.jpg
             $resizedFilePath = $dir . '/' . $resizedFileName;
-
-
-
 
             $thumbfileResult = $this->resize($file, $resizedFilePath, $width);
             if (!empty($thumbfileResult)) {
@@ -52,14 +50,14 @@ class PdfUtils
     }
 
     /**
-    * Create a thumbnail of the first page
-    *
-    * @param string $source somewhere/foo.pdf
-    * @param string $target foo/foo.pdf
-    * @param int $width width in px
+     * Create a thumbnail of the first page
+     *
+     * @param string $source somewhere/foo.pdf
+     * @param string $target foo/foo.pdf
+     * @param int $width width in px
 
-    * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
-    */
+     * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
+     */
     public function resize($source, $target, $width = 210)
     {
         $result = null;
@@ -70,15 +68,14 @@ class PdfUtils
 
         if ($this->driver === 'imagick') {
             if ('application/pdf' === $mime_type) {
-                $im     = new \Imagick(\realpath($source));
+                $im = new \Imagick(\realpath($source));
                 $im->setIteratorIndex(0);
                 $im->setCompression(\Imagick::COMPRESSION_JPEG);
                 $im->setCompressionQuality($this->quality);
-    
-                $ratio_orig = $im->getImageWidth()/$im->getImageHeight();
-                $height = \intval(\round($width/$ratio_orig, 0, PHP_ROUND_HALF_UP));
-    
-    
+
+                $ratio_orig = $im->getImageWidth() / $im->getImageHeight();
+                $height = \intval(\round($width / $ratio_orig, 0, PHP_ROUND_HALF_UP));
+
                 $im->setImageFormat('jpeg');
                 //https://stackoverflow.com/questions/41585848/imagickflattenimages-method-is-deprecated-and-its-use-should-be-avoided
                 $im->setImageAlphaChannel(11); // Imagick::ALPHACHANNEL_REMOVE
@@ -88,36 +85,28 @@ class PdfUtils
                 $im->writeimage($target);
                 $im->clear();
                 $im->destroy();
-    
-    
-    
-    
-    
+
                 $result = \json_decode('{}');
-                $result->{'width'} = (string)$width;
-                $result->{'height'} = (string)$height;
-    
+                $result->{'width'} = (string) $width;
+                $result->{'height'} = (string) $height;
+
                 $result->{'url'} = \basename($target);
             }
         }
 
-
-
         return $result;
     }
 
-
     /**
-    * @param string $file : file path
-    * @return \stdClass true if smaller size is created
-    */
+     * @param string $file : file path
+     * @return \stdClass true if smaller size is created
+     */
     public function pdfInfo(string $file)
     {
         $result = \json_decode('{}');
         $fileutils = new FileUtils();
         $result->{'mimetype'} = $fileutils->getMimeType($file);
         $result->{'url'} = \basename($file);
-
 
         return $result;
     }

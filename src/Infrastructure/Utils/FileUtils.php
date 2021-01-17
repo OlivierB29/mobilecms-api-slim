@@ -1,6 +1,7 @@
 <?php namespace App\Infrastructure\Utils;
 
 /**
+ * File utilities
  */
 class FileUtils
 {
@@ -11,7 +12,6 @@ class FileUtils
         unset($file_info);
         return $mime_type;
     }
-
 
     /**
      * Copy a file and create directory if necessary.
@@ -51,7 +51,6 @@ class FileUtils
             }
         }
     }
-
 
     public function deleteDir($dir)
     {

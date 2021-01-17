@@ -1,10 +1,9 @@
 <?php namespace App\Infrastructure\Services;
 
-use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\ImageUtils;
+use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\PdfUtils;
-use App\Infrastructure\Utils\Properties;
 
 /**
  * File utility service.
@@ -29,7 +28,6 @@ class FileService extends AbstractService
 
         return $result;
     }
-
 
     /**
      * Get updated file descriptions from a directory.
@@ -86,7 +84,7 @@ class FileService extends AbstractService
     public function getRecordDirectory(string $mediadir, string $type, string $id, \stdClass $record): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
-            $result = $mediadir . '/' . $type . '/' ;
+            $result = $mediadir . '/' . $type . '/';
             // conf "organizeby": "year"
             $conf = $this->getConf($type);
             if (!empty($conf->getString('organizeby'))) {
@@ -95,10 +93,10 @@ class FileService extends AbstractService
                 $year = substr($recorddate, 0, 4);
                 // date should be mandatory
                 if (!empty($year)) {
-                    $result .=  $year . '/';
+                    $result .= $year . '/';
                 }
             }
-            $result .= $id ;
+            $result .= $id;
             return $result;
         } else {
             // @codeCoverageIgnoreStart
@@ -113,10 +111,9 @@ class FileService extends AbstractService
     public function getRecordDirectoryWithoutRecord(string $mediadir, string $type, string $id): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
-            $result = $mediadir . '/' . $type . '/' ;
+            $result = $mediadir . '/' . $type . '/';
 
-
-            $result .= $id ;
+            $result .= $id;
             return $result;
         } else {
             // @codeCoverageIgnoreStart
@@ -124,7 +121,6 @@ class FileService extends AbstractService
             // @codeCoverageIgnoreEnd
         }
     }
-
 
     /**
      * Create thumbnails files from specified URLs.
@@ -150,7 +146,6 @@ class FileService extends AbstractService
         $response = $this->getDefaultResponse();
         $destdir = $this->getRecordDirectoryWithoutRecord($mediadir, $datatype, $id);
 
-
         $result = [];
         $utils = new ImageUtils();
         $utils->setQuality($quality);
@@ -161,7 +156,6 @@ class FileService extends AbstractService
             // upload
             if (isset($file->{'url'})) {
                 $sizes = null;
-
 
                 // get foobar.html from http://something.com/[...]/foobar.html
                 $filePath = $destdir . '/' . basename($file->{'url'});
@@ -216,13 +210,12 @@ class FileService extends AbstractService
         return $response;
     }
 
-
     /**
      * Initialize a default Response object.
      *
      * @return Response object
      */
-    protected function getDefaultResponse() : Response
+    protected function getDefaultResponse(): Response
     {
         $response = new Response();
         $response->setCode(400);

@@ -1,12 +1,14 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
+use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Change password
+ */
 class ChangePasswordAction extends AuthAction
 {
 
@@ -22,12 +24,10 @@ class ChangePasswordAction extends AuthAction
 
         $service = new AuthService($this->getPrivateDirPath() . '/users');
 
-       
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}
 
         $logindata = $this->getRequestBody();
-
 
         $captchaanswer = null;
         if (isset($logindata->{'captchaanswer'})) {
@@ -43,9 +43,8 @@ class ChangePasswordAction extends AuthAction
             $logindata->{'newpassword'},
             $captchaanswer
         );
-        
+
         unset($logindata);
-        
 
         return $this->withResponse($response);
     }

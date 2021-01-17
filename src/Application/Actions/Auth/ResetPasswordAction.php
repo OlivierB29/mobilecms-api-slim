@@ -1,16 +1,17 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\Services\FileService;
+use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Utils\MailUtils;
 use App\Infrastructure\Utils\NetUtils;
-use App\Infrastructure\Services\AuthService;
-
 use PHPMailer\PHPMailer\PHPMailer;
+use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Reset a password by sending an email with a new password
+ */
 class ResetPasswordAction extends AuthAction
 {
 
@@ -25,7 +26,6 @@ class ResetPasswordAction extends AuthAction
         $this->checkConfiguration();
 
         $service = new AuthService($this->getPrivateDirPath() . '/users');
-
 
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}
@@ -48,14 +48,14 @@ class ResetPasswordAction extends AuthAction
             $date = date("Y-m-d H:i:s");
             $notificationBody = $u->getNewPassword('new password', $clearPassword, $this->getClientInfo(), $date);
             $textBody = $u->getNewTextPassword('new password', $clearPassword, $this->getClientInfo(), $date);
-            
+
             //$notificationHeaders = $u->getHeaders($this->getConf()->{'mailsender'});
 
             if ($this->getProperties()->getBoolean('enablemail', true)) {
                 // @codeCoverageIgnoreStart
                 $this->mail($from, $email, $email, $notificationTitle, $notificationBody, $textBody);
 
-            // @codeCoverageIgnoreEnd
+                // @codeCoverageIgnoreEnd
             } elseif ($this->getProperties()->getBoolean('debugnotifications', false)) {
                 $tmpResponse = $response->getResult();
                 // test only
@@ -67,7 +67,7 @@ class ResetPasswordAction extends AuthAction
         }
 
         unset($logindata);
-        
+
         return $this->withResponse($response);
     }
 
@@ -87,22 +87,19 @@ class ResetPasswordAction extends AuthAction
         return $result;
     }
 
-
     private function mail($from, $toAddress, $toName, $title, $htmlBody, $textBody)
     {
         //Create a new PHPMailer instance
         $mail = new PHPMailer();
         if ('true' === $this->getConf()->{'enablesmtp'}) {
             $mail->isSMTP(); // use smtp
-    $mail->Host = $this->getConf()->{'smtphost'}; // host
-    $mail->SMTPAuth = true; // auth
-    $mail->Username = $this->getConf()->{'smtpusername'}; // username
-    $mail->Password = $this->getConf()->{'smtppassword'}; // password
-    $mail->SMTPSecure = $this->getConf()->{'smtpsecure'}; // SSL
-    $mail->Port = $this->getProperties()->getInteger('smtpport', 465);
+            $mail->Host = $this->getConf()->{'smtphost'}; // host
+            $mail->SMTPAuth = true; // auth
+            $mail->Username = $this->getConf()->{'smtpusername'}; // username
+            $mail->Password = $this->getConf()->{'smtppassword'}; // password
+            $mail->SMTPSecure = $this->getConf()->{'smtpsecure'}; // SSL
+            $mail->Port = $this->getProperties()->getInteger('smtpport', 465);
         }
-
-
 
         //Set who the message is to be sent from
         $mail->setFrom($from, $from);

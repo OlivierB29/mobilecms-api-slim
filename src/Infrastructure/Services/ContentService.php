@@ -1,14 +1,7 @@
 <?php namespace App\Infrastructure\Services;
 
-use App\Infrastructure\Utils\Logger;
-use App\Infrastructure\Utils\JsonUtils;
-
-use App\Infrastructure\Utils\Properties;
-use App\Application\Actions\ActionPayload;
-
 use App\Infrastructure\Rest\Response;
-use Psr\Http\Message\ResponseInterface as PsrResponse;
-use Slim\Psr7\Response as ResponseImpl;
+use App\Infrastructure\Utils\JsonUtils;
 
 /**
  * Function used for sorting.
@@ -18,11 +11,11 @@ use Slim\Psr7\Response as ResponseImpl;
 function compareIndex(string $key)
 {
     /*
-    * compare two object using the $key property
-    * @param \stdClass a first object to compare
-    * @param \stdClass b second object to compare
-    * @return int same as strnatcmp
-    */
+     * compare two object using the $key property
+     * @param \stdClass a first object to compare
+     * @param \stdClass b second object to compare
+     * @return int same as strnatcmp
+     */
     return function (\stdClass $a, \stdClass $b) use ($key) {
         $result = 0;
         if (!empty($a) && !empty($b) && !empty($a->{$key}) && !empty($b->{$key})) {
@@ -41,11 +34,11 @@ function compareIndex(string $key)
 function compareIndexReverse(string $key)
 {
     /*
-    * compare two object using the $key property
-    * @param a first object to compare
-    * @param b second object to compare
-    * @return int same as strnatcmp
-    */
+     * compare two object using the $key property
+     * @param a first object to compare
+     * @param b second object to compare
+     * @return int same as strnatcmp
+     */
     return function (\stdClass $a, \stdClass $b) use ($key) {
         $result = 0;
         if (!empty($a) && !empty($b) && !empty($a->{$key}) && !empty($b->{$key})) {
@@ -67,8 +60,6 @@ function compareIndexReverse(string $key)
 class ContentService extends AbstractService
 {
 
-
-
     /**
      * Constructor.
      *
@@ -87,9 +78,9 @@ class ContentService extends AbstractService
      *
      * @return string /foobar/calendar/index.json
      */
-    private function getItemFileName(string $type, string $id, \stdClass $record) : string
+    private function getItemFileName(string $type, string $id, \stdClass $record): string
     {
-        $result = $this->databasedir . '/' . $type . '/' ;
+        $result = $this->databasedir . '/' . $type . '/';
         // conf "organizeby": "year"
         $conf = $this->getConf($type);
         if (!empty($conf->getString('organizeby'))) {
@@ -98,21 +89,20 @@ class ContentService extends AbstractService
             $year = substr($recorddate, 0, 4);
             // date should be mandatory
             if (!empty($year)) {
-                $result .=  $year . '/';
+                $result .= $year . '/';
             }
         }
         $result .= $id . '.json';
         return $result;
     }
 
-    private function getItemFileNameWithoutRecord(string $type, string $id) : string
+    private function getItemFileNameWithoutRecord(string $type, string $id): string
     {
-        $result = $this->databasedir . '/' . $type . '/' ;
+        $result = $this->databasedir . '/' . $type . '/';
 
         $result .= $id . '.json';
         return $result;
     }
-
 
     /**
      * Return a template index file path.
@@ -121,7 +111,7 @@ class ContentService extends AbstractService
      *
      * @return string /foobar/calendar/index_template.json
      */
-    private function getIndexTemplateFileName(string $type) : string
+    private function getIndexTemplateFileName(string $type): string
     {
         $this->checkType($type);
 
@@ -135,30 +125,26 @@ class ContentService extends AbstractService
      *
      * @return string /foobar/calendar/cache_template.json
      */
-    private function getCacheTemplateFileName(string $type) : string
+    private function getCacheTemplateFileName(string $type): string
     {
         $this->checkType($type);
 
         return $this->databasedir . '/' . $type . '/index/cache_template.json';
     }
 
-
-
-    public function getMetadataFileName(string $type) : string
+    public function getMetadataFileName(string $type): string
     {
         $this->checkType($type);
 
         return $this->databasedir . '/' . $type . '/index/metadata.json';
     }
 
-
-    public function getTemplateFileName(string $type) : string
+    public function getTemplateFileName(string $type): string
     {
         $this->checkType($type);
 
         return $this->databasedir . '/' . $type . '/index/new.json';
     }
-
 
     /**
      * Get a single record.
@@ -166,7 +152,7 @@ class ContentService extends AbstractService
      * @param string $type     eg: calendar
      * @param string $keyvalue : id value, eg :1
      */
-    public function getRecord(string $type, string $keyvalue) : Response
+    public function getRecord(string $type, string $keyvalue): Response
     {
         $response = $this->getDefaultResponse();
 
@@ -209,8 +195,6 @@ class ContentService extends AbstractService
 
         return $response;
     }
-
-
 
     /**
      * Return a filepath from a single filename, only contained in the public databasedir.
@@ -356,13 +340,12 @@ class ContentService extends AbstractService
      *
      * @return string /foobar/calendar/index.json
      */
-    public function getIndexFileName(string $type) : string
+    public function getIndexFileName(string $type): string
     {
         $this->checkType($type);
 
         return $this->databasedir . '/' . $type . '/index/index.json';
     }
-
 
     /**
      * Save a record.
@@ -440,7 +423,7 @@ class ContentService extends AbstractService
     public function publishById(string $type, string $keyname, string $keyvalue): Response
     {
         //  $this->logger->info('publishById' . $type . ',' . $keyname . ',' . $keyvalue);
-        
+
         $response = $this->getDefaultResponse();
 
         // file name eg: index.json
@@ -448,8 +431,8 @@ class ContentService extends AbstractService
         /*
         Load a template for index.
         eg :
-            { "id": "", "date": "",  "activity": "", "title": "" }
-        */
+        { "id": "", "date": "",  "activity": "", "title": "" }
+         */
         $indexValue = null;
         // create an indexed with cached items
         if (\file_exists($this->getCacheTemplateFileName($type))) {
@@ -458,8 +441,6 @@ class ContentService extends AbstractService
             $indexValue = JsonUtils::readJsonFile($this->getIndexTemplateFileName($type));
         }
 
-        
-
         // Read the full JSON record
         $recordFile = $this->databasedir . '/' . $type . '/' . $keyvalue . '.json';
 
@@ -467,7 +448,6 @@ class ContentService extends AbstractService
 
         //copy some fields to index
         JsonUtils::copy($record, $indexValue);
-       
 
         // get index data
         $data = JsonUtils::readJsonFile($file);
@@ -490,7 +470,7 @@ class ContentService extends AbstractService
             }
             $cacheSize = $this->getConf($type)->getInteger('cachesize', 0);
         }
-           
+
         // sort
         if ($sortAscending) {
             usort($data, compareIndex($sortby));
@@ -503,8 +483,6 @@ class ContentService extends AbstractService
         unset($data);
         unset($record);
 
-
-
         $response->setCode(200);
         // set a timestamp response
         // $tempResponse = $response->getResult();
@@ -514,7 +492,6 @@ class ContentService extends AbstractService
         return $response;
     }
 
- 
     /**
      * Rebuild an index.
      *
@@ -531,17 +508,15 @@ class ContentService extends AbstractService
 
         $indexFile = $this->getIndexFileName($type);
 
-
         /*
         Load a template for index.
         eg :
-            { "id": "", "date": "",  "activity": "", "title": "" }
-        */
+        { "id": "", "date": "",  "activity": "", "title": "" }
+         */
 
         $indexTemplate = JsonUtils::readJsonFile($this->getIndexTemplateFileName($type));
 
         $cacheTemplate = null;
-
 
         if ($handle = opendir($this->databasedir . '/' . $type)) {
             while (false !== ($file = readdir($handle))) {
@@ -563,8 +538,6 @@ class ContentService extends AbstractService
             }
             closedir($handle);
         }
-
-
 
         // sorted index by a field, or by id
         $sortby = $keyname;
@@ -602,7 +575,6 @@ class ContentService extends AbstractService
             }
         }
 
-
         // write to file
         JsonUtils::writeJsonFile($indexFile, $data);
         unset($data);
@@ -632,7 +604,7 @@ class ContentService extends AbstractService
             }
             $cacheSize = $this->getConf($type)->getInteger('cachesize', 0);
         }
-        
+
         // sort
         if ($sortAscending) {
             usort($data, compareIndex($sortby));
@@ -664,16 +636,13 @@ class ContentService extends AbstractService
         return $tmp;
     }
 
-
-
-
     public function deleteRecords(string $type, array $ids)
     {
         $response = $this->getDefaultResponse();
 
         foreach ($ids as $id) {
 
-                // Read the JSON file
+            // Read the JSON file
             $file = $this->databasedir . '/' . $type . '/' . $id . '.json';
 
             if (file_exists($file)) {
@@ -686,8 +655,6 @@ class ContentService extends AbstractService
                 // @codeCoverageIgnoreEnd
             }
         }
-
-
 
         return $response;
     }

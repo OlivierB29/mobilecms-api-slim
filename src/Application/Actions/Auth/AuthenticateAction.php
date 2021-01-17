@@ -1,12 +1,14 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Services\AuthService;
+use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Authenticate and return a token
+ */
 class AuthenticateAction extends AuthAction
 {
 
@@ -25,7 +27,6 @@ class AuthenticateAction extends AuthAction
             // login and get token
             // eg : { "user": "test@example.com", "password":"Sample#123456"}
 
-
             if (!isset($logindata->{'password'})) {
                 throw new \Exception('no password data');
             }
@@ -35,7 +36,7 @@ class AuthenticateAction extends AuthAction
                 $captchaanswer = $logindata->{'captchaanswer'};
             }
             $service = new AuthService($this->getPrivateDirPath() . '/users');
-            
+
             $response = $service->getToken($this->getUser($logindata), $logindata->{'password'}, $captchaanswer);
             unset($logindata);
             // free variables before response

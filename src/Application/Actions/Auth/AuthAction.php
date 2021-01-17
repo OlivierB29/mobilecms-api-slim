@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
@@ -24,8 +24,6 @@ abstract class AuthAction extends RestAction
 
         return $result;
     }
-
-
 
     /**
      * Check if directory is defined.

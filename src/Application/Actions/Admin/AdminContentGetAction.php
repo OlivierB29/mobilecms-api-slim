@@ -9,6 +9,9 @@ use App\Infrastructure\Services\ContentService;
 
 use App\Infrastructure\Services\AuthService;
 
+/**
+ * Get a user
+ */
 class AdminContentGetAction extends AdminAction
 {
 

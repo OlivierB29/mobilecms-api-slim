@@ -7,6 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 use App\Infrastructure\Services\ContentService;
 
+/**
+ * Get users types and others
+ */
 class AdminTypesGetAction extends AdminAction
 {
 

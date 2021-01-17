@@ -10,6 +10,9 @@ use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Utils\JsonUtils;
 
+/**
+ * Create a user
+ */
 class AdminContentCreateAction extends AdminAction
 {
 

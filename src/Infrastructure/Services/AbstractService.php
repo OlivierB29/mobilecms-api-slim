@@ -1,7 +1,7 @@
 <?php namespace App\Infrastructure\Services;
 
-use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\Properties;
 
 abstract class AbstractService
 {
@@ -11,18 +11,17 @@ abstract class AbstractService
      */
     protected $databasedir;
 
-
     protected function getConf(string $type): Properties
     {
         $conf = new Properties();
         if (\file_exists($this->getConfFileName($type))) {
             $conf->loadConf($this->getConfFileName($type));
         }
-        
+
         return $conf;
     }
 
-    protected function getConfFileName(string $type) : string
+    protected function getConfFileName(string $type): string
     {
         $this->checkType($type);
 
@@ -36,24 +35,21 @@ abstract class AbstractService
         }
     }
 
-
     protected function checkParams(string $type, string $id)
     {
         $this->checkType($type);
-
 
         if (empty($id)) {
             throw new \Exception('empty id');
         }
     }
 
-
     /**
      * Initialize a default Response object.
      *
      * @return Response object
      */
-    protected function getDefaultResponse() : Response
+    protected function getDefaultResponse(): Response
     {
         $response = new Response();
         $response->setCode(400);

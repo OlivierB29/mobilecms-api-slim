@@ -1,20 +1,18 @@
 <?php namespace App\Infrastructure\Utils;
 
 /**
-* Read a simple JSON configuration file.
-*/
+ * Read a simple JSON configuration file.
+ */
 class Properties
 {
     /**
-    * \stdClass JSON conf
-    */
-    private $conf ;
+     * \stdClass JSON conf
+     */
+    private $conf;
 
     private $rootDir;
 
     private static $instance;
-
-
 
     /**
      * Constructor.
@@ -33,13 +31,13 @@ class Properties
      * @param int $default : default value if configuration is empty
      * @return int value
      */
-    public function getInteger(string $key, int $default = 0) : int
+    public function getInteger(string $key, int $default = 0): int
     {
         $result = $default;
 
         if (!empty($this->getConf()->{$key})) {
             if (\is_string($this->getConf()->{$key})) {
-                $result = (int)$this->getConf()->{$key};
+                $result = (int) $this->getConf()->{$key};
             } else {
                 $result = $this->getConf()->{$key};
             }
@@ -54,7 +52,7 @@ class Properties
      * @param bool $default : default value if configuration is empty
      * @return bool value
      */
-    public function getBoolean(string $key, bool $default) : bool
+    public function getBoolean(string $key, bool $default): bool
     {
         $result = $default;
 
@@ -76,7 +74,7 @@ class Properties
      * @param string $key : key
      * @return string value
      */
-    public function getString(string $key) : string
+    public function getString(string $key): string
     {
         $result = '';
 
@@ -106,9 +104,9 @@ class Properties
     }
 
     /**
-    * get JSON conf
-    * @return \stdClass JSON conf
-    */
+     * get JSON conf
+     * @return \stdClass JSON conf
+     */
     public function getConf(): \stdClass
     {
         return $this->conf;

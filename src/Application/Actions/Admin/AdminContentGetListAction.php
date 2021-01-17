@@ -7,6 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\UserService;
 use App\Infrastructure\Services\ContentService;
 
+/**
+ * Get user list
+ */
 class AdminContentGetListAction extends AdminAction
 {
 

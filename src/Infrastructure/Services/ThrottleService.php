@@ -1,9 +1,12 @@
 <?php namespace App\Infrastructure\Services;
 
-use  App\Infrastructure\Utils\JsonUtils;
-use  App\Infrastructure\Utils\NetUtils;
-use  App\Infrastructure\Utils\CaptchaUtils;
+use App\Infrastructure\Utils\CaptchaUtils;
+use App\Infrastructure\Utils\JsonUtils;
+use App\Infrastructure\Utils\NetUtils;
 
+/**
+ * Control failed logins and check captcha
+ */
 class ThrottleService
 {
     /**
@@ -22,7 +25,6 @@ class ThrottleService
         $this->databasedir = $databasedir;
     }
 
-
     public function getLoginHistoryFileName(string $user)
     {
         return $this->databasedir . '/' . 'history' . '/' . $user . '.json';
@@ -32,7 +34,6 @@ class ThrottleService
     {
         return $this->databasedir . '/' . 'captcha' . '/' . $user . '.json';
     }
-
 
     public function saveFailedLogin(string $user)
     {
@@ -51,8 +52,6 @@ class ThrottleService
             $failedList = [];
         }
 
-                 
-
         $failed = $this->createFailedLoginRecord($user);
 
         \array_push($failedList, $failed);
@@ -60,7 +59,7 @@ class ThrottleService
         $result = count($failedList);
         // write to file
         JsonUtils::writeJsonFile($file, $history);
-                 
+
         return $result;
     }
 
@@ -77,8 +76,6 @@ class ThrottleService
             $failedList = $history->{'failed'};
             $result = count($failedList);
         }
-                 
-                 
 
         return $result;
     }
@@ -99,18 +96,17 @@ class ThrottleService
             $history = \json_decode('{}');
             $failedList = [];
         }
-        
+
         if (\file_exists($this->getCaptchaFileName($user))) {
             \unlink($this->getCaptchaFileName($user));
         }
-
 
         $history->{'failed'} = [];
         $history->{'archive' . date("YmdHis")} = $failedList;
         $result = count($failedList);
         // write to file
         JsonUtils::writeJsonFile($file, $history);
-        
+
         return $result;
     }
 
@@ -155,7 +151,6 @@ class ThrottleService
 
         return $result;
     }
-
 
     public function createFailedLoginRecord(string $user)
     {
