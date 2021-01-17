@@ -1,11 +1,10 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
 use App\Infrastructure\Services\AuthService;
 use Psr\Http\Message\ResponseInterface as Response;
-
 
 /**
  * Get minimal information of an account

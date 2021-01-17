@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 namespace App\Application\Actions\Auth;
 
@@ -55,7 +55,7 @@ class ResetPasswordAction extends AuthAction
                 // @codeCoverageIgnoreStart
                 $this->mail($from, $email, $email, $notificationTitle, $notificationBody, $textBody);
 
-                // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
             } elseif ($this->getProperties()->getBoolean('debugnotifications', false)) {
                 $tmpResponse = $response->getResult();
                 // test only
