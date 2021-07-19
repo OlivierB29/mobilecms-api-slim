@@ -22,7 +22,11 @@ Assume `www/html/` is the web root context.
 
 # Server on Ubuntu
 With a default Ubuntu, you may need : 
+PHP 7.x
 `sudo apt install php-xdebug libapache2-mod-php php-gd php-mbstring php-xml php-imagick`
+
+PHP 8.0
+`sudo apt install  php8.0-gd php8.0-mbstring php8.0-xml php8.0-imagick`
 
 # VS Code Debugging
 Install and enable in php.ini :
