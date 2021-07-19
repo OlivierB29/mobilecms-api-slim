@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 /*
 
 Copyright (c) 2015-2020 Mika Tuupola
@@ -393,7 +395,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $method = str_replace(" ", "", $method);
             if (method_exists($this, $method)) {
                 /* Try to use setter */
-
+                /** @phpstan-ignore-next-line */
                 call_user_func([$this, $method], $value);
             } else {
                 /* Or fallback to setting option directly */
