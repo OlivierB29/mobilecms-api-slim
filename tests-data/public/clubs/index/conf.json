@@ -1,0 +1,7 @@
+{
+    "sortby": "date",
+    "sortdirection": "desc",
+    "organizefield": "",
+    "organizeby": "",
+    "typethumbnailsizes":[32, 48, 64, 128, 256]
+}

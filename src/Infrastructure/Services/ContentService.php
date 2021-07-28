@@ -80,9 +80,9 @@ class ContentService extends AbstractService
      */
     private function getItemFileName(string $type, string $id, \stdClass $record): string
     {
-        $result = $this->databasedir . '/' . $type . '/';
+        $result = $this->getDatabaseDir() . '/' . $type . '/';
         // conf "organizeby": "year"
-        $conf = $this->getConf($type);
+        $conf = $this->getRecordConf($type);
         if (!empty($conf->getString('organizeby'))) {
             // get year from date field
             $recorddate = $record->{$conf->getString('organizefield')};
@@ -98,7 +98,7 @@ class ContentService extends AbstractService
 
     private function getItemFileNameWithoutRecord(string $type, string $id): string
     {
-        $result = $this->databasedir . '/' . $type . '/';
+        $result = $this->getDatabaseDir() . '/' . $type . '/';
 
         $result .= $id . '.json';
         return $result;
@@ -115,7 +115,7 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/index_template.json';
+        return $this->getDatabaseDir() . '/' . $type . '/index/index_template.json';
     }
 
     /**
@@ -129,21 +129,21 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/cache_template.json';
+        return $this->getDatabaseDir() . '/' . $type . '/index/cache_template.json';
     }
 
     public function getMetadataFileName(string $type): string
     {
         $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/metadata.json';
+        return $this->getDatabaseDir() . '/' . $type . '/index/metadata.json';
     }
 
     public function getTemplateFileName(string $type): string
     {
         $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/new.json';
+        return $this->getDatabaseDir() . '/' . $type . '/index/new.json';
     }
 
     /**
@@ -222,7 +222,7 @@ class ContentService extends AbstractService
             // @codeCoverageIgnoreEnd
         }
 
-        $file = $this->databasedir . '/' . $filename;
+        $file = $this->getDatabaseDir() . '/' . $filename;
 
         // get one element
         if (file_exists($file)) {
@@ -254,7 +254,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         // Read the JSON file
-        $file = $this->databasedir . '/' . $filename;
+        $file = $this->getDatabaseDir() . '/' . $filename;
         $data = JsonUtils::readJsonFile($file);
 
         // get one element
@@ -293,7 +293,7 @@ class ContentService extends AbstractService
 
         $thelist = [];
 
-        if ($handle = opendir($this->databasedir . '/' . $type)) {
+        if ($handle = opendir($this->getDatabaseDir() . '/' . $type)) {
             while (false !== ($file = readdir($handle))) {
                 $fileObject = json_decode('{}');
                 if ($file != '.' && $file != '..' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'json') {
@@ -323,7 +323,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         // Read the JSON file
-        $file = $this->databasedir . '/' . $filename;
+        $file = $this->getDatabaseDir() . '/' . $filename;
         $data = JsonUtils::readJsonFile($file);
         if (isset($data)) {
             $response->setCode(200);
@@ -344,7 +344,7 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->databasedir . '/' . $type . '/index/index.json';
+        return $this->getDatabaseDir() . '/' . $type . '/index/index.json';
     }
 
     /**
@@ -442,7 +442,7 @@ class ContentService extends AbstractService
         }
 
         // Read the full JSON record
-        $recordFile = $this->databasedir . '/' . $type . '/' . $keyvalue . '.json';
+        $recordFile = $this->getDatabaseDir() . '/' . $type . '/' . $keyvalue . '.json';
 
         $record = JsonUtils::readJsonFile($recordFile);
 
@@ -461,14 +461,14 @@ class ContentService extends AbstractService
         $sortby = $keyname;
         $sortAscending = false;
         $cacheSize = -1;
-        if ($this->getConf($type) != null) {
-            if (!empty($this->getConf($type)->getString('sortby'))) {
-                $sortby = $this->getConf($type)->getString('sortby');
+        if ($this->getRecordConf($type) != null) {
+            if (!empty($this->getRecordConf($type)->getString('sortby'))) {
+                $sortby = $this->getRecordConf($type)->getString('sortby');
             }
-            if ('asc' === $this->getConf($type)->getString('sortdirection')) {
+            if ('asc' === $this->getRecordConf($type)->getString('sortdirection')) {
                 $sortAscending = true;
             }
-            $cacheSize = $this->getConf($type)->getInteger('cachesize', 0);
+            $cacheSize = $this->getRecordConf($type)->getInteger('cachesize', 0);
         }
 
         // sort
@@ -518,11 +518,11 @@ class ContentService extends AbstractService
 
         $cacheTemplate = null;
 
-        if ($handle = opendir($this->databasedir . '/' . $type)) {
+        if ($handle = opendir($this->getDatabaseDir() . '/' . $type)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != '.' && $file != '..' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'json') {
                     // Read the full JSON record
-                    $filename = $this->databasedir . '/' . $type . '/' . $file;
+                    $filename = $this->getDatabaseDir() . '/' . $type . '/' . $file;
                     $record = JsonUtils::readJsonFile($filename);
 
                     //
@@ -543,14 +543,14 @@ class ContentService extends AbstractService
         $sortby = $keyname;
         $sortAscending = false;
         $cacheSize = -1;
-        if ($this->getConf($type) != null) {
-            if (!empty($this->getConf($type)->getString('sortby'))) {
-                $sortby = $this->getConf($type)->getString('sortby');
+        if ($this->getRecordConf($type) != null) {
+            if (!empty($this->getRecordConf($type)->getString('sortby'))) {
+                $sortby = $this->getRecordConf($type)->getString('sortby');
             }
-            if ('asc' === $this->getConf($type)->getString('sortdirection')) {
+            if ('asc' === $this->getRecordConf($type)->getString('sortdirection')) {
                 $sortAscending = true;
             }
-            $cacheSize = $this->getConf($type)->getInteger('cachesize', 0);
+            $cacheSize = $this->getRecordConf($type)->getInteger('cachesize', 0);
         }
 
         // sort
@@ -566,7 +566,7 @@ class ContentService extends AbstractService
             $i = 0;
             while ($i < $cacheSize && $i < count($data)) {
                 $file = $data[$i]->{$keyname};
-                $filename = $this->databasedir . '/' . $type . '/' . $file . '.json';
+                $filename = $this->getDatabaseDir() . '/' . $type . '/' . $file . '.json';
                 $record = JsonUtils::readJsonFile($filename);
                 $cacheValue = clone $cacheTemplate;
                 JsonUtils::copy($record, $cacheValue);
@@ -595,14 +595,14 @@ class ContentService extends AbstractService
         $sortby = $keyname;
         $sortAscending = false;
         $cacheSize = -1;
-        if ($this->getConf($type) != null) {
-            if (!empty($this->getConf($type)->getString('sortby'))) {
-                $sortby = $this->getConf($type)->getString('sortby');
+        if ($this->getRecordConf($type) != null) {
+            if (!empty($this->getRecordConf($type)->getString('sortby'))) {
+                $sortby = $this->getRecordConf($type)->getString('sortby');
             }
-            if ('asc' === $this->getConf($type)->getString('sortdirection')) {
+            if ('asc' === $this->getRecordConf($type)->getString('sortdirection')) {
                 $sortAscending = true;
             }
-            $cacheSize = $this->getConf($type)->getInteger('cachesize', 0);
+            $cacheSize = $this->getRecordConf($type)->getInteger('cachesize', 0);
         }
 
         // sort
@@ -622,13 +622,13 @@ class ContentService extends AbstractService
      */
     public function options(string $filename)
     {
-        $file = $this->databasedir . '/' . $filename;
+        $file = $this->getDatabaseDir() . '/' . $filename;
 
         return JsonUtils::readJsonFile($file);
     }
     public function adminOptions(string $filename)
     {
-        $file = $this->databasedir . '/' . $filename;
+        $file = $this->getDatabaseDir() . '/' . $filename;
         //  $tmp = json_decode('{}');
         //  $tmp->{'list'} = JsonUtils::readJsonFile($file);
         $tmp = JsonUtils::readJsonFile($file);
@@ -643,7 +643,7 @@ class ContentService extends AbstractService
         foreach ($ids as $id) {
 
             // Read the JSON file
-            $file = $this->databasedir . '/' . $type . '/' . $id . '.json';
+            $file = $this->getDatabaseDir() . '/' . $type . '/' . $id . '.json';
 
             if (file_exists($file)) {
                 unlink($file);
@@ -658,4 +658,6 @@ class ContentService extends AbstractService
 
         return $response;
     }
+
+    
 }

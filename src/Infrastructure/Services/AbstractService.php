@@ -6,26 +6,47 @@ use App\Infrastructure\Utils\Properties;
 abstract class AbstractService
 {
 
+
+
+
     /**
      * Main directory (eg: /opt/foobar/data ).
      */
     protected $databasedir;
 
-    protected function getConf(string $type): Properties
+    protected $recordConf;
+
+    protected function getRecordConf(string $type): Properties
     {
-        $conf = new Properties();
-        if (\file_exists($this->getConfFileName($type))) {
-            $conf->loadConf($this->getConfFileName($type));
+        if (empty($this->recordConf)) {
+            $this->recordConf = new Properties();
+
+            $this->recordConf->loadRecordConf($this->getDatabaseDir(), $this->getConfFileName($type));
+    
+        }
+ 
+        return $this->recordConf;
+    }
+
+    protected function getDatabaseDir(): string
+    {
+        if (empty($this->databasedir)) {
+            throw new \Exception('databasedir is  empty');
         }
 
-        return $conf;
+        if (empty(\realpath($this->databasedir))) {
+            throw new \Exception('databasedir : invalid path');
+        }
+    
+        return $this->databasedir ;
     }
+
+    
 
     protected function getConfFileName(string $type): string
     {
         $this->checkType($type);
-
-        return $this->databasedir . '/' . $type . '/index/conf.json';
+        return \realpath($this->getDatabaseDir() . '/' . $type . '/index/conf.json');
     }
 
     protected function checkType(string $type)

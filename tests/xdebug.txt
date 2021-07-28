@@ -1,0 +1,44 @@
+Build complete.
+Don't forget to run 'make test'.
+
+running: make INSTALL_ROOT="/tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0" install
+Makefile:245: avertissement : surchargement de la recette pour la cible « test »
+Makefile:132: avertissement : ancienne recette ignorée pour la cible « test »
+Installing shared extensions:     /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr/lib/php/20200930/
+
+  +----------------------------------------------------------------------+
+  |                                                                      |
+  |   INSTALLATION INSTRUCTIONS                                          |
+  |   =========================                                          |
+  |                                                                      |
+  |   See https://xdebug.org/install.php#configure-php for instructions  |
+  |   on how to enable Xdebug for PHP.                                   |
+  |                                                                      |
+  |   Documentation is available online as well:                         |
+  |   - A list of all settings:  https://xdebug.org/docs-settings.php    |
+  |   - A list of all functions: https://xdebug.org/docs-functions.php   |
+  |   - Profiling instructions:  https://xdebug.org/docs-profiling2.php  |
+  |   - Remote debugging:        https://xdebug.org/docs-debugger.php    |
+  |                                                                      |
+  |                                                                      |
+  |   NOTE: Please disregard the message                                 |
+  |       You should add "extension=xdebug.so" to php.ini                |
+  |   that is emitted by the PECL installer. This does not work for      |
+  |   Xdebug.                                                            |
+  |                                                                      |
+  +----------------------------------------------------------------------+
+
+
+running: find "/tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0" | xargs ls -dils
+1972947    4 drwxr-xr-x 3 root root    4096 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0
+1973719    4 drwxr-xr-x 3 root root    4096 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr
+1973723    4 drwxr-xr-x 3 root root    4096 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr/lib
+1973727    4 drwxr-xr-x 3 root root    4096 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr/lib/php
+1973731    4 drwxr-xr-x 2 root root    4096 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr/lib/php/20200930
+1973715 1912 -rwxr-xr-x 1 root root 1954184 juil. 21 22:35 /tmp/pear/temp/pear-build-rootkbBjrN/install-xdebug-3.0.0/usr/lib/php/20200930/xdebug.so
+
+Build process completed successfully
+Installing '/usr/lib/php/20200930/xdebug.so'
+install ok: channel://pecl.php.net/xdebug-3.0.0
+configuration option "php_ini" is not set to php.ini location
+You should add "zend_extension=/usr/lib/php/20200930/xdebug.so" to php.ini

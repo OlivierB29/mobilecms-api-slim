@@ -19,7 +19,7 @@ class ThumbnailsAction extends FileAction
         $this->initConf();
         $this->checkConfiguration();
 
-        $service = new FileService();
+        $service = new FileService($this->getPublicDirPath());
         $files = $this->getRequestBody();
         $response = $service->createThumbnails(
             $this->getMediaDirPath(),

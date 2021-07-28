@@ -16,7 +16,7 @@ class BasicUploadGetAction extends FileAction
     {
         $response = $this->getDefaultResponse();
         // create service
-        $service = new FileService();
+        $service = new FileService($this->getPublicDirPath());
 
         // update files description
         // /var/www/html/media/calendar/1

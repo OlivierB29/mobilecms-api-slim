@@ -10,6 +10,14 @@ use App\Infrastructure\Utils\PdfUtils;
  */
 class FileService extends AbstractService
 {
+    protected $recordconf;
+
+    public function __construct(string $databasedir) 
+    {
+        $this->databasedir = $databasedir;
+        //$this->recordconf = $this->getRecordConf();
+    }
+
     /**
      * Direct file children from dir.
      *
@@ -86,7 +94,7 @@ class FileService extends AbstractService
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
             $result = $mediadir . '/' . $type . '/';
             // conf "organizeby": "year"
-            $conf = $this->getConf($type);
+            $conf = $this->getRecordConf($type);
             if (!empty($conf->getString('organizeby'))) {
                 // get year from date field
                 $recorddate = $record->{$conf->getString('organizefield')};
@@ -163,8 +171,9 @@ class FileService extends AbstractService
                 $thumbdir = $destdir . '/thumbnails';
                 if (file_exists($filePath)) {
                     // thumbnails sizes
-                    if (!empty($file->{'sizes'}) && count($file->{'sizes'}) > 0) {
-                        $sizes = $file->{'sizes'};
+                    if (!empty($this->getTypeThumbnailSizes($datatype)) && count($this->getTypeThumbnailSizes($datatype)) > 0) {
+
+                        $sizes = $this->getTypeThumbnailSizes($datatype);
                     } else {
                         // @codeCoverageIgnoreStart
                         $sizes = $defaultsizes;
@@ -177,11 +186,13 @@ class FileService extends AbstractService
                         $fileResponse = $utils->imageInfo($filePath);
                     } else {
                         // thumbnails sizes
-                        if (!empty($file->{'sizes'}) && count($file->{'sizes'}) > 0) {
-                            $sizes = $file->{'sizes'};
+                        if (!empty($this->getTypeThumbnailSizes($datatype)) && count($this->getTypeThumbnailSizes($datatype)) > 0) {
+                            $sizes = $this->getTypeThumbnailSizes($datatype);
+
                         } else {
                             // @codeCoverageIgnoreStart
                             $sizes = $defaultPdfsizes;
+
                             // @codeCoverageIgnoreEnd
                         }
                         // future version with PDF preview : https://gist.github.com/umidjons/11037635
@@ -222,5 +233,12 @@ class FileService extends AbstractService
         $response->setResult(new \stdClass);
 
         return $response;
+    }
+
+    protected function getTypeThumbnailSizes($type): array
+    {
+
+        $result = $this->getRecordConf($type)->getArray('typethumbnailsizes');
+        return $result;
     }
 }

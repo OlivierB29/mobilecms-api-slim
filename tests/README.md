@@ -16,3 +16,12 @@
 xdebug.remote_enable = 1
 xdebug.remote_autostart = 1
 ```
+## Xdebug with PHP 8.0 and pecl install
+sudo pecl channel-update pecl.php.net
+sudo pecl install xdebug-3.0.0 
+
+- edit /etc/php/8.0/cli/php.ini
+;;;;;;;;;;;;;;;;;;;
+; Module Settings ;
+;;;;;;;;;;;;;;;;;;;
+zend_extension=/usr/lib/php/20200930/xdebug.so

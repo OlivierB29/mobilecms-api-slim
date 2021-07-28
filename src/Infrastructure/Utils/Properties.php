@@ -84,6 +84,15 @@ class Properties
         return $result;
     }
 
+    public function getArray(string $key): array
+    {
+        $result = [];
+        if (!empty($this->getConf()->{$key})) {
+            $result = $this->getConf()->{$key};
+        }
+        return $result;
+    }
+
     /**
      * Read a JSON configuration file.
      *
@@ -92,6 +101,18 @@ class Properties
     public function loadConf(string $file)
     {
         if (\file_exists($file)) {
+            $this->setConf(json_decode(file_get_contents($file)));
+        } else {
+            throw new \Exception('conf file not found ' . $file);
+        }
+    }
+
+    public function loadRecordConf(string $rootDir, string $file)
+    {
+        $this->rootDir = $rootDir;
+
+        if (\file_exists($file)) {
+
             $this->setConf(json_decode(file_get_contents($file)));
         } else {
             throw new \Exception('conf file not found ' . $file);
@@ -119,7 +140,7 @@ class Properties
     {
         if (!isset(self::$instance)) {
             self::$instance = new Properties();
-            self::$instance->rootDir = $rootDir;
+            self::$instance->rootDir = \realpath($rootDir);
             self::$instance->loadConf($file);
         }
 

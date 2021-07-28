@@ -17,7 +17,7 @@ class ContentDeleteByIdAction extends CmsAction
     protected function action(): Response
     {
         //delete media
-        $fileservice = new FileService();
+        $fileservice = new FileService($this->getPublicDirPath());
         $mediadir = $fileservice->getRecordDirectoryWithoutRecord($this->getMediaDirPath(), $this->resolveArg('type'), $this->getParam('id'));
         unset($fileservice);
         if (\file_exists($mediadir)) {
