@@ -21,7 +21,15 @@ sudo pecl channel-update pecl.php.net
 sudo pecl install xdebug-3.0.0 
 
 - edit /etc/php/8.0/cli/php.ini
-;;;;;;;;;;;;;;;;;;;
-; Module Settings ;
-;;;;;;;;;;;;;;;;;;;
+```
+[xdebug]
 zend_extension=/usr/lib/php/20200930/xdebug.so
+xdebug.mode=debug
+xdebug.client_host=127.0.0.1
+xdebug.client_port=9003
+xdebug.start_upon_error=yes
+```
+
+## Xdebug 3 and VS Code
+.vscode/launch.json
+"port": 9003
