@@ -277,7 +277,6 @@ final class FileApiTest extends AuthApiTest
     }
     public function testThumbnailsByRecord()
     {
-        
         $record = '/clubs/1';
         $this->path = $this->getApi() . '/fileapi/thumbnails/clubs/1';
 
@@ -313,8 +312,6 @@ final class FileApiTest extends AuthApiTest
 
         $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-256.jpg'));
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-256.jpg');
-
-
     }
 
     public function testDefaultThumbnails()
@@ -372,7 +369,6 @@ final class FileApiTest extends AuthApiTest
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-100.jpg');
         $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-200.jpg'));
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/loremipsum-200.jpg');
-
     }
 
     public function testThumbnailsDefaultSizes()

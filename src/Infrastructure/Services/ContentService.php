@@ -658,6 +658,4 @@ class ContentService extends AbstractService
 
         return $response;
     }
-
-    
 }
