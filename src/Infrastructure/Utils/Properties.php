@@ -112,7 +112,6 @@ class Properties
         $this->rootDir = $rootDir;
 
         if (\file_exists($file)) {
-
             $this->setConf(json_decode(file_get_contents($file)));
         } else {
             throw new \Exception('conf file not found ' . $file);

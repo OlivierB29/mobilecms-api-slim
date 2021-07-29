@@ -12,7 +12,7 @@ class FileService extends AbstractService
 {
     protected $recordconf;
 
-    public function __construct(string $databasedir) 
+    public function __construct(string $databasedir)
     {
         $this->databasedir = $databasedir;
         //$this->recordconf = $this->getRecordConf();
@@ -172,7 +172,6 @@ class FileService extends AbstractService
                 if (file_exists($filePath)) {
                     // thumbnails sizes
                     if (!empty($this->getTypeThumbnailSizes($datatype)) && count($this->getTypeThumbnailSizes($datatype)) > 0) {
-
                         $sizes = $this->getTypeThumbnailSizes($datatype);
                     } else {
                         // @codeCoverageIgnoreStart
@@ -188,7 +187,6 @@ class FileService extends AbstractService
                         // thumbnails sizes
                         if (!empty($this->getTypeThumbnailSizes($datatype)) && count($this->getTypeThumbnailSizes($datatype)) > 0) {
                             $sizes = $this->getTypeThumbnailSizes($datatype);
-
                         } else {
                             // @codeCoverageIgnoreStart
                             $sizes = $defaultPdfsizes;
@@ -237,7 +235,6 @@ class FileService extends AbstractService
 
     protected function getTypeThumbnailSizes($type): array
     {
-
         $result = $this->getRecordConf($type)->getArray('typethumbnailsizes');
         return $result;
     }

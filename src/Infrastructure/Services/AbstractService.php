@@ -22,7 +22,6 @@ abstract class AbstractService
             $this->recordConf = new Properties();
 
             $this->recordConf->loadRecordConf($this->getDatabaseDir(), $this->getConfFileName($type));
-    
         }
  
         return $this->recordConf;
