@@ -33,3 +33,29 @@ xdebug.start_upon_error=yes
 ## Xdebug 3 and VS Code
 .vscode/launch.json
 "port": 9003
+
+## Slim API doesn't work 
+Especially after a long time...
+
+- Double check in a browser
+http://localhost:8888/mobilecmsapi/v2/cmsapi/status
+Should return HTTP 401
+
+- 2nd test
+http://localhost:8888/mobilecmsapi/v2/foo/bar
+Should return HTTP 400 with
+
+{
+    "type": "NOT_ALLOWED",
+    "description": "Method not allowed. Must be one of: OPTIONS"
+}
+
+For a successful login, check existing users !
+
+
+## Docker
+- install and run
+`sudo docker-compose up -d`
+
+- list containers
+`sudo docker container ps -a`
