@@ -14,7 +14,7 @@ class ThrottleService
      */
     private $databasedir;
 
-    private $maxfailed = 1;
+    private $maxfailed = 5;
     /**
      * Constructor.
      *
@@ -128,14 +128,11 @@ class ThrottleService
     {
         $result = null;
 
-        $failed = $this->countFailedLogin($user);
+        $result = CaptchaUtils::captcha();
 
-        if ($failed >= $this->maxfailed) {
-            $result = CaptchaUtils::captcha();
-
-            $file = $this->getCaptchaFileName($user);
-            JsonUtils::writeJsonFile($file, $result);
-        }
+        $file = $this->getCaptchaFileName($user);
+        JsonUtils::writeJsonFile($file, $result);
+        
 
         return $result;
     }
