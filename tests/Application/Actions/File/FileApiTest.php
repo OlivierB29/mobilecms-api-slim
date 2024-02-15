@@ -292,7 +292,7 @@ final class FileApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
 
-        $expected = '[{"mimetype":"image\/jpeg","width":"640","height":"476","url":"tennisclub.jpg","thumbnails":[{"width":"32","height":"24","url":"tennisclub-32.jpg"},{"width":"48","height":"36","url":"tennisclub-48.jpg"},{"width":"64","height":"48","url":"tennisclub-64.jpg"},{"width":"128","height":"95","url":"tennisclub-128.jpg"},{"width":"256","height":"190","url":"tennisclub-256.jpg"}]}]';
+        $expected = '[{"mimetype":"image\/jpeg","width":"1200","height":"630","url":"tennisclub.jpg","thumbnails":[{"width":"32","height":"17","url":"tennisclub-32.jpg"},{"width":"48","height":"25","url":"tennisclub-48.jpg"},{"width":"64","height":"34","url":"tennisclub-64.jpg"},{"width":"128","height":"67","url":"tennisclub-128.jpg"},{"width":"256","height":"134","url":"tennisclub-256.jpg"}]}]';
 
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
 
