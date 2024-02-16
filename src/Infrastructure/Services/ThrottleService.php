@@ -110,6 +110,19 @@ class ThrottleService
         return $result;
     }
 
+    public function isCaptchaRequired(string $user)
+    {
+        $result = false;
+
+        $failed = $this->countFailedLogin($user);
+
+        if ($failed >= $this->maxfailed) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
     public function getCaptcha(string $user)
     {
         $result = null;
