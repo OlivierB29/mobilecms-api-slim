@@ -18,7 +18,7 @@ class DeleteAction extends FileAction
 
         $this->checkConfiguration();
 
-        $response = $this->deleteFiles(
+        $response = $this->deleteMediaFiles(
             $this->getParam('type'),
             $this->getParam('id'),
             $this->getRequestBody()

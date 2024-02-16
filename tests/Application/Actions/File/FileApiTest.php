@@ -108,15 +108,22 @@ final class FileApiTest extends AuthApiTest
     */
     public function testDelete()
     {
-        $filename = 'testdelete.pdf';
+        $filename = 'blackholeaccretion_w1920_h1080_cw1920_ch1080.jpg';
         $record = '/calendar/2';
         // tests-data/fileapi/save -> tests-data/fileapi/media/calendar/2/
 
-
+        $fileutils = new FileUtils();
 
         $destfile = $this->API->getMediaDirPath() . $record . '/' . $filename;
 
-        copy('tests-data/fileapi/save/' . $filename, $destfile);
+        copy('tests-data/fileapi/save2/calendar/2/blackhole/' . $filename, $destfile);
+
+        $destThumbnailDir = $this->API->getMediaDirPath() . $record . '/thumbnails';
+        
+        $fileutils->copydir('tests-data/fileapi/save2/calendar/2/blackhole/thumbnails', $destThumbnailDir);
+
+
+        $this->assertTrue( file_exists( $destThumbnailDir ) && is_dir( $destThumbnailDir ) );
 
         // assert file exists before API call
         $this->assertTrue(file_exists($destfile));
@@ -124,7 +131,7 @@ final class FileApiTest extends AuthApiTest
 
         $this->SERVER = ['REQUEST_URI' => $this->path, 'REQUEST_METHOD' => 'POST', 'HTTP_ORIGIN' => 'foobar'];
 
-        $recordStr = '[{ "url": "testdelete.pdf", "title":"test"}]';
+        $recordStr = '[{ "url": "'.$filename.'", "title":"test"}]';
 
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
@@ -292,7 +299,7 @@ final class FileApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
 
-        $expected = '[{"mimetype":"image\/jpeg","width":"640","height":"476","url":"tennisclub.jpg","thumbnails":[{"width":"32","height":"24","url":"tennisclub-32.jpg"},{"width":"48","height":"36","url":"tennisclub-48.jpg"},{"width":"64","height":"48","url":"tennisclub-64.jpg"},{"width":"128","height":"95","url":"tennisclub-128.jpg"},{"width":"256","height":"190","url":"tennisclub-256.jpg"}]}]';
+        $expected = '[{"mimetype":"image\/jpeg","width":"1200","height":"630","url":"tennisclub.jpg","thumbnails":[{"width":"32","height":"17","url":"tennisclub-32.jpg"},{"width":"48","height":"25","url":"tennisclub-48.jpg"},{"width":"64","height":"34","url":"tennisclub-64.jpg"},{"width":"128","height":"67","url":"tennisclub-128.jpg"},{"width":"256","height":"134","url":"tennisclub-256.jpg"}]}]';
 
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
 
@@ -342,6 +349,32 @@ final class FileApiTest extends AuthApiTest
         $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg'));
         unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-300.jpg');
     }
+
+    public function refreshThumbnails(string $record)
+    {
+        
+        $this->path = $this->getApi() . '/fileapi/thumbnails' . $record;
+
+        $recordStr = '';
+
+        $this->POST = ['requestbody' => $recordStr];
+        unset($recordStr);
+
+
+        $response = $this->request('POST', $this->path);
+
+
+        $this->assertEquals(200, $response->getCode());
+
+        $this->assertTrue($response != null);
+
+        $expected = '[]';
+
+        $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
+
+  
+    }
+
 
     public function testPdfThumbnails()
     {

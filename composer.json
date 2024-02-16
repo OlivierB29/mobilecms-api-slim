@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "ext-json": "*",
         "monolog/monolog": "^2.2",
         "php-di/php-di": "^6.3",
@@ -37,7 +37,10 @@
     },
  "config": {
         "process-timeout": 0,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -52,6 +55,6 @@
     "scripts": {
         "start": "php -S localhost:8888 -t public-dev",
         "test": "phpunit",
-        "dist": "rm -rf vendor dist && php ~/bin/composer.phar install --no-dev && mkdir dist && cp -R public app src vendor dist"
+        "dist": "rm -rf vendor dist && composer install --no-dev && mkdir dist && cp -R public app src vendor dist"
     }
 }

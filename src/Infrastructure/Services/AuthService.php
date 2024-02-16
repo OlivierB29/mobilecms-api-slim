@@ -381,13 +381,18 @@ class AuthService
             $user = $this->service->getJsonUser($email);
             if (isset($user)) {
                 // do not send private info such as password ...
-                $info = json_decode('{"name":"", "clientalgorithm":"", "newpasswordrequired":"", "captcha":""}');
+                $info = json_decode('{"name":"", "clientalgorithm":"", "newpasswordrequired":""}');
 
                 JsonUtils::copy($user, $info);
-                $captchaObj2 = $this->throttle->createCaptcha($email);
-                if ($captchaObj2 != null) {
-                    $info->{'captcha'} = $captchaObj2->{'question'};
+                if ($this->throttle->isCaptchaRequired($email)) {
+                    
+                    $captchaObj2 = $this->throttle->createCaptcha($email);
+                    if ($captchaObj2 != null) {
+                        $info->{'captcha'} = $captchaObj2->{'question'};
+                    }
+
                 }
+
 
                 $response->setResult($info);
                 $response->setCode(200);

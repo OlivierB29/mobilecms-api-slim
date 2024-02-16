@@ -65,4 +65,22 @@ class FileUtils
         }
         rmdir($dir);
     }
+    /**
+        * Copy a directory without recursion
+        *
+        * @param string $src : source
+        * @param string $dst : dest
+        */
+    public function copyDirectoryWithoutRecursion($src, $dst) {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if (!is_dir($src . '/' . $file)) {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
 }
