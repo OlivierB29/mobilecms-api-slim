@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /home/olivier/git/mobilecms-api-slim:/var/www/html/mobilecms-api-slim
+   # command: bash -c "docker-php-ext-install mbstring xml && pecl install imagick && docker-php-ext-enable imagick&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && php-fpm"
+   # command: bash -c "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && php-fpm"
+    
+    ports:
+      - 8888:80
+    restart: unless-stopped
+

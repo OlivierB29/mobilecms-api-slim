@@ -75,7 +75,9 @@ class ActionPayload implements JsonSerializable
     }
 
     //CUSTOM start
-    public function jsonSerialize(): mixed
+    // PHP 8 : add mixed return type
+    // PHP 7 : let the return type be inferred
+    public function jsonSerialize()
     {
         $payload = \json_decode('{}');
 
