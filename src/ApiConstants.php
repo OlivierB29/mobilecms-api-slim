@@ -6,7 +6,7 @@ namespace App;
 interface ApiConstants
 {
     public const ROOT = '/mobilecmsapi';
-    public const VERSION = '/v2';
+    public const VERSION = '/v3';
 
     public const API = self::ROOT . self::VERSION;
 }

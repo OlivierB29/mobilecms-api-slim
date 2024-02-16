@@ -7,6 +7,7 @@ use App\Application\Actions\RestAction;
 
 use Psr\Log\LoggerInterface;
 use App\Infrastructure\Services\FileService;
+use App\Infrastructure\Services\ContentService;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\ImageUtils;
 
@@ -45,22 +46,27 @@ abstract class FileAction extends RestAction
 
 
 
-    protected $service;
+    protected $filesService;
+
+    protected $contentservice;
 
 
 
     /**
      * Get a service
      */
-    protected function getService(): FileService
+    protected function getFileService(): FileService
     {
-        if ($this->service == null) {
-            $this->service = new FileService();
+        if ($this->filesService == null) {
+            $this->filesService = new FileService($this->getPublicDirPath());
         }
         
-        return $this->service;
+        return $this->filesService;
     }
 
+
+
+ 
 
     /**
      * Init configuration.
@@ -165,14 +171,39 @@ abstract class FileAction extends RestAction
      * @param array $files : [{ "url": "http://something.com/[...]/foobar.html" }]
      * @return Response rest response
      */
-    protected function deleteFiles(string $datatype, string $id, array $files): Response
+    protected function deleteMediaFiles(string $datatype, string $id, array $files): Response
     {
         $response = $this->getDefaultResponse();
 
 
         $result = [];
 
+        $tmpRecord = $this->getContentService()->getRecord($datatype, $id);
+        if ($tmpRecord == null) {
+            throw new \Exception('Record not found');
+        }
+        
+
+
+
+
         foreach ($files as $formKey => $file) {
+
+            foreach ($tmpRecord->getResult()->media as $media => $fileInRecord) {
+                if ($fileInRecord->url === $file->url) {
+                    foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
+                        $thumbnailPath = $this->getMediaDirPath() . '/' . $datatype . '/' . $id . '/thumbnails' . '/'  . $thumbnailFile->url;
+                        if (file_exists($thumbnailPath)) {
+                            if (!unlink($thumbnailPath)) {
+                                throw new \Exception('delete ' . $thumbnailPath . ' KO');
+                            }
+                        } 
+    
+                    }
+                }
+    
+            }
+
             // /var/www/html/media/calendar/1
             $destdir = $this->getRecordDirPath($datatype, $id);
 
@@ -192,7 +223,12 @@ abstract class FileAction extends RestAction
             }
         }
 
-        $response->setResult($result);
+
+
+        $uploadResult = $this->getFileService()->getDescriptions($destdir);
+
+
+        $response->setResult($uploadResult);
         $response->setCode(200);
 
         return $response;
@@ -235,5 +271,18 @@ abstract class FileAction extends RestAction
             $result = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         }
         return $result;
+    }
+
+
+    /**
+     * Get a service
+     */
+    protected function getContentService(): ContentService
+    {
+        if ($this->contentservice == null) {
+            $this->contentservice = new ContentService($this->getPublicDirPath());
+        }
+        
+        return $this->contentservice;
     }
 }

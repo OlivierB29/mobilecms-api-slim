@@ -41,7 +41,9 @@ Debian 12
 - Install and enable in php.ini :
 https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
 
-- Start a debug session then run `composer test`
+- Start a debug session
+- Add a breakpoint
+- Run `composer test`
 
 
 # FAQ
@@ -62,10 +64,12 @@ In future plans, with the growing data, the database may become useful. For now,
 - A: [Imagick - ImagickException not authorized @ error/constitute.c/ReadImage/412 error](https://stackoverflow.com/questions/52817741/imagick-imagickexception-not-authorized-error-constitute-c-readimage-412-err)
 
 - alternate 
-`cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak`
-`sed -i "s/rights\=\"none\" pattern\=\"PS\"/rights\=\"read\|write\" pattern\=\"PS\"/" /etc/ImageMagick-6/policy.xml`
-`sed -i "s/rights\=\"none\" pattern\=\"PDF\"/rights\=\"read\|write\" pattern\=\"PDF\"/" /etc/ImageMagick-6/policy.xml`
-`sed -i "s/rights\=\"none\" pattern\=\"XPS\"/rights\=\"read\|write\" pattern\=\"XPS\"/" /etc/ImageMagick-6/policy.xml`
+```
+sudo cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
+sudo sed -i "s/rights\=\"none\" pattern\=\"PS\"/rights\=\"read\|write\" pattern\=\"PS\"/" /etc/ImageMagick-6/policy.xml
+sudo sed -i "s/rights\=\"none\" pattern\=\"PDF\"/rights\=\"read\|write\" pattern\=\"PDF\"/" /etc/ImageMagick-6/policy.xml
+sudo sed -i "s/rights\=\"none\" pattern\=\"XPS\"/rights\=\"read\|write\" pattern\=\"XPS\"/" /etc/ImageMagick-6/policy.xml
+```
 
 - Q: When running phpunit : `Class 'DOMDocument' not found`
 - A: Install php-xml (https://stackoverflow.com/questions/14395239/class-domdocument-not-found#14395414)

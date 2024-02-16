@@ -26,7 +26,7 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v2/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v3/debugapi"}', $response->getEncodedResult());
     }
 
     public function testXssRoute2()
@@ -40,7 +40,7 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v2/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v3/debugapi"}', $response->getEncodedResult());
     }
     
     public function testXssRoute3()
@@ -54,6 +54,6 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v2/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v3/debugapi"}', $response->getEncodedResult());
     }
 }

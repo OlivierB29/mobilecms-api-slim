@@ -75,7 +75,7 @@ class ActionPayload implements JsonSerializable
     }
 
     //CUSTOM start
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $payload = \json_decode('{}');
 
