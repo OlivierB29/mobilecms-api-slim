@@ -42,21 +42,15 @@ final class LoginThrottleTest extends ApiTest
     {
         $this->path = $this->getApi() . '/authapi/authenticate';
 
-        $recordStr = '{ "user": "captchatest@example.com", "password":"wrong1"}';
+
+
+        for ($i = 0; $i < 10; $i++) {
+            $recordStr = '{ "user": "captchatest@example.com", "password":"wrong' . $i . '"}';
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
         $this->assertEquals(401, $response->getCode());
 
-        $recordStr = '{ "user": "captchatest@example.com", "password":"wrong2"}';
-        $this->POST = ['requestbody' => $recordStr];
-        $response = $this->request('POST', $this->path);
-        $this->assertEquals(401, $response->getCode());
-
-        $recordStr = '{ "user": "captchatest@example.com", "password":"wrong3"}';
-        $this->POST = ['requestbody' => $recordStr];
-        $response = $this->request('POST', $this->path);
-        $this->assertEquals(401, $response->getCode());
-
+        }
 
 
 
@@ -74,7 +68,8 @@ final class LoginThrottleTest extends ApiTest
 
         $captachaFile = $this->throttle->getCaptchaFileName("captchatest@example.com");
         $captcha = JsonUtils::readJsonFile($captachaFile);
-
+        $this->assertTrue(\property_exists($captcha, 'question') === true);
+        $this->assertTrue(\property_exists($userObject, 'captcha') === true);
         $this->assertTrue($userObject->{'captcha'} === $captcha->{'question'});
     }
 
@@ -84,15 +79,15 @@ final class LoginThrottleTest extends ApiTest
     {
         $this->path = $this->getApi() . '/authapi/authenticate';
 
-        $recordStr = '{ "user": "captchatest@example.com", "password":"wrong1"}';
+
+        for ($i = 0; $i < 10; $i++) {
+            $recordStr = '{ "user": "captchatest@example.com", "password":"wrong' . $i . '"}';
         $this->POST = ['requestbody' => $recordStr];
         $response = $this->request('POST', $this->path);
         $this->assertEquals(401, $response->getCode());
 
-        $recordStr = '{ "user": "captchatest@example.com", "password":"wrong2"}';
-        $this->POST = ['requestbody' => $recordStr];
-        $response = $this->request('POST', $this->path);
-        $this->assertEquals(401, $response->getCode());
+        }
+
 
 
 
@@ -112,6 +107,8 @@ final class LoginThrottleTest extends ApiTest
         $captachaFile = $this->throttle->getCaptchaFileName("captchatest@example.com");
         $captcha = JsonUtils::readJsonFile($captachaFile);
 
+        $this->assertTrue(\property_exists($captcha, 'question') === true);
+        $this->assertTrue(\property_exists($userObject, 'captcha') === true);
         $this->assertTrue($userObject->{'captcha'} === $captcha->{'question'});
 
 

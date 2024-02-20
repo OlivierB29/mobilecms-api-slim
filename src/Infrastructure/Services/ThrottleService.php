@@ -44,7 +44,7 @@ class ThrottleService
         $history = null;
         $failedList = null;
         // TODO add failed login
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             $history = JsonUtils::readJsonFile($file);
             $failedList = $history->{'failed'};
         } else {
@@ -97,17 +97,36 @@ class ThrottleService
             $failedList = [];
         }
 
-        if (\file_exists($this->getCaptchaFileName($user))) {
-            \unlink($this->getCaptchaFileName($user));
-        }
+
+        $this->deleteCaptchaFile($user);
 
         $history->{'failed'} = [];
-        $history->{'archive' . date("YmdHis")} = $failedList;
+        if (\count($failedList) === 0) {
+            $history->{'archive' . date("YmdHis")} = $failedList;
+        }
+
         $result = count($failedList);
         // write to file
         JsonUtils::writeJsonFile($file, $history);
 
         return $result;
+    }
+
+    public function deleteCaptchaFile(string $user)
+    {
+        $result = false;
+        if (\file_exists($this->getCaptchaFileName($user))) {
+            \unlink($this->getCaptchaFileName($user));
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    public function isCaptchaCreated(string $user)
+    {
+
+        return \file_exists($this->getCaptchaFileName($user));
     }
 
     public function isCaptchaRequired(string $user)
@@ -127,12 +146,9 @@ class ThrottleService
     {
         $result = null;
 
-        $failed = $this->countFailedLogin($user);
 
-        if ($failed >= $this->maxfailed) {
-            $file = $this->getCaptchaFileName($user);
-            $result = JsonUtils::readJsonFile($file);
-        }
+        $file = $this->getCaptchaFileName($user);
+        $result = JsonUtils::readJsonFile($file);
 
         return $result;
     }
@@ -150,17 +166,7 @@ class ThrottleService
         return $result;
     }
 
-    public function verifyCaptcha(string $user, string $answer): bool
-    {
-        $result = false;
-        $file = $this->getCaptchaFileName($user);
-        $captchaVerify = JsonUtils::readJsonFile($file);
-        if ($captchaVerify->{'answer'} === $answer) {
-            $result = true;
-        }
 
-        return $result;
-    }
 
     public function createFailedLoginRecord(string $user)
     {
