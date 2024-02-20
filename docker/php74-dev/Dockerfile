@@ -16,6 +16,7 @@ RUN pecl install xdebug-2.9.8 \
     && docker-php-ext-enable xdebug
 
 # TODO enable xdebug
+RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 #RUN echo '[XDebug]' >> /usr/local/etc/php/php.ini
 #RUN echo 'xdebug.remote_enable = 1' >> /usr/local/etc/php/php.ini
 #RUN echo 'xdebug.remote_autostart = 1' >> /usr/local/etc/php/php.ini

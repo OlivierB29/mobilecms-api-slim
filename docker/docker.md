@@ -24,3 +24,7 @@ or
 ## bash
 
 `sudo docker exec -it php74-dev_app_1 bash`
+
+then
+`cd mobilecms-api-slim`
+`composer test`
