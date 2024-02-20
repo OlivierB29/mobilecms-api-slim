@@ -13,8 +13,7 @@ enabled:
   - strict
   - unalign_double_arrow
 
-disabled:
-  - short_array_syntax
+
 
 finder:
   exclude:
