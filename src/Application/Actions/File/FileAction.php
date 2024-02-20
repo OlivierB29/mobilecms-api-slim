@@ -1,22 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\File;
 
 use App\Application\Actions\RestAction;
-
-use Psr\Log\LoggerInterface;
-use App\Infrastructure\Services\FileService;
-use App\Infrastructure\Services\ContentService;
-use App\Infrastructure\Utils\Properties;
-use App\Infrastructure\Utils\ImageUtils;
-
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Services\ContentService;
+use App\Infrastructure\Services\FileService;
 use App\Infrastructure\Utils\FileUtils;
+use App\Infrastructure\Utils\ImageUtils;
 
 abstract class FileAction extends RestAction
 {
-
     /**
      * Media directory (eg: media ).
      */
@@ -37,40 +33,30 @@ abstract class FileAction extends RestAction
 
     protected $pdfimagequality = 80;
 
-
     protected $fileExtensions = [];
 
     protected $imagequality = 100;
 
     protected $imagedriver = 'gd';
 
-
-
     protected $filesService;
 
     protected $contentservice;
 
-
-
     /**
-     * Get a service
+     * Get a service.
      */
     protected function getFileService(): FileService
     {
         if ($this->filesService == null) {
             $this->filesService = new FileService($this->getPublicDirPath());
         }
-        
+
         return $this->filesService;
     }
 
-
-
- 
-
     /**
      * Init configuration.
-     *
      */
     public function initConf()
     {
@@ -85,8 +71,6 @@ abstract class FileAction extends RestAction
         }
     }
 
-
-
     public function setFiles(array $files = null)
     {
         // Useful for tests
@@ -100,10 +84,6 @@ abstract class FileAction extends RestAction
         }
     }
 
-
-
-
-
     /**
      * Main storage directory.
      *
@@ -111,7 +91,7 @@ abstract class FileAction extends RestAction
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'media'};
+        return $this->getRootDir().$this->getConf()->{'media'};
     }
 
     /**
@@ -121,12 +101,9 @@ abstract class FileAction extends RestAction
      */
     public function getRecordDirPath($type, $id): string
     {
-        return $this->getMediaDirPath() . '/' . $type . '/' . $id;
+        return $this->getMediaDirPath().'/'.$type.'/'.$id;
     }
 
-
-
-   
     /**
      * Get file info and build JSON response.
      *
@@ -163,72 +140,74 @@ abstract class FileAction extends RestAction
         }
     }
 
-
     /**
-    * enable debug
-    * @param bool $value enable debug
-    */
+     * enable debug.
+     *
+     * @param bool $value enable debug
+     */
     public function setDebug(bool $value)
     {
         $this->debug = $value;
     }
 
-
-
     /**
-    * Basic upload verification
-    * @param string $file file name
-    * @return bool
-    */
+     * Basic upload verification.
+     *
+     * @param string $file file name
+     *
+     * @return bool
+     */
     protected function isAllowedExtension(string $file): bool
     {
         $result = false;
         if ($file !== '') {
             $result = in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $this->fileExtensions);
         }
+
         return $result;
     }
 
     /**
-    * Basic upload verification
-    * @param string $file file name
-    * @return string
-    */
+     * Basic upload verification.
+     *
+     * @param string $file file name
+     *
+     * @return string
+     */
     protected function getExtension(string $file): string
     {
         $result = false;
         if ($file !== '') {
             $result = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         }
+
         return $result;
     }
 
-
     /**
-     * Get a service
+     * Get a service.
      */
     protected function getContentService(): ContentService
     {
         if ($this->contentservice == null) {
             $this->contentservice = new ContentService($this->getPublicDirPath());
         }
-        
+
         return $this->contentservice;
     }
-
 
     /**
      * Delete files.
      *
      * @param string $datatype news
      * @param string $id       123
-     * @param array $files : [{ "url": "http://something.com/[...]/foobar.html" }]
+     * @param array  $files    : [{ "url": "http://something.com/[...]/foobar.html" }]
+     *
      * @return Response rest response
      */
     protected function deleteMediaFiles(string $datatype, string $id, array $files): Response
     {
         $response = $this->getDefaultResponse();
-
 
         $result = [];
 
@@ -236,30 +215,21 @@ abstract class FileAction extends RestAction
         if ($tmpRecord == null) {
             throw new \Exception('Record not found');
         }
-        
-
-
-
 
         foreach ($files as $formKey => $file) {
-
             if (\property_exists($tmpRecord->getResult(), 'media')) {
-
-
-            foreach ($tmpRecord->getResult()->{'media'} as $media => $fileInRecord) {
-                if ($fileInRecord->url === $file->url) {
-                    foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
-                        $thumbnailPath = $this->getMediaDirPath() . '/' . $datatype . '/' . $id . '/thumbnails' . '/'  . $thumbnailFile->url;
-                        if (file_exists($thumbnailPath)) {
-                            if (!unlink($thumbnailPath)) {
-                                throw new \Exception('delete ' . $thumbnailPath . ' KO');
+                foreach ($tmpRecord->getResult()->{'media'} as $media => $fileInRecord) {
+                    if ($fileInRecord->url === $file->url) {
+                        foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
+                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
+                            if (file_exists($thumbnailPath)) {
+                                if (!unlink($thumbnailPath)) {
+                                    throw new \Exception('delete '.$thumbnailPath.' KO');
+                                }
                             }
-                        } 
-    
+                        }
                     }
                 }
-    
-            }
             }
             // /var/www/html/media/calendar/1
             $destdir = $this->getRecordDirPath($datatype, $id);
@@ -267,23 +237,20 @@ abstract class FileAction extends RestAction
             // upload
             if (isset($file->{'url'})) {
                 // get foobar.html from http://something.com/[...]/foobar.html
-                $destfile = $destdir . '/' . basename($file->{'url'});
+                $destfile = $destdir.'/'.basename($file->{'url'});
                 if (file_exists($destfile)) {
                     if (!unlink($destfile)) {
-                        throw new \Exception('delete ' . $file['url'] . ' KO');
+                        throw new \Exception('delete '.$file['url'].' KO');
                     }
                 } else {
                     // TODO add message
                 }
             } else {
-                throw new \Exception('wrong file ' . $file['url'] . ' KO');
+                throw new \Exception('wrong file '.$file['url'].' KO');
             }
         }
 
-
-
         $uploadResult = $this->getFileService()->getDescriptions($destdir);
-
 
         $response->setResult($uploadResult);
         $response->setCode(200);

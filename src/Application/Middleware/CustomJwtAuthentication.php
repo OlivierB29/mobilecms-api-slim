@@ -29,36 +29,36 @@ SOFTWARE.
 /**
  * @see       https://github.com/tuupola/slim-jwt-auth
  * @see       https://appelsiini.net/projects/slim-jwt-auth
+ *
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
 namespace App\Application\Middleware;
 
+use App\ApiConstants;
+use App\Infrastructure\Rest\JwtToken;
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Utils\Properties;
 use Closure;
 use DomainException;
-use InvalidArgumentException;
 use Exception;
 use Firebase\JWT\JWT;
-use Psr\Http\Message\ServerRequestInterface;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
+use Slim\Exception\HttpForbiddenException;
 use SplStack;
-use Tuupola\Middleware\DoublePassTrait;
+// CUSTOM
 use Tuupola\Http\Factory\ResponseFactory;
+use Tuupola\Middleware\DoublePassTrait;
 use Tuupola\Middleware\JwtAuthentication\RequestMethodRule;
 use Tuupola\Middleware\JwtAuthentication\RequestPathRule;
 use Tuupola\Middleware\JwtAuthentication\RuleInterface;
-
-// CUSTOM
-use App\Infrastructure\Services\AuthService;
-use App\Infrastructure\Utils\Properties;
-use App\Infrastructure\Rest\JwtToken;
-use Slim\Exception\HttpForbiddenException;
-use App\ApiConstants;
 
 class CustomJwtAuthentication implements MiddlewareInterface
 {
@@ -66,48 +66,52 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
     /**
      * PSR-3 compliant logger.
+     *
      * @var LoggerInterface|null
      */
     private $logger;
 
     /**
      * Last error message.
+     *
      * @var string
      */
     private $message;
 
     /**
      * The rules stack.
+     *
      * @var SplStack<RuleInterface>
      */
     private $rules;
 
     /**
      * Stores all the options passed to the middleware.
+     *
      * @var mixed[]
      */
     private $options = [
-        "secure" => true,
-        "relaxed" => ["localhost", "127.0.0.1"],
-        "algorithm" => ["HS256", "HS512", "HS384"],
-        "header" => "Authorization",
-        "regexp" => "/Bearer\s+(.*)$/i",
-        "cookie" => "token",
-        "attribute" => "token",
-        "path" => "/",
-        "ignore" => null,
-        "before" => null,
-        "after" => null,
-        "error" => null
+        'secure'    => true,
+        'relaxed'   => ['localhost', '127.0.0.1'],
+        'algorithm' => ['HS256', 'HS512', 'HS384'],
+        'header'    => 'Authorization',
+        'regexp'    => "/Bearer\s+(.*)$/i",
+        'cookie'    => 'token',
+        'attribute' => 'token',
+        'path'      => '/',
+        'ignore'    => null,
+        'before'    => null,
+        'after'     => null,
+        'error'     => null,
     ];
 
     //CUSTOM start
-    
+
     private $defaultAuthorizeOptions = [
-        "userrole" => "",
-        "editorpath" => [ApiConstants::API . "/cmsapi", ApiConstants::API . "/fileapi"],
-        "adminpath" => [ApiConstants::API . "/adminapi"],
-        "ignore" => [ApiConstants::API . "/authapi", ApiConstants::API . "/debugapi"]
+        'userrole'   => '',
+        'editorpath' => [ApiConstants::API.'/cmsapi', ApiConstants::API.'/fileapi'],
+        'adminpath'  => [ApiConstants::API.'/adminapi'],
+        'ignore'     => [ApiConstants::API.'/authapi', ApiConstants::API.'/debugapi'],
     ];
 
     //CUSTOM end
@@ -118,7 +122,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
     public function __construct(array $options = [])
     {
         /* Setup stack for rules */
-        $this->rules = new \SplStack;
+        $this->rules = new \SplStack();
 
         /* Store passed in options overwriting any defaults. */
         $this->hydrate($options);
@@ -126,13 +130,13 @@ class CustomJwtAuthentication implements MiddlewareInterface
         /* If nothing was passed in options add default rules. */
         /* This also means $options["rules"] overrides $options["path"] */
         /* and $options["ignore"] */
-        if (!isset($options["rules"])) {
+        if (!isset($options['rules'])) {
             $this->rules->push(new RequestMethodRule([
-                "ignore" => ["OPTIONS"]
+                'ignore' => ['OPTIONS'],
             ]));
             $this->rules->push(new RequestPathRule([
-                "path" => $this->options["path"],
-                "ignore" => $this->options["ignore"]
+                'path'   => $this->options['path'],
+                'ignore' => $this->options['ignore'],
             ]));
         }
     }
@@ -147,13 +151,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
         // CUSTOM start
         // TODO : with shouldAuthenticate
-        $authorizeOptions = array_merge(array(), $this->defaultAuthorizeOptions);
+        $authorizeOptions = array_merge([], $this->defaultAuthorizeOptions);
         $rule = new FilterRule($authorizeOptions);
         if (false === $rule->isIgnore($request)) {
             return $handler->handle($request);
         }
         // CUSTOM end
-
 
         /* If rules say we should not authenticate call next and return. */
         if (false === $this->shouldAuthenticate($request)) {
@@ -162,12 +165,13 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
         // CUSTOM start
-        if (!empty($scheme) && !empty($host) && "https" !== $scheme && true === $this->options["secure"]) {
-            if (!in_array($host, $this->options["relaxed"])) {
+        if (!empty($scheme) && !empty($host) && 'https' !== $scheme && true === $this->options['secure']) {
+            if (!in_array($host, $this->options['relaxed'])) {
                 $message = sprintf(
-                    "Insecure use of middleware over %s denied by configuration.",
+                    'Insecure use of middleware over %s denied by configuration.',
                     strtoupper($scheme)
                 );
+
                 throw new RuntimeException($message);
             }
         }
@@ -178,57 +182,57 @@ class CustomJwtAuthentication implements MiddlewareInterface
             // CUSTOM start
             $jsonUser = $this->decodeToken($token);
             $decoded = $jsonUser->{'decoded'};
-            
-
 
             $authRule = new AuthorizeRule($authorizeOptions);
             $authRule->setUserRole($jsonUser->{'role'});
-       
+
             $permitted = $authRule->__invoke($request);
             if (!$permitted) {
-                throw new HttpForbiddenException($request, "operation not permitted");
+                throw new HttpForbiddenException($request, 'operation not permitted');
             }
         } catch (DomainException $exception) {
             //   $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process1');
 
-            $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
+            $response = (new ResponseFactory())->createResponse(401, $exception->getMessage());
+
             return $this->processError($response, [
-                "message" => $exception->getMessage(),
-                "uri" => (string)$request->getUri()
+                'message' => $exception->getMessage(),
+                'uri'     => (string) $request->getUri(),
             ]);
         } catch (RuntimeException  $exception) {
             // $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process2');
 
-            $response = (new ResponseFactory)->createResponse(401, $exception->getMessage());
+            $response = (new ResponseFactory())->createResponse(401, $exception->getMessage());
+
             return $this->processError($response, [
-                "message" => $exception->getMessage(),
-                "uri" => (string)$request->getUri()
+                'message' => $exception->getMessage(),
+                'uri'     => (string) $request->getUri(),
             ]);
         } catch (HttpForbiddenException $exception) {
-            $response = (new ResponseFactory)->createResponse(403, $exception->getMessage());
+            $response = (new ResponseFactory())->createResponse(403, $exception->getMessage());
             //  $this->log(LogLevel::WARNING, 'Http403_CustomJwt_process');
 
             return $this->processError($response, [
-                "message" => $exception->getMessage(),
-                "uri" => (string)$request->getUri()
+                'message' => $exception->getMessage(),
+                'uri'     => (string) $request->getUri(),
             ]);
         }
         // CUSTOM end
 
         $params = [
-            "decoded" => $decoded,
-            "token" => $token,
+            'decoded' => $decoded,
+            'token'   => $token,
         ];
 
         /* Add decoded token to request as attribute when requested. */
-        if ($this->options["attribute"]) {
-            $request = $request->withAttribute($this->options["attribute"], $decoded);
+        if ($this->options['attribute']) {
+            $request = $request->withAttribute($this->options['attribute'], $decoded);
         }
 
         /* Modify $request before calling next middleware. */
-        if (is_callable($this->options["before"])) {
-            $response = (new ResponseFactory)->createResponse(200);
-            $beforeRequest = $this->options["before"]($request, $params);
+        if (is_callable($this->options['before'])) {
+            $response = (new ResponseFactory())->createResponse(200);
+            $beforeRequest = $this->options['before']($request, $params);
             if ($beforeRequest instanceof ServerRequestInterface) {
                 $request = $beforeRequest;
             }
@@ -238,8 +242,8 @@ class CustomJwtAuthentication implements MiddlewareInterface
         $response = $handler->handle($request);
 
         /* Modify $response before returning. */
-        if (is_callable($this->options["after"])) {
-            $afterResponse = $this->options["after"]($response, $params);
+        if (is_callable($this->options['after'])) {
+            $afterResponse = $this->options['after']($response, $params);
             if ($afterResponse instanceof ResponseInterface) {
                 return $afterResponse;
             }
@@ -258,11 +262,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
         $new = clone $this;
         /* Clear the stack */
         unset($new->rules);
-        $new->rules = new \SplStack;
+        $new->rules = new \SplStack();
         /* Add the rules */
         foreach ($rules as $callable) {
             $new = $new->addRule($callable);
         }
+
         return $new;
     }
 
@@ -274,6 +279,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
         $new = clone $this;
         $new->rules = clone $this->rules;
         $new->rules->push($callable);
+
         return $new;
     }
 
@@ -288,6 +294,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
                 return false;
             }
         }
+
         return true;
     }
 
@@ -298,12 +305,13 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function processError(ResponseInterface $response, array $arguments): ResponseInterface
     {
-        if (is_callable($this->options["error"])) {
-            $handlerResponse = $this->options["error"]($response, $arguments);
+        if (is_callable($this->options['error'])) {
+            $handlerResponse = $this->options['error']($response, $arguments);
             if ($handlerResponse instanceof ResponseInterface) {
                 return $handlerResponse;
             }
         }
+
         return $response;
     }
 
@@ -313,11 +321,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function fetchToken(ServerRequestInterface $request): string
     {
         /* Check for token in header. */
-        $header = $request->getHeaderLine($this->options["header"]);
+        $header = $request->getHeaderLine($this->options['header']);
 
         if (false === empty($header)) {
-            if (preg_match($this->options["regexp"], $header, $matches)) {
-                $this->log(LogLevel::DEBUG, "Using token from request header");
+            if (preg_match($this->options['regexp'], $header, $matches)) {
+                $this->log(LogLevel::DEBUG, 'Using token from request header');
+
                 return $matches[1];
             }
         }
@@ -325,17 +334,19 @@ class CustomJwtAuthentication implements MiddlewareInterface
         /* Token not found in header try a cookie. */
         $cookieParams = $request->getCookieParams();
 
-        if (isset($cookieParams[$this->options["cookie"]])) {
-            $this->log(LogLevel::DEBUG, "Using token from cookie");
-            if (preg_match($this->options["regexp"], $cookieParams[$this->options["cookie"]], $matches)) {
+        if (isset($cookieParams[$this->options['cookie']])) {
+            $this->log(LogLevel::DEBUG, 'Using token from cookie');
+            if (preg_match($this->options['regexp'], $cookieParams[$this->options['cookie']], $matches)) {
                 return $matches[1];
             }
-            return $cookieParams[$this->options["cookie"]];
-        };
-        
+
+            return $cookieParams[$this->options['cookie']];
+        }
+
         /* If everything fails log and throw. */
-        $this->log(LogLevel::WARNING, "Token not found");
-        throw new RuntimeException("Token not found.");
+        $this->log(LogLevel::WARNING, 'Token not found');
+
+        throw new RuntimeException('Token not found.');
     }
 
     /**
@@ -348,17 +359,17 @@ class CustomJwtAuthentication implements MiddlewareInterface
         try {
             // CUSTOM : start
             $decoded = null;
-            
-            $service = new AuthService(Properties::getInstance()->getRootDir() . Properties::getInstance()->getConf()->{'privatedir'} . '/users');
-            $jwtImpl  = Properties::getInstance()->getConf()->{'jwt'};
+
+            $service = new AuthService(Properties::getInstance()->getRootDir().Properties::getInstance()->getConf()->{'privatedir'}.'/users');
+            $jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
 
             $jsonUser = $service->getJsonUserFromToken($token);
-          
+
             if ('php-jwt' === $jwtImpl) {
                 $decoded = JWT::decode(
                     $token,
                     $jsonUser->{'salt'},
-                    (array) $this->options["algorithm"]
+                    (array) $this->options['algorithm']
                 );
             } else {
                 $jwtUtil = new JwtToken();
@@ -377,6 +388,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             return $jsonUser;
         } catch (Exception $exception) {
             $this->log(LogLevel::WARNING, $exception->getMessage(), [$token]);
+
             throw $exception;
         }
     }
@@ -390,9 +402,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
     {
         foreach ($data as $key => $value) {
             /* https://github.com/facebook/hhvm/issues/6368 */
-            $key = str_replace(".", " ", $key);
+            $key = str_replace('.', ' ', $key);
             $method = lcfirst(ucwords($key));
-            $method = str_replace(" ", "", $method);
+            $method = str_replace(' ', '', $method);
             if (method_exists($this, $method)) {
                 /* Try to use setter */
                 /** @phpstan-ignore-next-line */
@@ -411,7 +423,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function path($path): void
     {
-        $this->options["path"] = (array) $path;
+        $this->options['path'] = (array) $path;
     }
 
     /**
@@ -421,7 +433,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function ignore($ignore): void
     {
-        $this->options["ignore"] = (array) $ignore;
+        $this->options['ignore'] = (array) $ignore;
     }
 
     /**
@@ -429,7 +441,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function cookie(string $cookie): void
     {
-        $this->options["cookie"] = $cookie;
+        $this->options['cookie'] = $cookie;
     }
 
     /**
@@ -437,7 +449,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function secure(bool $secure): void
     {
-        $this->options["secure"] = $secure;
+        $this->options['secure'] = $secure;
     }
 
     /**
@@ -447,7 +459,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function relaxed(array $relaxed): void
     {
-        $this->options["relaxed"] = $relaxed;
+        $this->options['relaxed'] = $relaxed;
     }
 
     /**
@@ -458,12 +470,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function secret($secret): void
     {
         /** @phpstan-ignore-next-line */
-        if (false === is_array($secret) && false === is_string($secret) && ! $secret instanceof \ArrayAccess) {
+        if (false === is_array($secret) && false === is_string($secret) && !$secret instanceof \ArrayAccess) {
             throw new InvalidArgumentException(
                 'Secret must be either a string or an array of "kid" => "secret" pairs'
             );
         }
-        $this->options["secret"] = $secret;
+        $this->options['secret'] = $secret;
     }
 
     /**
@@ -472,9 +484,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function error(callable $error): void
     {
         if ($error instanceof Closure) {
-            $this->options["error"] = $error->bindTo($this);
+            $this->options['error'] = $error->bindTo($this);
         } else {
-            $this->options["error"] = $error;
+            $this->options['error'] = $error;
         }
     }
 
@@ -503,7 +515,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function attribute(string $attribute): void
     {
-        $this->options["attribute"] = $attribute;
+        $this->options['attribute'] = $attribute;
     }
 
     /**
@@ -511,7 +523,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function header(string $header): void
     {
-        $this->options["header"] = $header;
+        $this->options['header'] = $header;
     }
 
     /**
@@ -519,29 +531,28 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function regexp(string $regexp): void
     {
-        $this->options["regexp"] = $regexp;
+        $this->options['regexp'] = $regexp;
     }
 
     /**
-     * Set the allowed algorithms
+     * Set the allowed algorithms.
      *
      * @param string|string[] $algorithm
      */
     private function algorithm($algorithm): void
     {
-        $this->options["algorithm"] = (array) $algorithm;
+        $this->options['algorithm'] = (array) $algorithm;
     }
 
     /**
      * Set the before handler.
      */
-
     private function before(callable $before): void
     {
         if ($before instanceof Closure) {
-            $this->options["before"] = $before->bindTo($this);
+            $this->options['before'] = $before->bindTo($this);
         } else {
-            $this->options["before"] = $before;
+            $this->options['before'] = $before;
         }
     }
 
@@ -551,14 +562,15 @@ class CustomJwtAuthentication implements MiddlewareInterface
     private function after(callable $after): void
     {
         if ($after instanceof Closure) {
-            $this->options["after"] = $after->bindTo($this);
+            $this->options['after'] = $after->bindTo($this);
         } else {
-            $this->options["after"] = $after;
+            $this->options['after'] = $after;
         }
     }
 
     /**
      * Set the rules.
+     *
      * @param RuleInterface[] $rules
      */
     private function rules(array $rules): void

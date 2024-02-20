@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Middleware;
 
-use Tests\TestCase;
-use Firebase\JWT\JWT;
-use Firebase\JWT\SignatureInvalidException;
 use App\Infrastructure\Rest\JwtToken;
+use Firebase\JWT\JWT;
+use Tests\TestCase;
 
 final class JWTTest extends TestCase
 {
@@ -19,7 +18,7 @@ final class JWTTest extends TestCase
     {
         $this->util = new JwtToken();
         $this->util->setAlgorithm('sha512');
-        $this->allowed_algs = ["HS512"];
+        $this->allowed_algs = ['HS512'];
     }
 
     public function testBasic()
@@ -32,12 +31,9 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-
         $payload = $this->util->initPayload($username, $email, $role);
-        
-        $phpjwtToken = JWT::encode($payload, $key, $alg);
 
-        
+        $phpjwtToken = JWT::encode($payload, $key, $alg);
 
         $this->assertTrue($token != null);
         $this->assertTrue(strlen($token) > 100);
@@ -82,12 +78,10 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-
         $payload = $this->util->initPayload($username, $email, $role);
-        
+
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
-        
         $this->assertFalse(
             $this->util->verifyToken($token, 'wrongsecret')
         );

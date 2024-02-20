@@ -1,31 +1,30 @@
 <?php
+
 namespace Tests;
 
-use Tests\TestCase;
-use Tests\FakeApi;
-use Psr\Http\Message\ResponseInterface;
+use App\ApiConstants;
+use App\Application\Actions\ActionPayload;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\Properties;
-use Tuupola\Http\Factory\UploadedFileFactory;
-use Tuupola\Http\Factory\StreamFactory;
-use Slim\Psr7\Uri;
-use App\Application\Actions\ActionPayload;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request;
-use App\ApiConstants;
+use Slim\Psr7\Uri;
+use Tuupola\Http\Factory\StreamFactory;
+use Tuupola\Http\Factory\UploadedFileFactory;
 
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 
 abstract class ApiTest extends TestCase
 {
-    protected $path='';
-    protected $headers=[];
-    protected $REQUEST=[];
-    protected $SERVER=[];
-    protected $GET=[];
-    protected $POST=[];
+    protected $path = '';
+    protected $headers = [];
+    protected $REQUEST = [];
+    protected $SERVER = [];
+    protected $GET = [];
+    protected $POST = [];
 
-    protected $requestbody=[];
+    protected $requestbody = [];
     protected $memory1 = 0;
     protected $memory2 = 0;
 
@@ -33,18 +32,17 @@ abstract class ApiTest extends TestCase
 
     protected $postformdata = false;
 
-
     protected function setUp(): void
     {
-        Properties::init(__DIR__ . '/../tests-data', __DIR__ . '/conf.json');
+        Properties::init(__DIR__.'/../tests-data', __DIR__.'/conf.json');
 
-        $this->path='';
-        $this->headers['HTTP_ACCEPT']= 'application/json';
-        $this->headers['Content-Type']='application/json';
-        $this->REQUEST=[];
-        $this->SERVER=[];
-        $this->GET=[];
-        $this->POST=[];
+        $this->path = '';
+        $this->headers['HTTP_ACCEPT'] = 'application/json';
+        $this->headers['Content-Type'] = 'application/json';
+        $this->REQUEST = [];
+        $this->SERVER = [];
+        $this->GET = [];
+        $this->POST = [];
         $this->API = new FakeApi();
     }
 
@@ -68,8 +66,8 @@ abstract class ApiTest extends TestCase
     {
         $path = '';
         // ignore request parameters : TODO ignore them into Slim
-        if (strpos($pathArg, "?") !== false) {
-            $path =  substr($pathArg, 0, strpos($pathArg, "?"));
+        if (strpos($pathArg, '?') !== false) {
+            $path = substr($pathArg, 0, strpos($pathArg, '?'));
         } else {
             $path = $pathArg;
         }
@@ -84,9 +82,9 @@ abstract class ApiTest extends TestCase
         } else {
             $request = $this->createRequest($verb, $path, $this->headers);
         }
-        
+
         // emulate POST body
-        
+
         if (isset($this->POST['requestbody'])) {
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
@@ -109,14 +107,14 @@ abstract class ApiTest extends TestCase
     }
 
     /**
-     * execute request throw slim, using previous class Response
+     * execute request throw slim, using previous class Response.
      */
     protected function request($verb, $pathArg): Response
     {
         $path = '';
         // ignore request parameters : TODO ignore them into Slim
-        if (strpos($pathArg, "?") !== false) {
-            $path =  substr($pathArg, 0, strpos($pathArg, "?"));
+        if (strpos($pathArg, '?') !== false) {
+            $path = substr($pathArg, 0, strpos($pathArg, '?'));
         } else {
             $path = $pathArg;
         }
@@ -126,8 +124,7 @@ abstract class ApiTest extends TestCase
         //  $headers = ['HTTP_ACCEPT' => 'application/json', 'Authorization' => 'Bearer ' . $token];
 
         $request = $this->createRequest($verb, $path, $this->headers);
- 
-        
+
         if (isset($this->POST['requestbody'])) {
             if ($this->postformdata) {
                 $contents = \json_decode($this->POST['requestbody']);
@@ -149,11 +146,10 @@ abstract class ApiTest extends TestCase
         return $this->toOldResponse($response);
     }
 
-
     /**
-     * convert a PSR to the previous Response class
+     * convert a PSR to the previous Response class.
      */
-    protected function toOldResponse(ResponseInterface $psrResponse) : Response
+    protected function toOldResponse(ResponseInterface $psrResponse): Response
     {
         $result = new Response();
         $result->setCode($psrResponse->getStatusCode());
@@ -170,14 +166,12 @@ abstract class ApiTest extends TestCase
             $result->setResult(\json_decode('{}'));
         }
 
-        
         return $result;
     }
 
-
-    protected function getPublicFile(string $file) : string
+    protected function getPublicFile(string $file): string
     {
-        return file_get_contents(Properties::getInstance()->getPublicDirPath() . '/' . $file);
+        return file_get_contents(Properties::getInstance()->getPublicDirPath().'/'.$file);
     }
 
     protected function assertResponse(ActionPayload $expected, ResponseInterface $actual)
@@ -187,12 +181,12 @@ abstract class ApiTest extends TestCase
 
             if (isset($jsonResponse->{'data'})) {
                 $bodyStr = \json_encode($jsonResponse->{'data'});
-    
+
                 $this->assertJsonStringEqualsJsonString($expected->getData(), $bodyStr);
             }
         }
 
-        if ($expected->getError()  != null) {
+        if ($expected->getError() != null) {
             $this->assertEquals($expected->getError()->getDescription(), $actual->getReasonPhrase());
         }
 
@@ -200,9 +194,10 @@ abstract class ApiTest extends TestCase
     }
 
     /**
-    * get JSON conf
-    * @return \stdClass JSON conf
-    */
+     * get JSON conf.
+     *
+     * @return \stdClass JSON conf
+     */
     public function getConf()
     {
         return Properties::getInstance()->getConf();
@@ -225,12 +220,12 @@ abstract class ApiTest extends TestCase
      */
     public function getPublicDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'publicdir'};
+        return $this->getRootDir().$this->getConf()->{'publicdir'};
     }
 
     public function getPrivateDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'privatedir'};
+        return $this->getRootDir().$this->getConf()->{'privatedir'};
     }
 
     /**
@@ -240,12 +235,12 @@ abstract class ApiTest extends TestCase
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'media'};
+        return $this->getRootDir().$this->getConf()->{'media'};
     }
 
     // UploadedFileInterface[]
 
-    protected function toUploadedFileInterface(array $files) : array
+    protected function toUploadedFileInterface(array $files): array
     {
         $result = [];
         /*
@@ -261,7 +256,7 @@ abstract class ApiTest extends TestCase
             $stream = $streamFactory->createStreamFromFile($filePath);
             $size = $file['size'];
             $error = \UPLOAD_ERR_OK;
-            $clientFilename =  $file['name'];
+            $clientFilename = $file['name'];
             $clientMediaType = $file['type'];
             $uploadedFile = $factory->createUploadedFile(
                 $stream,
@@ -272,10 +267,9 @@ abstract class ApiTest extends TestCase
             );
             array_push($result, $uploadedFile);
         }
-        
+
         return $result;
     }
-
 
     protected function createFilesRequest(
         string $method,
@@ -294,6 +288,7 @@ abstract class ApiTest extends TestCase
             $h->addHeader($name, $value);
         }
         $uploadedFiles = $this->toUploadedFileInterface($files);
+
         return new Request($method, $uri, $h, $cookies, $serverParams, $stream, $uploadedFiles);
     }
 

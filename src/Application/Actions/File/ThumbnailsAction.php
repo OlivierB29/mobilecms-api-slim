@@ -1,21 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\File;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class ThumbnailsAction extends FileAction
 {
-
     /**
      * {@inheritdoc}
      */
     protected function action(): Response
     {
         $response = $this->getDefaultResponse();
-        
+
         $this->initConf();
         $this->checkConfiguration();
 
@@ -32,7 +32,6 @@ class ThumbnailsAction extends FileAction
             $this->pdfimagequality,
             $this->imagedriver
         );
-
 
         return $this->withResponse($response);
     }

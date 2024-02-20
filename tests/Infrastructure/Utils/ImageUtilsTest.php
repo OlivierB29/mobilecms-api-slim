@@ -1,11 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
-
 use App\Infrastructure\Utils\ImageUtils;
+use PHPUnit\Framework\TestCase;
 
 final class ImageUtilsTest extends TestCase
 {
@@ -57,7 +57,7 @@ final class ImageUtilsTest extends TestCase
 
     public function testCreateThumbnails()
     {
-        $sizes = [ 150, 300, 672, 768, 1024 ];
+        $sizes = [150, 300, 672, 768, 1024];
         $src = 'tests-data/imagesutils/baseball-field-1149153.jpg';
         $dir = 'tests-data/imagesutils/thumbnails';
         $u = new ImageUtils();
@@ -68,10 +68,9 @@ final class ImageUtilsTest extends TestCase
         $this->assertTrue(count($result) === count($sizes));
     }
 
-
     public function testCreateThumbnailsTooBig()
     {
-        $sizes = [ 150, 300, 672, 768, 1024, 8000 ];
+        $sizes = [150, 300, 672, 768, 1024, 8000];
         $src = 'tests-data/imagesutils/baseball-field-1149153.jpg';
         $dir = 'tests-data/imagesutils/thumbnails';
         $u = new ImageUtils();

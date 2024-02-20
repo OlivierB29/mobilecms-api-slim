@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Rest;
+<?php
+
+namespace App\Infrastructure\Rest;
 
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Slim\Psr7\Response as ResponseImpl;
@@ -13,7 +15,7 @@ class Response
      */
     private $result;
 
-    private $error = "";
+    private $error = '';
 
     /**
      * http return code to return.
@@ -81,7 +83,7 @@ class Response
     /**
      * Set an error message and format it to JSON.
      *
-     * @param int $code http status code
+     * @param int    $code http status code
      * @param string $msg  set error message
      */
     public function setError(int $code, string $msg)
@@ -94,7 +96,7 @@ class Response
         $this->error = $msg;
     }
 
-    public function getError() : string
+    public function getError(): string
     {
         return $this->error;
     }
@@ -103,6 +105,7 @@ class Response
     {
         $result = new ResponseImpl($this->getCode());
         $result->getBody()->write($this->getEncodedResult());
+
         return $result;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 namespace App\Application\Middleware;
 
 /**
  * @see       https://github.com/tuupola/slim-jwt-auth
  */
-
 
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,7 +20,8 @@ class AuthorizeRule
     private $userrole = null;
 
     /**
-     * Stores all the options passed to the rule
+     * Stores all the options passed to the rule.
+     *
      * @var mixed[]
      */
     /*
@@ -43,45 +44,44 @@ class AuthorizeRule
 
     public function __invoke(ServerRequestInterface $request): bool
     {
-        $uri = "/" . $request->getUri()->getPath();
-        $uri = preg_replace("#/+#", "/", $uri);
+        $uri = '/'.$request->getUri()->getPath();
+        $uri = preg_replace('#/+#', '/', $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->options["ignore"] as $ignore) {
-            $ignore = rtrim($ignore, "/");
-            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
+        foreach ((array) $this->options['ignore'] as $ignore) {
+            $ignore = rtrim($ignore, '/');
+            if ((bool) preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
                 return true;
             }
         }
 
         /* Otherwise check if path matches and we should authenticate. */
-        foreach ((array)$this->options["editorpath"] as $path) {
-            $path = rtrim($path, "/");
-            if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->userrole, "editor");
+        foreach ((array) $this->options['editorpath'] as $path) {
+            $path = rtrim($path, '/');
+            if ((bool) preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
+                $result = $this->isPermitted($this->userrole, 'editor');
+
                 return $result;
             }
         }
         /* Otherwise check if path matches and we should authenticate. */
-        foreach ((array)$this->options["adminpath"] as $path) {
-            $path = rtrim($path, "/");
-            if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
-                $result = $this->isPermitted($this->userrole, "admin");
+        foreach ((array) $this->options['adminpath'] as $path) {
+            $path = rtrim($path, '/');
+            if ((bool) preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
+                $result = $this->isPermitted($this->userrole, 'admin');
+
                 return $result;
             }
         }
 
-
         return false;
     }
-
-
 
     /**
      * Control if the current user has access to API.
      *
-     * @param string $userRole         object
-     * @param string   $requiredRole required role
+     * @param string $userRole     object
+     * @param string $requiredRole required role
      *
      * @return bool true if access is authorized
      */
@@ -89,11 +89,11 @@ class AuthorizeRule
     {
         $result = false;
         if (!empty($userRole) && !empty($requiredRole)) {
-            if ($requiredRole === "editor") {
+            if ($requiredRole === 'editor') {
                 $result = $this->isPermittedEditor($userRole);
             }
 
-            if ($requiredRole === "admin") {
+            if ($requiredRole === 'admin') {
                 $result = $this->isPermittedAdmin($userRole);
             }
         }
@@ -111,10 +111,10 @@ class AuthorizeRule
     private function isPermittedEditor(string $userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty("editor") && !empty("admin")) {
-            if ($userRole === "editor") {
+        if (!empty($userRole) && !empty('editor') && !empty('admin')) {
+            if ($userRole === 'editor') {
                 $result = true;
-            } elseif ($userRole === "admin") {
+            } elseif ($userRole === 'admin') {
                 $result = true;
             }
         }
@@ -132,8 +132,8 @@ class AuthorizeRule
     private function isPermittedAdmin($userRole): bool
     {
         $result = false;
-        if (!empty($userRole) && !empty("admin")) {
-            if ($userRole === "admin") {
+        if (!empty($userRole) && !empty('admin')) {
+            if ($userRole === 'admin') {
                 return true;
             }
         }

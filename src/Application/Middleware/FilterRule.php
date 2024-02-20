@@ -1,12 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 namespace App\Application\Middleware;
 
 /**
  * @see       https://github.com/tuupola/slim-jwt-auth
  */
-
 
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,10 +17,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FilterRule
 {
-
-
     /**
-     * Stores all the options passed to the rule
+     * Stores all the options passed to the rule.
+     *
      * @var mixed[]
      */
     /*
@@ -43,34 +42,33 @@ class FilterRule
 
     public function __invoke(ServerRequestInterface $request): bool
     {
-        $uri = "/" . $request->getUri()->getPath();
-        $uri = preg_replace("#/+#", "/", $uri);
+        $uri = '/'.$request->getUri()->getPath();
+        $uri = preg_replace('#/+#', '/', $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->options["ignore"] as $ignore) {
-            $ignore = rtrim($ignore, "/");
-            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
+        foreach ((array) $this->options['ignore'] as $ignore) {
+            $ignore = rtrim($ignore, '/');
+            if ((bool) preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
                 return false;
             }
         }
-
-
 
         return true;
     }
 
     public function isIgnore(ServerRequestInterface $request): bool
     {
-        $uri = "/" . $request->getUri()->getPath();
-        $uri = preg_replace("#/+#", "/", $uri);
+        $uri = '/'.$request->getUri()->getPath();
+        $uri = preg_replace('#/+#', '/', $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->options["ignore"] as $ignore) {
-            $ignore = rtrim($ignore, "/");
-            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
+        foreach ((array) $this->options['ignore'] as $ignore) {
+            $ignore = rtrim($ignore, '/');
+            if ((bool) preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
                 return false;
             }
         }
+
         return true;
     }
 }

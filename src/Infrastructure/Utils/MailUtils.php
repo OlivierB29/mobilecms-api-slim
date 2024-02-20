@@ -1,6 +1,6 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
 
-use App\ApiConstants;
+namespace App\Infrastructure\Utils;
 
 /**
  * Mail Utility.
@@ -20,8 +20,6 @@ class MailUtils
         $this->rootdir = $rootdir;
     }
 
-
-
     /**
      * Generate new password. Should separate technical functions and business.
      *
@@ -31,9 +29,9 @@ class MailUtils
      *
      * @return string notification content
      */
-    public function getNewPassword(string $subject, string $password, string $clientinfo, string $date) : string
+    public function getNewPassword(string $subject, string $password, string $clientinfo, string $date): string
     {
-        $message = file_get_contents(__DIR__ . '/mail/newpassword.html');
+        $message = file_get_contents(__DIR__.'/mail/newpassword.html');
         $message = str_replace('%subject%', $subject, $message);
         $message = str_replace('%password%', $password, $message);
         $message = str_replace('%clientinfo%', $clientinfo, $message);
@@ -42,9 +40,9 @@ class MailUtils
         return $message;
     }
 
-    public function getNewTextPassword(string $subject, string $password, string $clientinfo, string $date) : string
+    public function getNewTextPassword(string $subject, string $password, string $clientinfo, string $date): string
     {
-        $message = file_get_contents(__DIR__ . '/mail/newpassword.txt');
+        $message = file_get_contents(__DIR__.'/mail/newpassword.txt');
         $message = str_replace('%subject%', $subject, $message);
         $message = str_replace('%password%', $password, $message);
         $message = str_replace('%clientinfo%', $clientinfo, $message);
@@ -58,29 +56,28 @@ class MailUtils
      *
      * @return string mail headers
      */
-    public function getHeaders(string $from) : string
+    public function getHeaders(string $from): string
     {
         if (empty($from)) {
             // @codeCoverageIgnoreStart
-            $from = 'no-reply@' . $_SERVER['HTTP_HOST'];
+            $from = 'no-reply@'.$_SERVER['HTTP_HOST'];
             // @codeCoverageIgnoreEnd
         }
         $name = $from;
 
-        $headers = 'From: ' . $name . '<' . $from . '>' . "\r\n";
-        $headers  .= 'Reply-To: ' . $from . "\r\n";
-        $headers  .= 'MIME-Version: 1.0' . "\r\n";
-        $headers  .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-
+        $headers = 'From: '.$name.'<'.$from.'>'."\r\n";
+        $headers .= 'Reply-To: '.$from."\r\n";
+        $headers .= 'MIME-Version: 1.0'."\r\n";
+        $headers .= 'Content-Type: text/html; charset=UTF-8'."\r\n";
 
         return $headers;
     }
 
-    public function getFrom($from) : string
+    public function getFrom($from): string
     {
         if (empty($from)) {
             // @codeCoverageIgnoreStart
-            $from = 'no-reply@' . $_SERVER['HTTP_HOST'];
+            $from = 'no-reply@'.$_SERVER['HTTP_HOST'];
             // @codeCoverageIgnoreEnd
         }
 

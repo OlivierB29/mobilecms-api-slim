@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
 use App\Infrastructure\Utils\JsonUtils;
+use PHPUnit\Framework\TestCase;
 
 final class JsonUtilsTest extends TestCase
 {
@@ -15,6 +16,7 @@ final class JsonUtilsTest extends TestCase
             json_encode(JsonUtils::readJsonFile('tests-data/jsonutils/mini.json'))
         );
     }
+
     public function testNewDirectory()
     {
         JsonUtils::writeJsonFile('tests-data/newpath/test.json', \json_decode('{}'));
@@ -22,7 +24,7 @@ final class JsonUtilsTest extends TestCase
     }
 
     /**
-     * doesn't work in docker, since root is the owner of the file
+     * doesn't work in docker, since root is the owner of the file.
      */
     /*public function testWriteException()
     {

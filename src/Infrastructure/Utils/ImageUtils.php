@@ -1,28 +1,32 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 /**
- * Image resize util and image information
+ * Image resize util and image information.
  */
 class ImageUtils
 {
     /**
-    * default image quality
-    */
+     * default image quality.
+     */
     private $quality = 100;
 
     /**
-     * image driver
+     * image driver.
      */
     private $driver = 'imagick';
 
     /**
-    * Create a list of thumbnails
-    * @param string $file : file path
-    * @param string $dir : directory containing resized files
-    * @param array $sizes : array of new resized widths
-    * @return array created files
-    */
-    public function multipleResize(string $file, string $dir, array $sizes) : array
+     * Create a list of thumbnails.
+     *
+     * @param string $file  : file path
+     * @param string $dir   : directory containing resized files
+     * @param array  $sizes : array of new resized widths
+     *
+     * @return array created files
+     */
+    public function multipleResize(string $file, string $dir, array $sizes): array
     {
         $result = [];
 
@@ -38,23 +42,25 @@ class ImageUtils
 
         foreach ($sizes as $width) {
             // base name : foo-320.pg
-            $resizedFileName = $fileName . '-' . (string)$width . '.' . $extension;
+            $resizedFileName = $fileName.'-'.(string) $width.'.'.$extension;
 
             // file name : foobar/foo-320.pg
-            $resizedFilePath = $dir . '/' . $resizedFileName;
+            $resizedFilePath = $dir.'/'.$resizedFileName;
 
             $thumbfileResult = $this->resize($file, $resizedFilePath, $width);
             if (!empty($thumbfileResult)) {
                 \array_push($result, $thumbfileResult);
             }
         }
+
         return $result;
     }
 
     /**
-    * @param string $file : file path
-    * @return \stdClass true if smaller size is created
-    */
+     * @param string $file : file path
+     *
+     * @return \stdClass true if smaller size is created
+     */
     public function imageInfo(string $file)
     {
         $result = \json_decode('{}');
@@ -64,20 +70,20 @@ class ImageUtils
         // calculate height
         list($width, $height) = \getimagesize($file);
 
-        $result->{'width'} = (string)$width;
-        $result->{'height'} = (string)$height;
+        $result->{'width'} = (string) $width;
+        $result->{'height'} = (string) $height;
         $result->{'url'} = \basename($file);
-
 
         return $result;
     }
 
     /**
-    * @param string $fileName : file path
-    * @param string $thumbFile : new resized file
-    * @param int $width : new resized width
-    * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
-    */
+     * @param string $fileName  : file path
+     * @param string $thumbFile : new resized file
+     * @param int    $width     : new resized width
+     *
+     * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
+     */
     public function resize(string $fileName, string $thumbFile, int $width)
     {
         $result = null;
@@ -90,9 +96,8 @@ class ImageUtils
         list($width_orig, $height_orig) = \getimagesize($fileName);
 
         if ($width_orig > $width) {
-            $ratio_orig = $width_orig/$height_orig;
-            $height = intval(round($width/$ratio_orig, 0, PHP_ROUND_HALF_UP));
-
+            $ratio_orig = $width_orig / $height_orig;
+            $height = intval(round($width / $ratio_orig, 0, PHP_ROUND_HALF_UP));
 
             // create directory if necessary
 
@@ -102,15 +107,13 @@ class ImageUtils
                 // @codeCoverageIgnoreEnd
             }
 
-
             if ($mime_type) {
                 $result = \json_decode('{}');
-                $result->{'width'} = (string)$width;
-                $result->{'height'} = (string)$height;
+                $result->{'width'} = (string) $width;
+                $result->{'height'} = (string) $height;
                 $result->{'url'} = \basename($thumbFile);
 
                 switch ($mime_type) {
-                    
                     case 'image/jpeg':
                         if ($this->driver === 'imagick') {
                             $this->resizeJpegImagick($fileName, $thumbFile, $width, $height);
@@ -134,20 +137,20 @@ class ImageUtils
                 }
             }
         }
+
         return $result;
     }
 
     /**
-    * @param string $fileName : file path
-    * @param string $thumbFile : new resized file
-    * @param int $width : new resized width
-    */
+     * @param string $fileName  : file path
+     * @param string $thumbFile : new resized file
+     * @param int    $width     : new resized width
+     */
     private function resizeJpegImagick(string $fileName, string $thumbFile, int $width, int $height)
     {
-  
-            // https://secure.php.net/manual/en/imagick.thumbnailimage.php
+        // https://secure.php.net/manual/en/imagick.thumbnailimage.php
         // Max vert or horiz resolution
-        $maxsize=$width;
+        $maxsize = $width;
 
         // create new Imagick object
         $image = new \Imagick($fileName);
@@ -172,14 +175,15 @@ class ImageUtils
         // Destroys \Imagick object, freeing allocated resources in the process
         $image->destroy();
     }
+
     /**
-    * @param string $fileName : file path
-    * @param string $thumbFile : new resized file
-    * @param int $width : new resized width
-    * @param int $height : new resized height
-    * @param int $width_orig : width
-    * @param int $height_orig : height
-    */
+     * @param string $fileName    : file path
+     * @param string $thumbFile   : new resized file
+     * @param int    $width       : new resized width
+     * @param int    $height      : new resized height
+     * @param int    $width_orig  : width
+     * @param int    $height_orig : height
+     */
     private function resizeJpegGd(string $fileName, string $thumbFile, int $width, int $height, int $width_orig, int $height_orig)
     {
         // Resample
@@ -188,7 +192,6 @@ class ImageUtils
         \imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
         \imagejpeg($image_p, $thumbFile, $this->quality);
     }
-
 
     /**
      * Set quality.
@@ -203,7 +206,6 @@ class ImageUtils
     }
 
     /**
-     *
      * @param string $newval enable imagick
      */
     public function setDriver(string $newval)
@@ -212,8 +214,10 @@ class ImageUtils
     }
 
     /**
-     * Detect image type by extension
+     * Detect image type by extension.
+     *
      * @param string $file filename
+     *
      * @return bool true if image
      */
     public function isImage($file)
@@ -224,7 +228,7 @@ class ImageUtils
             $path_parts = pathinfo($file);
 
             $extension = $path_parts['extension'];
-            if (!empty($extension) && in_array(strtolower($extension), array("jpeg", "jpg", "png", "gif"))) {
+            if (!empty($extension) && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif'])) {
                 if (exif_imagetype($file) > 0) {
                     $result = true;
                 }

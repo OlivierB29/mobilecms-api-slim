@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\UserService;
-use App\Infrastructure\Services\ContentService;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
- * Get user list
+ * Get user list.
  */
 class AdminContentGetListAction extends AdminAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -22,10 +21,10 @@ class AdminContentGetListAction extends AdminAction
 
         $this->checkConfiguration();
 
-
         //get all records in directory
-        $userService = new UserService($this->getPrivateDirPath() . '/users');
+        $userService = new UserService($this->getPrivateDirPath().'/users');
         $response = $userService->getAllUsers();
+
         return $this->withResponse($response);
     }
 }

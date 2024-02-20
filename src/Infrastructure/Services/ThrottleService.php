@@ -1,11 +1,13 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Utils\CaptchaUtils;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\NetUtils;
 
 /**
- * Control failed logins and check captcha
+ * Control failed logins and check captcha.
  */
 class ThrottleService
 {
@@ -15,6 +17,7 @@ class ThrottleService
     private $databasedir;
 
     private $maxfailed = 5;
+
     /**
      * Constructor.
      *
@@ -27,12 +30,12 @@ class ThrottleService
 
     public function getLoginHistoryFileName(string $user)
     {
-        return $this->databasedir . '/' . 'history' . '/' . $user . '.json';
+        return $this->databasedir.'/'.'history'.'/'.$user.'.json';
     }
 
     public function getCaptchaFileName(string $user)
     {
-        return $this->databasedir . '/' . 'captcha' . '/' . $user . '.json';
+        return $this->databasedir.'/'.'captcha'.'/'.$user.'.json';
     }
 
     public function saveFailedLogin(string $user)
@@ -97,12 +100,11 @@ class ThrottleService
             $failedList = [];
         }
 
-
         $this->deleteCaptchaFile($user);
 
         $history->{'failed'} = [];
         if (\count($failedList) === 0) {
-            $history->{'archive' . date("YmdHis")} = $failedList;
+            $history->{'archive'.date('YmdHis')} = $failedList;
         }
 
         $result = count($failedList);
@@ -125,7 +127,6 @@ class ThrottleService
 
     public function isCaptchaCreated(string $user)
     {
-
         return \file_exists($this->getCaptchaFileName($user));
     }
 
@@ -146,7 +147,6 @@ class ThrottleService
     {
         $result = null;
 
-
         $file = $this->getCaptchaFileName($user);
         $result = JsonUtils::readJsonFile($file);
 
@@ -161,18 +161,16 @@ class ThrottleService
 
         $file = $this->getCaptchaFileName($user);
         JsonUtils::writeJsonFile($file, $result);
-        
 
         return $result;
     }
 
-
-
     public function createFailedLoginRecord(string $user)
     {
         $result = \json_decode('{}');
-        $result->{'date'} = date("D M d Y G:i");
+        $result->{'date'} = date('D M d Y G:i');
         $result->{'ip'} = NetUtils::getClientIp();
+
         return $result;
     }
 }

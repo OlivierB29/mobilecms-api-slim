@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
@@ -21,6 +23,7 @@ function compareIndex(string $key)
         if (!empty($a) && !empty($b) && !empty($a->{$key}) && !empty($b->{$key})) {
             $result = strnatcmp($a->{$key}, $b->{$key});
         }
+
         return $result;
     };
 }
@@ -29,7 +32,6 @@ function compareIndex(string $key)
  * Function used for sorting.
  *
  * @param string $key name
-
  */
 function compareIndexReverse(string $key)
 {
@@ -44,6 +46,7 @@ function compareIndexReverse(string $key)
         if (!empty($a) && !empty($b) && !empty($a->{$key}) && !empty($b->{$key})) {
             $result = strnatcmp($b->{$key}, $a->{$key});
         }
+
         return $result;
     };
 }
@@ -59,7 +62,6 @@ function compareIndexReverse(string $key)
  */
 class ContentService extends AbstractService
 {
-
     /**
      * Constructor.
      *
@@ -80,7 +82,7 @@ class ContentService extends AbstractService
      */
     private function getItemFileName(string $type, string $id, \stdClass $record): string
     {
-        $result = $this->getDatabaseDir() . '/' . $type . '/';
+        $result = $this->getDatabaseDir().'/'.$type.'/';
         // conf "organizeby": "year"
         $conf = $this->getRecordConf($type);
         if (!empty($conf->getString('organizeby'))) {
@@ -89,18 +91,20 @@ class ContentService extends AbstractService
             $year = substr($recorddate, 0, 4);
             // date should be mandatory
             if (!empty($year)) {
-                $result .= $year . '/';
+                $result .= $year.'/';
             }
         }
-        $result .= $id . '.json';
+        $result .= $id.'.json';
+
         return $result;
     }
 
     private function getItemFileNameWithoutRecord(string $type, string $id): string
     {
-        $result = $this->getDatabaseDir() . '/' . $type . '/';
+        $result = $this->getDatabaseDir().'/'.$type.'/';
 
-        $result .= $id . '.json';
+        $result .= $id.'.json';
+
         return $result;
     }
 
@@ -115,7 +119,7 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->getDatabaseDir() . '/' . $type . '/index/index_template.json';
+        return $this->getDatabaseDir().'/'.$type.'/index/index_template.json';
     }
 
     /**
@@ -129,21 +133,21 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->getDatabaseDir() . '/' . $type . '/index/cache_template.json';
+        return $this->getDatabaseDir().'/'.$type.'/index/cache_template.json';
     }
 
     public function getMetadataFileName(string $type): string
     {
         $this->checkType($type);
 
-        return $this->getDatabaseDir() . '/' . $type . '/index/metadata.json';
+        return $this->getDatabaseDir().'/'.$type.'/index/metadata.json';
     }
 
     public function getTemplateFileName(string $type): string
     {
         $this->checkType($type);
 
-        return $this->getDatabaseDir() . '/' . $type . '/index/new.json';
+        return $this->getDatabaseDir().'/'.$type.'/index/new.json';
     }
 
     /**
@@ -164,7 +168,7 @@ class ContentService extends AbstractService
             $response->setResult(JsonUtils::readJsonFile($file));
             $response->setCode(200);
         } else {
-            $response->setError(404, 'not found ' . $type . '/' . $keyvalue);
+            $response->setError(404, 'not found '.$type.'/'.$keyvalue);
         }
 
         return $response;
@@ -189,7 +193,7 @@ class ContentService extends AbstractService
             $response->setCode(200);
         } else {
             // @codeCoverageIgnoreStart
-            $response->setError(404, 'not found ' . $type . ' : ' . $keyvalue);
+            $response->setError(404, 'not found '.$type.' : '.$keyvalue);
             // @codeCoverageIgnoreEnd
         }
 
@@ -218,11 +222,11 @@ class ContentService extends AbstractService
         //
         if (strpos($filename, '..') !== false) {
             // @codeCoverageIgnoreStart
-            throw new \Exception('Invalid path ' . $filename);
+            throw new \Exception('Invalid path '.$filename);
             // @codeCoverageIgnoreEnd
         }
 
-        $file = $this->getDatabaseDir() . '/' . $filename;
+        $file = $this->getDatabaseDir().'/'.$filename;
 
         // get one element
         if (file_exists($file)) {
@@ -230,7 +234,7 @@ class ContentService extends AbstractService
             $response->setCode(200);
         } else {
             // @codeCoverageIgnoreStart
-            $response->setError(404, 'not found ' . $file);
+            $response->setError(404, 'not found '.$file);
             // @codeCoverageIgnoreEnd
         }
 
@@ -254,7 +258,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         // Read the JSON file
-        $file = $this->getDatabaseDir() . '/' . $filename;
+        $file = $this->getDatabaseDir().'/'.$filename;
         $data = JsonUtils::readJsonFile($file);
 
         // get one element
@@ -267,7 +271,7 @@ class ContentService extends AbstractService
                 $response->setCode(200);
             } else {
                 // element not found
-                $response->setError(404, 'not found ' . $keyname . ' : ' . $keyvalue);
+                $response->setError(404, 'not found '.$keyname.' : '.$keyvalue);
             }
         } else {
             // return all
@@ -293,7 +297,7 @@ class ContentService extends AbstractService
 
         $thelist = [];
 
-        if ($handle = opendir($this->getDatabaseDir() . '/' . $type)) {
+        if ($handle = opendir($this->getDatabaseDir().'/'.$type)) {
             while (false !== ($file = readdir($handle))) {
                 $fileObject = json_decode('{}');
                 if ($file != '.' && $file != '..' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'json') {
@@ -323,7 +327,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         // Read the JSON file
-        $file = $this->getDatabaseDir() . '/' . $filename;
+        $file = $this->getDatabaseDir().'/'.$filename;
         $data = JsonUtils::readJsonFile($file);
         if (isset($data)) {
             $response->setCode(200);
@@ -344,15 +348,15 @@ class ContentService extends AbstractService
     {
         $this->checkType($type);
 
-        return $this->getDatabaseDir() . '/' . $type . '/index/index.json';
+        return $this->getDatabaseDir().'/'.$type.'/index/index.json';
     }
 
     /**
      * Save a record.
      *
-     * @param string $type      : object type (eg : calendar)
-     * @param string $keyname   : primary key inside the file.
-     * @param \stdClass $record : JSON data
+     * @param string    $type    : object type (eg : calendar)
+     * @param string    $keyname : primary key inside the file.
+     * @param \stdClass $record  : JSON data
      */
     public function post(string $type, string $keyname, \stdClass $record)
     {
@@ -382,9 +386,9 @@ class ContentService extends AbstractService
     /**
      * Update a record.
      *
-     * @param string $type      : object type (eg : calendar)
-     * @param string $keyname   : primary key inside the file.
-     * @param \stdClass $record : JSON data
+     * @param string    $type    : object type (eg : calendar)
+     * @param string    $keyname : primary key inside the file.
+     * @param \stdClass $record  : JSON data
      */
     public function update(string $type, string $keyname, \stdClass $record): Response
     {
@@ -416,8 +420,8 @@ class ContentService extends AbstractService
     /**
      * Add object id to index.
      *
-     * @param string $type      : object type (eg : calendar)
-     * @param string $keyname   : primary key inside the file.
+     * @param string $type     : object type (eg : calendar)
+     * @param string $keyname  : primary key inside the file.
      * @param string $keyvalue : value
      */
     public function publishById(string $type, string $keyname, string $keyvalue): Response
@@ -442,7 +446,7 @@ class ContentService extends AbstractService
         }
 
         // Read the full JSON record
-        $recordFile = $this->getDatabaseDir() . '/' . $type . '/' . $keyvalue . '.json';
+        $recordFile = $this->getDatabaseDir().'/'.$type.'/'.$keyvalue.'.json';
 
         $record = JsonUtils::readJsonFile($recordFile);
 
@@ -518,11 +522,11 @@ class ContentService extends AbstractService
 
         $cacheTemplate = null;
 
-        if ($handle = opendir($this->getDatabaseDir() . '/' . $type)) {
+        if ($handle = opendir($this->getDatabaseDir().'/'.$type)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != '.' && $file != '..' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'json') {
                     // Read the full JSON record
-                    $filename = $this->getDatabaseDir() . '/' . $type . '/' . $file;
+                    $filename = $this->getDatabaseDir().'/'.$type.'/'.$file;
                     $record = JsonUtils::readJsonFile($filename);
 
                     //
@@ -566,7 +570,7 @@ class ContentService extends AbstractService
             $i = 0;
             while ($i < $cacheSize && $i < count($data)) {
                 $file = $data[$i]->{$keyname};
-                $filename = $this->getDatabaseDir() . '/' . $type . '/' . $file . '.json';
+                $filename = $this->getDatabaseDir().'/'.$type.'/'.$file.'.json';
                 $record = JsonUtils::readJsonFile($filename);
                 $cacheValue = clone $cacheTemplate;
                 JsonUtils::copy($record, $cacheValue);
@@ -585,7 +589,8 @@ class ContentService extends AbstractService
 
     /**
      * Sort an array, using a configuration.
-     * @param array $data : index content
+     *
+     * @param array  $data    : index content
      * @param string $type    : object type (eg : calendar)
      * @param string $keyname : default sort key, if conf is empty
      */
@@ -622,13 +627,14 @@ class ContentService extends AbstractService
      */
     public function options(string $filename)
     {
-        $file = $this->getDatabaseDir() . '/' . $filename;
+        $file = $this->getDatabaseDir().'/'.$filename;
 
         return JsonUtils::readJsonFile($file);
     }
+
     public function adminOptions(string $filename)
     {
-        $file = $this->getDatabaseDir() . '/' . $filename;
+        $file = $this->getDatabaseDir().'/'.$filename;
         //  $tmp = json_decode('{}');
         //  $tmp->{'list'} = JsonUtils::readJsonFile($file);
         $tmp = JsonUtils::readJsonFile($file);
@@ -641,9 +647,8 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         foreach ($ids as $id) {
-
             // Read the JSON file
-            $file = $this->getDatabaseDir() . '/' . $type . '/' . $id . '.json';
+            $file = $this->getDatabaseDir().'/'.$type.'/'.$id.'.json';
 
             if (file_exists($file)) {
                 unlink($file);
@@ -651,7 +656,7 @@ class ContentService extends AbstractService
                 $response->setCode(200);
             } else {
                 // @codeCoverageIgnoreStart
-                $response->setError(404, 'not found ' . $type . ' : ' . $id);
+                $response->setError(404, 'not found '.$type.' : '.$id);
                 // @codeCoverageIgnoreEnd
             }
         }

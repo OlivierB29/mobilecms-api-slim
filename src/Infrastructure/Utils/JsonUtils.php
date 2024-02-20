@@ -1,11 +1,12 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 /**
  * JSON utility for PHP.
  */
 class JsonUtils
 {
-
     /**
      * Read a JSON file.
      *
@@ -22,7 +23,7 @@ class JsonUtils
      * Read a JSON file.
      *
      * @param string $file : file
-     * param  $data : JSON object
+     *                     param  $data : JSON object
      */
     public static function writeJsonFile(string $file, $data)
     {
@@ -35,17 +36,17 @@ class JsonUtils
                 mkdir($dir);
             }
             if (file_exists($dir) && !is_writable($dir)) {
-                throw new \Exception('Access error to output dir' . $dir);
+                throw new \Exception('Access error to output dir'.$dir);
             }
             if (file_exists($file) && !is_writable($file)) {
                 // @codeCoverageIgnoreStart
-                throw new \Exception('Error opening output file' . $file);
+                throw new \Exception('Error opening output file'.$file);
                 // @codeCoverageIgnoreEnd
             }
             $fh = fopen($file, 'w');
             if (!$fh) {
                 // @codeCoverageIgnoreStart
-                die('Error writing to output file' . $file);
+                exit('Error writing to output file'.$file);
                 // @codeCoverageIgnoreEnd
             }
 
@@ -85,12 +86,12 @@ class JsonUtils
     }
 
     /**
-    * Find an index of a JSON object into a JSON array, by key=value.
-    *
-    * @param array  $data  : Array
-    * @param string $name  : eg: id
-    * @param string $value : eg: 123
-    */
+     * Find an index of a JSON object into a JSON array, by key=value.
+     *
+     * @param array  $data  : Array
+     * @param string $name  : eg: id
+     * @param string $value : eg: 123
+     */
     public static function getIndexByKey(array $data, string $name, string $value)
     {
         $result = -1;
@@ -113,8 +114,8 @@ class JsonUtils
      * If the JSON array previously contained a mapping for the key,
      * the old value is replaced by the specified value.
      *
-     * @param array $data : JSON Array
-     * @param string $name : eg: id
+     * @param array     $data : JSON Array
+     * @param string    $name : eg: id
      * @param \stdClass $item : JSON object
      *
      * @return array updated array

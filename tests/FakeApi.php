@@ -1,17 +1,16 @@
 <?php
+
 namespace Tests;
 
 use App\Infrastructure\Utils\Properties;
-use Psr\Http\Message\ResponseInterface as PsrResponse;
-use App\Infrastructure\Rest\Response;
 
 final class FakeApi
 {
-
-        /**
-    * get JSON conf
-    * @return \stdClass JSON conf
-    */
+    /**
+     * get JSON conf.
+     *
+     * @return \stdClass JSON conf
+     */
     public function getConf()
     {
         return Properties::getInstance()->getConf();
@@ -34,7 +33,7 @@ final class FakeApi
      */
     public function getPublicDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'publicdir'};
+        return $this->getRootDir().$this->getConf()->{'publicdir'};
     }
 
     /**
@@ -44,6 +43,6 @@ final class FakeApi
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'media'};
+        return $this->getRootDir().$this->getConf()->{'media'};
     }
 }

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
@@ -8,7 +9,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class RegisterAction extends AuthAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -18,7 +18,7 @@ class RegisterAction extends AuthAction
 
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
-        $service = new AuthService($this->getPrivateDirPath() . '/users');
+        $service = new AuthService($this->getPrivateDirPath().'/users');
 
         // register and create a user
 
@@ -33,7 +33,7 @@ class RegisterAction extends AuthAction
         );
         if (empty($createresult)) {
             $response->setCode(200);
-            $response->setResult(new \stdClass);
+            $response->setResult(new \stdClass());
         } else {
             $response->setError(400, 'Bad user parameters');
         }

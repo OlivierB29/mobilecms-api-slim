@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\ImageUtils;
@@ -28,7 +30,7 @@ class FileService extends AbstractService
         $result = [];
         $scanned_directory = array_diff(scandir($dir), ['..', '.']);
         foreach ($scanned_directory as $key => $value) {
-            $filePath = $dir . DIRECTORY_SEPARATOR . $value;
+            $filePath = $dir.DIRECTORY_SEPARATOR.$value;
             if (is_file($filePath)) {
                 array_push($result, $this->getFileResponse($filePath, $value));
             }
@@ -84,7 +86,7 @@ class FileService extends AbstractService
      * Get real path of media files.
      *
      * @param string $mediadir eg: media
-     * @param string $type eg: calendar
+     * @param string $type     eg: calendar
      * @param string $id       eg: 1
      *
      * @return string eg : /var/www/html/media/calendar/1
@@ -92,7 +94,7 @@ class FileService extends AbstractService
     public function getRecordDirectory(string $mediadir, string $type, string $id, \stdClass $record): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
-            $result = $mediadir . '/' . $type . '/';
+            $result = $mediadir.'/'.$type.'/';
             // conf "organizeby": "year"
             $conf = $this->getRecordConf($type);
             if (!empty($conf->getString('organizeby'))) {
@@ -101,14 +103,15 @@ class FileService extends AbstractService
                 $year = substr($recorddate, 0, 4);
                 // date should be mandatory
                 if (!empty($year)) {
-                    $result .= $year . '/';
+                    $result .= $year.'/';
                 }
             }
             $result .= $id;
+
             return $result;
         } else {
             // @codeCoverageIgnoreStart
-            throw new \Exception('getMediaDirectory() mediadir ' . $mediadir . ' type ' . $type . ' id ' . $id);
+            throw new \Exception('getMediaDirectory() mediadir '.$mediadir.' type '.$type.' id '.$id);
             // @codeCoverageIgnoreEnd
         }
     }
@@ -119,24 +122,26 @@ class FileService extends AbstractService
     public function getRecordDirectoryWithoutRecord(string $mediadir, string $type, string $id): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
-            $result = $mediadir . '/' . $type . '/';
+            $result = $mediadir.'/'.$type.'/';
 
             $result .= $id;
+
             return $result;
         } else {
             // @codeCoverageIgnoreStart
-            throw new \Exception('getMediaDirectory() mediadir ' . $mediadir . ' type ' . $type . ' id ' . $id);
+            throw new \Exception('getMediaDirectory() mediadir '.$mediadir.' type '.$type.' id '.$id);
             // @codeCoverageIgnoreEnd
         }
     }
 
     /**
      * Create thumbnails files from specified URLs.
-     * @param string $mediadir : destination directory
-     * @param string $datatype : news
-     * @param string $id       : 123
-     * @param array $files : [{ "url": "tennis.jpg", "sizes": [100, 200, 300]}]
-     * @param array $defaultsizes : [100, 200, 300, 400, 500]
+     *
+     * @param string $mediadir     : destination directory
+     * @param string $datatype     : news
+     * @param string $id           : 123
+     * @param array  $files        : [{ "url": "tennis.jpg", "sizes": [100, 200, 300]}]
+     * @param array  $defaultsizes : [100, 200, 300, 400, 500]
      *
      * @return Response result
      */
@@ -166,9 +171,9 @@ class FileService extends AbstractService
                 $sizes = null;
 
                 // get foobar.html from http://something.com/[...]/foobar.html
-                $filePath = $destdir . '/' . basename($file->{'url'});
+                $filePath = $destdir.'/'.basename($file->{'url'});
 
-                $thumbdir = $destdir . '/thumbnails';
+                $thumbdir = $destdir.'/thumbnails';
                 if (file_exists($filePath)) {
                     // thumbnails sizes
                     if (!empty($this->getTypeThumbnailSizes($datatype)) && count($this->getTypeThumbnailSizes($datatype)) > 0) {
@@ -209,7 +214,7 @@ class FileService extends AbstractService
                     // TODO add message
                 }
             } else {
-                throw new \Exception('wrong file ' . $file['url'] . ' KO');
+                throw new \Exception('wrong file '.$file['url'].' KO');
             }
         }
 
@@ -228,7 +233,7 @@ class FileService extends AbstractService
     {
         $response = new Response();
         $response->setCode(400);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         return $response;
     }
@@ -236,6 +241,7 @@ class FileService extends AbstractService
     protected function getTypeThumbnailSizes($type): array
     {
         $result = $this->getRecordConf($type)->getArray('typethumbnailsizes');
+
         return $result;
     }
 }

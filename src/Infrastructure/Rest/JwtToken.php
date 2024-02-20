@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Rest;
+<?php
+
+namespace App\Infrastructure\Rest;
 
 /**
  * Utility for creating JWT.
@@ -9,7 +11,6 @@ class JwtToken
      * algorithm see http://php.net/manual/en/function.hash-algos.php.
      */
     private $algorithm = 'sha512';
-
 
     /**
      * set algorithm see http://php.net/manual/en/function.hash-algos.php.
@@ -46,7 +47,8 @@ class JwtToken
 
     /**
      * Verify a token.
-     * compare to jwt.php @ line 255
+     * compare to jwt.php @ line 255.
+     *
      * @param string $token     token data
      * @param string $secretKey secret key
      *
@@ -89,8 +91,6 @@ class JwtToken
             throw new \Exception('Signature verification failed!');
         }
 
-
-
         return $tokenArray;
     }
 
@@ -122,7 +122,8 @@ class JwtToken
     {
         // cf firebase/php-jwt
         $algs = ['sha512' => 'HS512'];
-        return base64_encode('{ "alg": "' . $algs[$this->algorithm] . '","typ": "JWT"}');
+
+        return base64_encode('{ "alg": "'.$algs[$this->algorithm].'","typ": "JWT"}');
     }
 
     /**
@@ -136,7 +137,7 @@ class JwtToken
      */
     public function initPayload(string $username, string $email, string $role): string
     {
-        return base64_encode('{ "sub": "' . $email . '", "name": "' . $username . '", "role": "' . $role . '"}');
+        return base64_encode('{ "sub": "'.$email.'", "name": "'.$username.'", "role": "'.$role.'"}');
     }
 
     /**
@@ -150,7 +151,7 @@ class JwtToken
      */
     private function createToken(string $header, string $payload, string $secretKey): string
     {
-        return $header . '.' . $payload . '.' . $this->createSignature($header, $payload, $secretKey);
+        return $header.'.'.$payload.'.'.$this->createSignature($header, $payload, $secretKey);
     }
 
     /**
@@ -164,7 +165,7 @@ class JwtToken
      */
     private function createSignature(string $header, string $payload, string $secretKey): string
     {
-        return hash_hmac($this->algorithm, $header . '.' . $payload, $this->createSecret($secretKey));
+        return hash_hmac($this->algorithm, $header.'.'.$payload, $this->createSecret($secretKey));
     }
 
     /**
@@ -177,7 +178,7 @@ class JwtToken
      */
     public function createSecret(string $secret): string
     {
-        return $secret . date('Yz');
+        return $secret.date('Yz');
     }
 
     /**
@@ -188,7 +189,7 @@ class JwtToken
      * @return mixed JSON payload object
      */
     // @codeCoverageIgnoreStart
-    private function parseHeader(string $payload) : mixed
+    private function parseHeader(string $payload): mixed
     {
         return json_decode(base64_decode($payload));
     }
@@ -202,19 +203,17 @@ class JwtToken
      * @return mixed JSON payload object
      */
     // @codeCoverageIgnoreStart
-    private function parsePayload(string $payload) : mixed
+    private function parsePayload(string $payload): mixed
     {
         return json_decode(base64_decode($payload));
     }
     // @codeCoverageIgnoreEnd
 
-    public function getUserFromToken($token) : string
+    public function getUserFromToken($token): string
     {
         if (!isset($token)) {
             throw new \Exception('empty token');
         }
-
-
 
         // get payload and convert to JSON
 

@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 /**
  * Read a simple JSON configuration file.
@@ -6,7 +8,7 @@
 class Properties
 {
     /**
-     * \stdClass JSON conf
+     * \stdClass JSON conf.
      */
     private $conf;
 
@@ -16,8 +18,6 @@ class Properties
 
     /**
      * Constructor.
-     *
-     *
      */
     public function __construct()
     {
@@ -27,8 +27,9 @@ class Properties
     /**
      * Read an integer property.
      *
-     * @param string $key : key
-     * @param int $default : default value if configuration is empty
+     * @param string $key     : key
+     * @param int    $default : default value if configuration is empty
+     *
      * @return int value
      */
     public function getInteger(string $key, int $default = 0): int
@@ -42,14 +43,16 @@ class Properties
                 $result = $this->getConf()->{$key};
             }
         }
+
         return $result;
     }
 
     /**
      * Read a boolean property.
      *
-     * @param string $key : key
-     * @param bool $default : default value if configuration is empty
+     * @param string $key     : key
+     * @param bool   $default : default value if configuration is empty
+     *
      * @return bool value
      */
     public function getBoolean(string $key, bool $default): bool
@@ -65,6 +68,7 @@ class Properties
                 $result = false;
             }
         }
+
         return $result;
     }
 
@@ -72,6 +76,7 @@ class Properties
      * Read a boolean property.
      *
      * @param string $key : key
+     *
      * @return string value
      */
     public function getString(string $key): string
@@ -81,6 +86,7 @@ class Properties
         if (!empty($this->getConf()->{$key})) {
             $result = $this->getConf()->{$key};
         }
+
         return $result;
     }
 
@@ -90,6 +96,7 @@ class Properties
         if (!empty($this->getConf()->{$key})) {
             $result = $this->getConf()->{$key};
         }
+
         return $result;
     }
 
@@ -103,7 +110,7 @@ class Properties
         if (\file_exists($file)) {
             $this->setConf(json_decode(file_get_contents($file)));
         } else {
-            throw new \Exception('conf file not found ' . $file);
+            throw new \Exception('conf file not found '.$file);
         }
     }
 
@@ -114,7 +121,7 @@ class Properties
         if (\file_exists($file)) {
             $this->setConf(json_decode(file_get_contents($file)));
         } else {
-            throw new \Exception('conf file not found ' . $file);
+            throw new \Exception('conf file not found '.$file);
         }
     }
 
@@ -124,7 +131,8 @@ class Properties
     }
 
     /**
-     * get JSON conf
+     * get JSON conf.
+     *
      * @return \stdClass JSON conf
      */
     public function getConf(): \stdClass
@@ -133,7 +141,7 @@ class Properties
     }
 
     /**
-     * initialize
+     * initialize.
      */
     public static function init(string $rootDir, string $file)
     {
@@ -168,6 +176,6 @@ class Properties
      */
     public function getPublicDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'publicdir'};
+        return $this->getRootDir().$this->getConf()->{'publicdir'};
     }
 }

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
@@ -10,11 +11,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Http\Message\ResponseInterface as Response;
 
 /**
- * Reset a password by sending an email with a new password
+ * Reset a password by sending an email with a new password.
  */
 class ResetPasswordAction extends AuthAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -25,7 +25,7 @@ class ResetPasswordAction extends AuthAction
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
 
-        $service = new AuthService($this->getPrivateDirPath() . '/users');
+        $service = new AuthService($this->getPrivateDirPath().'/users');
 
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}
@@ -45,7 +45,7 @@ class ResetPasswordAction extends AuthAction
             $email = $this->getUser($logindata);
             $notificationTitle = 'new password';
             $from = $u->getFrom($this->getConf()->{'mailsender'});
-            $date = date("Y-m-d H:i:s");
+            $date = date('Y-m-d H:i:s');
             $notificationBody = $u->getNewPassword('new password', $clearPassword, $this->getClientInfo(), $date);
             $textBody = $u->getNewTextPassword('new password', $clearPassword, $this->getClientInfo(), $date);
 
@@ -62,7 +62,7 @@ class ResetPasswordAction extends AuthAction
                 $tmpResponse->{'notification'} = json_encode($textBody);
                 $response->setResult($tmpResponse);
             } else {
-                error_log("New password is: " . $clearPassword);
+                error_log('New password is: '.$clearPassword);
             }
         }
 
@@ -78,12 +78,13 @@ class ResetPasswordAction extends AuthAction
      */
     private function getClientInfo(): string
     {
-        $result = NetUtils::getClientIp() . ' ';
+        $result = NetUtils::getClientIp().' ';
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             // @codeCoverageIgnoreStart
             $result .= $_SERVER['HTTP_USER_AGENT'];
             // @codeCoverageIgnoreEnd
         }
+
         return $result;
     }
 
@@ -118,7 +119,7 @@ class ResetPasswordAction extends AuthAction
 
         //send the message, check for errors
         if (!$mail->send()) {
-            error_log('Mailer Error: ' . $mail->ErrorInfo);
+            error_log('Mailer Error: '.$mail->ErrorInfo);
         }
     }
 }

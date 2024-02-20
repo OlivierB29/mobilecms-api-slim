@@ -1,20 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Services\ContentService;
 use Psr\Http\Message\ResponseInterface as Response;
 
-use App\Infrastructure\Services\ContentService;
-
-use App\Infrastructure\Services\AuthService;
-
 /**
- * Get a user
+ * Get a user.
  */
 class AdminContentGetAction extends AdminAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -25,7 +23,7 @@ class AdminContentGetAction extends AdminAction
         $this->checkConfiguration();
 
         $service = new ContentService($this->getPrivateDirPath());
-        $authService = new AuthService($this->getPrivateDirPath() . '/users');
+        $authService = new AuthService($this->getPrivateDirPath().'/users');
 
         $tmpResponse = $service->getRecord($this->getParam('type'), $this->getParam('id'));
         // basic user fields, without password
@@ -33,6 +31,7 @@ class AdminContentGetAction extends AdminAction
             $response->setCode(200);
             $response->setResult($this->getUserResponse($tmpResponse->getResult()));
         }
+
         return $this->withResponse($response);
     }
 }

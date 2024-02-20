@@ -1,11 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
-
 use App\Infrastructure\Utils\MailUtils;
+use PHPUnit\Framework\TestCase;
 
 final class MailUtilsTest extends TestCase
 {

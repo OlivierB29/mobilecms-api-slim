@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions;
@@ -28,8 +29,8 @@ class ActionError implements JsonSerializable
     private $description;
 
     /**
-     * @param string        $type
-     * @param string|null   $description
+     * @param string      $type
+     * @param string|null $description
      */
     public function __construct(string $type, ?string $description)
     {
@@ -47,11 +48,13 @@ class ActionError implements JsonSerializable
 
     /**
      * @param string $type
+     *
      * @return self
      */
     public function setType(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -65,11 +68,13 @@ class ActionError implements JsonSerializable
 
     /**
      * @param string|null $description
+     *
      * @return self
      */
     public function setDescription(?string $description = null): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -79,7 +84,7 @@ class ActionError implements JsonSerializable
     public function jsonSerialize()
     {
         $payload = [
-            'type' => $this->type,
+            'type'        => $this->type,
             'description' => $this->description,
         ];
 

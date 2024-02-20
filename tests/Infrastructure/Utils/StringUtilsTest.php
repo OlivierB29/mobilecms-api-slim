@@ -1,11 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
-
 use App\Infrastructure\Utils\StringUtils;
+use PHPUnit\Framework\TestCase;
 
 final class StringUtilsTest extends TestCase
 {

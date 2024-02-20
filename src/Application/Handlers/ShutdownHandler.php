@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Handlers;
@@ -27,9 +28,9 @@ class ShutdownHandler
     /**
      * ShutdownHandler constructor.
      *
-     * @param Request           $request
-     * @param HttpErrorHandler  $errorHandler
-     * @param bool              $displayErrorDetails
+     * @param Request          $request
+     * @param HttpErrorHandler $errorHandler
+     * @param bool             $displayErrorDetails
      */
     public function __construct(
         Request $request,

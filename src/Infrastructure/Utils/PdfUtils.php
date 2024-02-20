@@ -1,25 +1,29 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 /**
- * PDF thumbnail and resize utility
+ * PDF thumbnail and resize utility.
  */
 class PdfUtils
 {
     /**
-     * default image quality
+     * default image quality.
      */
     private $quality = 80;
 
     /**
-     * image driver
+     * image driver.
      */
     private $driver = 'imagick';
 
     /**
-     * Create a list of thumbnails
-     * @param string $file : file path
-     * @param string $dir : directory containing resized files
-     * @param array $sizes : array of new resized widths
+     * Create a list of thumbnails.
+     *
+     * @param string $file  : file path
+     * @param string $dir   : directory containing resized files
+     * @param array  $sizes : array of new resized widths
+     *
      * @return array created files
      */
     public function multipleResize(string $file, string $dir, array $sizes)
@@ -36,26 +40,27 @@ class PdfUtils
 
         foreach ($sizes as $width) {
             // base name : foo.pdf
-            $resizedFileName = $fileName . '-' . (string) $width . '.' . $extension;
+            $resizedFileName = $fileName.'-'.(string) $width.'.'.$extension;
 
             // file name : foobar/foo-320.jpg
-            $resizedFilePath = $dir . '/' . $resizedFileName;
+            $resizedFilePath = $dir.'/'.$resizedFileName;
 
             $thumbfileResult = $this->resize($file, $resizedFilePath, $width);
             if (!empty($thumbfileResult)) {
                 \array_push($result, $thumbfileResult);
             }
         }
+
         return $result;
     }
 
     /**
-     * Create a thumbnail of the first page
+     * Create a thumbnail of the first page.
      *
      * @param string $source somewhere/foo.pdf
      * @param string $target foo/foo.pdf
-     * @param int $width width in px
-
+     * @param int    $width  width in px
+     *
      * @return \stdClass JSON image description {"width":"210","height":"297","url":"document.jpg"}
      */
     public function resize($source, $target, $width = 210)
@@ -99,6 +104,7 @@ class PdfUtils
 
     /**
      * @param string $file : file path
+     *
      * @return \stdClass true if smaller size is created
      */
     public function pdfInfo(string $file)
@@ -122,7 +128,6 @@ class PdfUtils
     }
 
     /**
-     *
      * @param string $newval enable imagick
      */
     public function setDriver(string $newval)
