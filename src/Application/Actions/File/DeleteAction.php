@@ -14,10 +14,12 @@ class DeleteAction extends FileAction
      */
     protected function action(): Response
     {
+        // RestResponse
         $response = $this->getDefaultResponse();
 
         $this->checkConfiguration();
 
+        // Response
         $response = $this->deleteMediaFiles(
             $this->getParam('type'),
             $this->getParam('id'),
@@ -28,4 +30,6 @@ class DeleteAction extends FileAction
 
         return $this->withResponse($response);
     }
+
+
 }

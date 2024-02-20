@@ -163,76 +163,6 @@ abstract class FileAction extends RestAction
         }
     }
 
-    /**
-     * Delete files.
-     *
-     * @param string $datatype news
-     * @param string $id       123
-     * @param array $files : [{ "url": "http://something.com/[...]/foobar.html" }]
-     * @return Response rest response
-     */
-    protected function deleteMediaFiles(string $datatype, string $id, array $files): Response
-    {
-        $response = $this->getDefaultResponse();
-
-
-        $result = [];
-
-        $tmpRecord = $this->getContentService()->getRecord($datatype, $id);
-        if ($tmpRecord == null) {
-            throw new \Exception('Record not found');
-        }
-        
-
-
-
-
-        foreach ($files as $formKey => $file) {
-
-            foreach ($tmpRecord->getResult()->media as $media => $fileInRecord) {
-                if ($fileInRecord->url === $file->url) {
-                    foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
-                        $thumbnailPath = $this->getMediaDirPath() . '/' . $datatype . '/' . $id . '/thumbnails' . '/'  . $thumbnailFile->url;
-                        if (file_exists($thumbnailPath)) {
-                            if (!unlink($thumbnailPath)) {
-                                throw new \Exception('delete ' . $thumbnailPath . ' KO');
-                            }
-                        } 
-    
-                    }
-                }
-    
-            }
-
-            // /var/www/html/media/calendar/1
-            $destdir = $this->getRecordDirPath($datatype, $id);
-
-            // upload
-            if (isset($file->{'url'})) {
-                // get foobar.html from http://something.com/[...]/foobar.html
-                $destfile = $destdir . '/' . basename($file->{'url'});
-                if (file_exists($destfile)) {
-                    if (!unlink($destfile)) {
-                        throw new \Exception('delete ' . $file['url'] . ' KO');
-                    }
-                } else {
-                    // TODO add message
-                }
-            } else {
-                throw new \Exception('wrong file ' . $file['url'] . ' KO');
-            }
-        }
-
-
-
-        $uploadResult = $this->getFileService()->getDescriptions($destdir);
-
-
-        $response->setResult($uploadResult);
-        $response->setCode(200);
-
-        return $response;
-    }
 
     /**
     * enable debug
@@ -284,5 +214,80 @@ abstract class FileAction extends RestAction
         }
         
         return $this->contentservice;
+    }
+
+
+    /**
+     * Delete files.
+     *
+     * @param string $datatype news
+     * @param string $id       123
+     * @param array $files : [{ "url": "http://something.com/[...]/foobar.html" }]
+     * @return Response rest response
+     */
+    protected function deleteMediaFiles(string $datatype, string $id, array $files): Response
+    {
+        $response = $this->getDefaultResponse();
+
+
+        $result = [];
+
+        $tmpRecord = $this->getContentService()->getRecord($datatype, $id);
+        if ($tmpRecord == null) {
+            throw new \Exception('Record not found');
+        }
+        
+
+
+
+
+        foreach ($files as $formKey => $file) {
+
+            if (\property_exists($tmpRecord->getResult(), 'media')) {
+
+
+            foreach ($tmpRecord->getResult()->{'media'} as $media => $fileInRecord) {
+                if ($fileInRecord->url === $file->url) {
+                    foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
+                        $thumbnailPath = $this->getMediaDirPath() . '/' . $datatype . '/' . $id . '/thumbnails' . '/'  . $thumbnailFile->url;
+                        if (file_exists($thumbnailPath)) {
+                            if (!unlink($thumbnailPath)) {
+                                throw new \Exception('delete ' . $thumbnailPath . ' KO');
+                            }
+                        } 
+    
+                    }
+                }
+    
+            }
+            }
+            // /var/www/html/media/calendar/1
+            $destdir = $this->getRecordDirPath($datatype, $id);
+
+            // upload
+            if (isset($file->{'url'})) {
+                // get foobar.html from http://something.com/[...]/foobar.html
+                $destfile = $destdir . '/' . basename($file->{'url'});
+                if (file_exists($destfile)) {
+                    if (!unlink($destfile)) {
+                        throw new \Exception('delete ' . $file['url'] . ' KO');
+                    }
+                } else {
+                    // TODO add message
+                }
+            } else {
+                throw new \Exception('wrong file ' . $file['url'] . ' KO');
+            }
+        }
+
+
+
+        $uploadResult = $this->getFileService()->getDescriptions($destdir);
+
+
+        $response->setResult($uploadResult);
+        $response->setCode(200);
+
+        return $response;
     }
 }
