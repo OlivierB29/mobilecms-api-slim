@@ -287,7 +287,7 @@ final class FileApiTest extends AuthApiTest
         $record = '/clubs/1';
         $this->path = $this->getApi() . '/fileapi/thumbnails/clubs/1';
 
-        $recordStr = '[{ "url": "tennisclub.jpg"}]';
+        $recordStr = '[{ "url": "tennis-court.jpg"}]';
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
 
@@ -299,26 +299,26 @@ final class FileApiTest extends AuthApiTest
 
         $this->assertTrue($response != null);
 
-        $expected = '[{"mimetype":"image\/jpeg","width":"1200","height":"630","url":"tennisclub.jpg","thumbnails":[{"width":"32","height":"17","url":"tennisclub-32.jpg"},{"width":"48","height":"25","url":"tennisclub-48.jpg"},{"width":"64","height":"34","url":"tennisclub-64.jpg"},{"width":"128","height":"67","url":"tennisclub-128.jpg"},{"width":"256","height":"134","url":"tennisclub-256.jpg"}]}]';
+        $expected = '[{"mimetype":"image\/jpeg","width":"1900","height":"1069","url":"tennis-court.jpg","thumbnails":[{"width":"32","height":"18","url":"tennis-court-32.jpg"},{"width":"48","height":"27","url":"tennis-court-48.jpg"},{"width":"64","height":"36","url":"tennis-court-64.jpg"},{"width":"128","height":"72","url":"tennis-court-128.jpg"},{"width":"256","height":"144","url":"tennis-court-256.jpg"}]}]';
 
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
 
-        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-32.jpg'));
-        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-32.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-32.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-32.jpg');
 
-        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-48.jpg'));
-        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-48.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-48.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-48.jpg');
 
 
 
-        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-64.jpg'));
-        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-64.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-64.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-64.jpg');
 
-        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-128.jpg'));
-        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-128.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-128.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-128.jpg');
 
-        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-256.jpg'));
-        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennisclub-256.jpg');
+        $this->assertTrue(file_exists($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-256.jpg'));
+        unlink($this->API->getMediaDirPath() . $record . '/thumbnails/tennis-court-256.jpg');
     }
 
     public function testDefaultThumbnails()
