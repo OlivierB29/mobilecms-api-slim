@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
+use App\Infrastructure\Services\ContentService;
 use Psr\Http\Message\ResponseInterface as Response;
 
-use App\Infrastructure\Services\ContentService;
-
 /**
- * Delete a user
+ * Delete a user.
  */
 class AdminContentDeleteAction extends AdminAction
 {
-
     /**
      * {@inheritdoc}
      */

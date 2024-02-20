@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
@@ -9,9 +10,7 @@ abstract class AdminAction extends RestAction
 {
     const INDEX_JSON = '/index/index.json';
 
-
     protected $role = 'admin';
-
 
     /**
      * Basic user fields, without password.
@@ -30,11 +29,6 @@ abstract class AdminAction extends RestAction
         return $responseUser;
     }
 
-
-
-
-
-
     /**
      * Initialize a default user object.
      *
@@ -44,7 +38,6 @@ abstract class AdminAction extends RestAction
     {
         return json_decode('{"name":"", "email":"", "password":"" }');
     }
-
 
     /**
      * Check config and throw an exception if needed.

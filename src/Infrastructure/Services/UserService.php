@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
@@ -74,7 +76,7 @@ class UserService
         }
 
         if (!empty($email)) {
-            return $this->databasedir . '/' . strtolower($email) . '.json';
+            return $this->databasedir.'/'.strtolower($email).'.json';
         } else {
             throw new \Exception('getJsonUserFile()  empty email');
         }
@@ -158,7 +160,7 @@ class UserService
     {
         $response = new Response();
         $response->setCode(400);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         return $response;
     }
@@ -166,11 +168,11 @@ class UserService
     /**
      * Create a new user file.
      *
-     * @param string $email          : email
-     * @param string $name           : name
-     * @param string $password       : password
-     * @param string $salt           : private salt
-     * @param string $role           : role none|editor|admin
+     * @param string $email    : email
+     * @param string $name     : name
+     * @param string $password : password
+     * @param string $salt     : private salt
+     * @param string $role     : role none|editor|admin
      */
     public function addDbUser(
         string $email,

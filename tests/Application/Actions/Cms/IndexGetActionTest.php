@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Application\Actions\Cms;
@@ -6,12 +7,9 @@ namespace Tests\Application\Actions\Cms;
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
 use App\Application\Handlers\HttpErrorHandler;
-
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
 use Tests\AuthApiTest;
-
-use App\Infrastructure\Utils\Properties;
 
 class IndexGetActionTest extends AuthApiTest
 {
@@ -23,7 +21,7 @@ class IndexGetActionTest extends AuthApiTest
         $container = $app->getContainer();
 
         // API
-        $request = $this->createRequest('GET', $this->getApi() . '/cmsapi/index/calendar', $this->headers);
+        $request = $this->createRequest('GET', $this->getApi().'/cmsapi/index/calendar', $this->headers);
         $response = $app->handle($request);
         $payloadObject = $response->getBody();
         $payload = (string) $response->getBody();
@@ -33,7 +31,6 @@ class IndexGetActionTest extends AuthApiTest
 
         $expectedPayload = new ActionPayload(200, $index_data);
         $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
-
 
         $this->assertResponse($expectedPayload, $response);
     }
@@ -52,7 +49,7 @@ class IndexGetActionTest extends AuthApiTest
         $app->add($errorMiddleware);
 
         // API
-        $request = $this->createRequest('GET', $this->getApi() . '/cmsapi/index/calendarZZ', $this->headers);
+        $request = $this->createRequest('GET', $this->getApi().'/cmsapi/index/calendarZZ', $this->headers);
         $response = $app->handle($request);
 
         // Assert

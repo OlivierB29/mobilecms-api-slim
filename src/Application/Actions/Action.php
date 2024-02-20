@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions;
@@ -8,8 +9,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpInternalServerErrorException;
+use Slim\Exception\HttpNotFoundException;
 
 abstract class Action
 {
@@ -47,9 +48,11 @@ abstract class Action
      * @param Request  $request
      * @param Response $response
      * @param array    $args
-     * @return Response
+     *
      * @throws HttpNotFoundException
      * @throws HttpBadRequestException
+     *
+     * @return Response
      */
     public function __invoke(Request $request, Response $response, $args): Response
     {
@@ -67,15 +70,17 @@ abstract class Action
     }
 
     /**
-     * @return Response
      * @throws DomainRecordNotFoundException
      * @throws HttpBadRequestException
+     *
+     * @return Response
      */
     abstract protected function action(): Response;
 
     /**
-     * @return array|object
      * @throws HttpBadRequestException
+     *
+     * @return array|object
      */
     protected function getFormDataOriginal()
     {
@@ -88,11 +93,12 @@ abstract class Action
         return $input;
     }
 
-
     /**
-     * @param  string $name
-     * @return mixed
+     * @param string $name
+     *
      * @throws HttpBadRequestException
+     *
+     * @return mixed
      */
     protected function resolveArg(string $name)
     {
@@ -104,7 +110,8 @@ abstract class Action
     }
 
     /**
-     * @param  array|object|null $data
+     * @param array|object|null $data
+     *
      * @return Response
      */
     protected function respondWithData($data = null, int $statusCode = 200): Response
@@ -114,10 +121,9 @@ abstract class Action
         return $this->respond($payload);
     }
 
-
-  
     /**
      * @param ActionPayload $payload
+     *
      * @return Response
      */
     protected function respond(ActionPayload $payload): Response

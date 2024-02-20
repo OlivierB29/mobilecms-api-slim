@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Services\ContentService;
+use App\Infrastructure\Utils\JsonUtils;
 use Psr\Http\Message\ResponseInterface as Response;
 
-use App\Infrastructure\Services\ContentService;
-
-use App\Infrastructure\Services\AuthService;
-use App\Infrastructure\Utils\JsonUtils;
-
 /**
- * Create a user
+ * Create a user.
  */
 class AdminContentCreateAction extends AdminAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -26,7 +24,7 @@ class AdminContentCreateAction extends AdminAction
         $this->checkConfiguration();
 
         $service = new ContentService($this->getPrivateDirPath());
-        $authService = new AuthService($this->getPrivateDirPath() . '/users');
+        $authService = new AuthService($this->getPrivateDirPath().'/users');
 
         // get all properties of a user, unless $user->{'property'} will fail if the request is empty
         $user = $this->getDefaultUser();
@@ -47,11 +45,12 @@ class AdminContentCreateAction extends AdminAction
             $id = $user->{'email'};
             $response = $service->publishById($this->getParam('type'), 'email', $id);
             unset($user);
-            $response->setResult(new \stdClass);
+            $response->setResult(new \stdClass());
             $response->setCode(200);
         } else {
             $response->setError(400, $createresult);
         }
+
         return $this->withResponse($response);
     }
 }

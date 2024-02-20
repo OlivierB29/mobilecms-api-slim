@@ -1,11 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Services;
 
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Services\ThrottleService;
 use PHPUnit\Framework\TestCase;
-use \App\Infrastructure\Services\AuthService;
-use \App\Infrastructure\Services\ThrottleService;
 
 final class AuthServiceTest extends TestCase
 {
@@ -17,19 +18,18 @@ final class AuthServiceTest extends TestCase
         $this->service = new AuthService('tests-data/userservice');
         $this->throttle = new ThrottleService('tests-data/userservice');
 
-        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
-            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
+            \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
-            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
+            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
         }
     }
-
 
     public function testCreateUser()
     {
         $mail = 'testcreate@example.com';
-        $file = 'tests-data/userservice/' . $mail . '.json';
+        $file = 'tests-data/userservice/'.$mail.'.json';
         if (file_exists($file)) {
             unlink($file);
         }
@@ -39,8 +39,6 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue($createresult === null);
         unlink($file);
     }
-
-
 
     public function testCreateUserEmptyEmail()
     {
@@ -63,7 +61,7 @@ final class AuthServiceTest extends TestCase
     public function testCreateUserAlreadyExists()
     {
         $mail = 'testcreate@example.com';
-        $file = 'tests-data/userservice/' . $mail . '.json';
+        $file = 'tests-data/userservice/'.$mail.'.json';
         if (file_exists($file)) {
             unlink($file);
         }
@@ -75,7 +73,6 @@ final class AuthServiceTest extends TestCase
         unlink($file);
     }
 
-
     public function testCreateUserEmptyPassword()
     {
         $mail = 'testcreate@example.com';
@@ -84,6 +81,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue($createresult !== null);
         $this->assertTrue(strpos($createresult, 'EmptyPassword') !== false);
     }
+
     public function testCreateUserEmptyUsername()
     {
         $mail = 'testcreate@example.com';
@@ -93,16 +91,14 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue(strpos($createresult, 'InvalidUser') !== false);
     }
 
-
-
     public function testLoginOk()
     {
-        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
-            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
+            \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
 
-        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
-            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
+            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
         }
         $result = $this->service->login('test@example.com', 'Sample#123456', null);
 
@@ -111,11 +107,11 @@ final class AuthServiceTest extends TestCase
 
     public function testGetToken()
     {
-        if (\file_exists($this->throttle->getLoginHistoryFileName("test@example.com"))) {
-            \unlink($this->throttle->getLoginHistoryFileName("test@example.com"));
+        if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
+            \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-        if (\file_exists($this->throttle->getCaptchaFileName("test@example.com"))) {
-            \unlink($this->throttle->getCaptchaFileName("test@example.com"));
+        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
+            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
         }
 
         $result = $this->service->getToken('test@example.com', 'Sample#123456');
@@ -152,7 +148,7 @@ final class AuthServiceTest extends TestCase
 
         $user = $getTokenResponse->getResult();
 
-        $result = $this->service->verifyToken($user->{'token'} . 'FOOBAR', 'editor');
+        $result = $this->service->verifyToken($user->{'token'}.'FOOBAR', 'editor');
 
         $this->assertTrue($result->getCode() === 401);
     }
@@ -220,25 +216,18 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue($result !== null);
     }
 
-
-
     public function testResetPasswordWrongUser()
     {
         $this->expectException(\Exception::class);
         $this->service->resetPassword('FOOBAR@example.com', 'foo');
     }
 
-
-
-
-
-
     public function testModifyPassword()
     {
         $userdir = 'tests-data/userservice';
         $email = 'modifypasssword@example.com';
 
-        copy($userdir . '/' . $email . '.backup.json', $userdir . '/' . $email . '.json');
+        copy($userdir.'/'.$email.'.backup.json', $userdir.'/'.$email.'.json');
 
         $oldPassword = 'Sample#123456';
 
@@ -260,7 +249,7 @@ final class AuthServiceTest extends TestCase
         $userdir = 'tests-data/userservice';
         $email = 'modifypasssword@example.com';
 
-        copy($userdir . '/' . $email . '.backup.json', $userdir . '/' . $email . '.json');
+        copy($userdir.'/'.$email.'.backup.json', $userdir.'/'.$email.'.json');
 
         $oldPassword = 'foo';
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use App\Infrastructure\Services\AuthService;
@@ -26,23 +27,23 @@ abstract class AuthApiTest extends ApiTest
 
         $this->conf = json_decode(file_get_contents('tests/conf.json'));
 
-        $service = new AuthService(realpath('tests-data') . $this->conf->{'privatedir'} . '/users');
+        $service = new AuthService(realpath('tests-data').$this->conf->{'privatedir'}.'/users');
 
         $response = $service->getToken('editor@example.com', 'Sample#123456');
         $this->user = $response->getResult();
-        $this->token = 'Bearer ' . $this->user->{'token'};
+        $this->token = 'Bearer '.$this->user->{'token'};
 
         $response = $service->getToken('guest@example.com', 'Sample#123456');
         $this->guest = $response->getResult();
-        $this->guesttoken = 'Bearer ' . $this->guest->{'token'};
+        $this->guesttoken = 'Bearer '.$this->guest->{'token'};
 
         $response = $service->getToken('editor@example.com', 'Sample#123456');
         $this->editor = $response->getResult();
-        $this->editortoken = 'Bearer ' . $this->editor->{'token'};
+        $this->editortoken = 'Bearer '.$this->editor->{'token'};
 
         $response = $service->getToken('admin@example.com', 'Sample#123456');
         $this->admin = $response->getResult();
-        $this->admintoken = 'Bearer ' . $this->admin->{'token'};
+        $this->admintoken = 'Bearer '.$this->admin->{'token'};
 
         $this->memory();
         $this->setEditor();
@@ -50,16 +51,16 @@ abstract class AuthApiTest extends ApiTest
 
     protected function setGuest()
     {
-        $this->headers['Authorization']=$this->guesttoken;
+        $this->headers['Authorization'] = $this->guesttoken;
     }
 
     protected function setEditor()
     {
-        $this->headers['Authorization']=$this->editortoken;
+        $this->headers['Authorization'] = $this->editortoken;
     }
 
     protected function setAdmin()
     {
-        $this->headers['Authorization']=$this->admintoken;
+        $this->headers['Authorization'] = $this->admintoken;
     }
 }

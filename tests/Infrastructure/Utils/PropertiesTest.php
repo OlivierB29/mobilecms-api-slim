@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
 use App\Infrastructure\Utils\Properties;
+use PHPUnit\Framework\TestCase;
 
 final class PropertiesTest extends TestCase
 {
@@ -18,7 +19,7 @@ final class PropertiesTest extends TestCase
 
     public function testConf()
     {
-        $this->assertTrue("bar" == $this->conf->getString('foo'));
+        $this->assertTrue('bar' == $this->conf->getString('foo'));
     }
 
     public function testEmptyConf()

@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\File;
 
-use Slim\Exception\HttpBadRequestException;//400
-use Slim\Exception\HttpNotFoundException;//404
-use Slim\Exception\HttpInternalServerErrorException;//500
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface as Response; //400
+//404
+use Psr\Http\Message\StreamInterface; //500
 use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\StreamInterface;
-use App\Infrastructure\Services\FileService;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class BasicUploadPostAction extends FileAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -24,7 +23,7 @@ class BasicUploadPostAction extends FileAction
         //get the full data of a single record
         // eg : /mobilecmsapi/v1/file/calendar/1
         $files = $this->request->getUploadedFiles();
-  
+
         /* just in case
 
                if (isset($tmpfiles['uploadfiles1'])) {
@@ -42,20 +41,18 @@ class BasicUploadPostAction extends FileAction
         $response->setCode(200);
 
         $response->setResult($uploadResult);
-               
+
         return $this->withResponse($response);
     }
-
 
     private function uploadFilesSlim($type, $id, $files): array
     {
         $result = [];
 
-        
         if (!isset($files) || count($files) === 0) {
             throw new HttpBadRequestException($this->request, 'no file.');
         }
-        
+
         // Basic upload verification
         foreach ($files as $fileControl) {
             if (!$this->isAllowedExtension($fileControl->getClientFilename())) {
@@ -67,7 +64,6 @@ class BasicUploadPostAction extends FileAction
                     throw new \Exception("files ? " . $tmpfile->getClientFilename());
                 }
         */
-        
 
         foreach ($files as $file) {
             $fileResult = $this->uploadFile($type, $id, $file);
@@ -82,7 +78,7 @@ class BasicUploadPostAction extends FileAction
         file_put_contents($file, $s->getContents());
     }
 
-    private function uploadFile(string $type, string $id, UploadedFileInterface $file) : \stdClass
+    private function uploadFile(string $type, string $id, UploadedFileInterface $file): \stdClass
     {
         $result = null;
         $destdir = $this->getRecordDirPath($type, $id);
@@ -95,26 +91,25 @@ class BasicUploadPostAction extends FileAction
 
         // upload
         if ($file->getClientFilename() !== null) {
-            $destfile = $destdir . '/' . $file->getClientFilename();
+            $destfile = $destdir.'/'.$file->getClientFilename();
 
             if ($this->getExtension($file->getClientFilename()) === 'pdf') {
                 $this->writeStream($destfile, $file->getStream());
             } else {
                 $file->moveTo($destfile);
             }
-            
+
             if (!file_exists($destfile)) {
-                throw new HttpInternalServerErrorException($this->request, 'Upload error ' . $file->getClientFilename());
+                throw new HttpInternalServerErrorException($this->request, 'Upload error '.$file->getClientFilename());
             }
 
-
- 
             chmod($destfile, $this->umask);
             $title = $file->getClientFilename();
             $url = $file->getClientFilename();
 
             $result = $this->getFileResponse($destfile, $title, $url);
         }
+
         return $result;
     }
 }

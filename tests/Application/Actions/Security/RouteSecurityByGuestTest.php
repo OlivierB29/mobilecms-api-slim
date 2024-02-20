@@ -1,19 +1,10 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Application\Actions\Security;
 
-use App\Application\Actions\ActionError;
-use App\Application\Actions\ActionPayload;
-use App\Application\Handlers\HttpErrorHandler;
-
-use DI\Container;
-use Slim\Middleware\ErrorMiddleware;
-
 use Tests\AuthApiTest;
-use App\Infrastructure\Utils\Properties;
-
-use App\Infrastructure\Utils\FileUtils;
 
 final class RouteSecurityByGuestTest extends AuthApiTest
 {
@@ -25,45 +16,36 @@ final class RouteSecurityByGuestTest extends AuthApiTest
         $this->setGuest();
     }
 
-
     public function testXssByGuest1()
     {
         $xss = '<script>alert("foo")</script>';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi().'/cmsapi/content/calendar/1'.'?'.$xss;
 
         $response = $this->request('GET', $this->path);
 
-
         $this->assertEquals(401, $response->getCode());
         $this->assertTrue($response != null);
-
-
     }
 
     public function testXssByGuest2()
     {
         $xss = 'foo=bar';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi().'/cmsapi/content/calendar/1'.'?'.$xss;
 
         $response = $this->request('GET', $this->path);
 
-
         $this->assertEquals(401, $response->getCode());
         $this->assertTrue($response != null);
-
-
     }
-    
+
     public function testXssByGuest3()
     {
         $xss = 'request=phpinfo()';
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . '?' . $xss;
+        $this->path = $this->getApi().'/cmsapi/content/calendar/1'.'?'.$xss;
 
         $response = $this->request('GET', $this->path);
 
-
         $this->assertEquals(401, $response->getCode());
         $this->assertTrue($response != null);
-
     }
 }

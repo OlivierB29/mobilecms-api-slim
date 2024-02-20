@@ -1,8 +1,9 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\JwtToken;
 use App\Infrastructure\Rest\Response;
-use App\Infrastructure\Services\ThrottleService;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\Properties;
 use Firebase\JWT\JWT;
@@ -63,26 +64,24 @@ class AuthService
         $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
 
-    public function controlCaptcha($email, $captchaAnswer) {
+    public function controlCaptcha($email, $captchaAnswer)
+    {
         $captchaValidated = false;
         if ($this->throttle->isCaptchaCreated($email)) {
-            
             $captchaObj = $this->throttle->getCaptcha($email);
 
-
-            if($captchaObj === null) {
-                throw new \Exception('captchaObj is null');                
+            if ($captchaObj === null) {
+                throw new \Exception('captchaObj is null');
             }
 
             if (isset($captchaObj) && isset($captchaObj->{'answer'}) && $captchaObj->{'answer'} === $captchaAnswer) {
                 $captchaValidated = true;
             }
-
-          
         } else {
             // no captcha required
             $captchaValidated = true;
         }
+
         return $captchaValidated;
     }
 
@@ -105,42 +104,29 @@ class AuthService
         // return the existing user
         $user = $this->service->getJsonUser($email);
 
-
-
         // user verification
         if (!empty($user)) {
-
-        // captcha start verification
-        $captchaValidated = $this->controlCaptcha($email, $captchaAnswer);
-        if (!$captchaValidated) {
-            $loginmsg = 'wrong captcha';
-        }
-        // captcha end
-
-
-        if ( $captchaValidated ) {
-
-
-            if ($captchaValidated && password_verify($password, $user->{'password'})) {
-                $loginmsg = '';
-
-                $this->throttle->archiveOldFailed($user->{'email'});
-
-            } else {
-                $loginmsg = 'Wrong password'; 
+            // captcha start verification
+            $captchaValidated = $this->controlCaptcha($email, $captchaAnswer);
+            if (!$captchaValidated) {
+                $loginmsg = 'wrong captcha';
             }
+            // captcha end
 
+            if ($captchaValidated) {
+                if ($captchaValidated && password_verify($password, $user->{'password'})) {
+                    $loginmsg = '';
 
+                    $this->throttle->archiveOldFailed($user->{'email'});
+                } else {
+                    $loginmsg = 'Wrong password';
+                }
+            } else {
+                $failed = $this->throttle->saveFailedLogin($user->{'email'});
+            }
         } else {
-            $failed = $this->throttle->saveFailedLogin($user->{'email'});   
+            $loginmsg = 'Wrong user';
         }
-
-    } else {
-        $loginmsg = 'Wrong user'; 
-    }
-        
-        
-  
 
         return $loginmsg;
     }
@@ -155,15 +141,14 @@ class AuthService
      */
     public function getToken($emailParam, $password, $captchaAnswer = null): Response
     {
-
         if ('captchatest@example.com' === $emailParam) {
-#            $foo = "bar";
+//            $foo = "bar";
         }
 
         // initialize Response
         $response = new Response();
         $response->setCode(401);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         $loginmsg = 'Wrong login';
 
@@ -174,78 +159,72 @@ class AuthService
         $user = $this->service->getJsonUser($email);
         // user verification
         if (!empty($user)) {
-
             // captcha start verification
             $captchaValidated = $this->controlCaptcha($email, $captchaAnswer);
             if (!$captchaValidated) {
                 $loginmsg = 'wrong captcha';
             }
             // captcha end
-// password
-if ($captchaValidated && password_verify($password, $user->{'password'})) {
-    $this->throttle->archiveOldFailed($user->{'email'});
+            // password
+            if ($captchaValidated && password_verify($password, $user->{'password'})) {
+                $this->throttle->archiveOldFailed($user->{'email'});
 
-    $token = null;
-    $jwt = new JwtToken();
-    if ('php-jwt' === $this->jwtImpl) {
-        $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
+                $token = null;
+                $jwt = new JwtToken();
+                if ('php-jwt' === $this->jwtImpl) {
+                    $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
 
-        $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
-    } else {
-        // old jwt impl
+                    $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
+                } else {
+                    // old jwt impl
 
-        $token = $jwt->createTokenFromUser(
-            $user->{'name'},
-            $user->{'email'},
-            $user->{'role'},
-            $user->{'salt'}
-        );
-        unset($jwt);
-    }
+                    $token = $jwt->createTokenFromUser(
+                        $user->{'name'},
+                        $user->{'email'},
+                        $user->{'role'},
+                        $user->{'salt'}
+                    );
+                    unset($jwt);
+                }
 
-    $response->setCode(200);
-    $userResponse = json_decode('{}');
-    $userResponse->{'name'} = $user->{'name'};
-    $userResponse->{'username'} = $user->{'name'};
-    $userResponse->{'email'} = $user->{'email'};
-    $userResponse->{'role'} = $user->{'role'};
-    $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
-    $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
-    /*
-    if ($user->{'newpasswordrequired'} !== 'true') {
-    $userResponse->{'token'} = $token;
-    }
-     */
-    $userResponse->{'token'} = $token;
+                $response->setCode(200);
+                $userResponse = json_decode('{}');
+                $userResponse->{'name'} = $user->{'name'};
+                $userResponse->{'username'} = $user->{'name'};
+                $userResponse->{'email'} = $user->{'email'};
+                $userResponse->{'role'} = $user->{'role'};
+                $userResponse->{'clientalgorithm'} = $user->{'clientalgorithm'};
+                $userResponse->{'newpasswordrequired'} = $user->{'newpasswordrequired'};
+                /*
+                if ($user->{'newpasswordrequired'} !== 'true') {
+                $userResponse->{'token'} = $token;
+                }
+                 */
+                $userResponse->{'token'} = $token;
 
-    $response->setResult($userResponse);
-    // success
-    $loginmsg = '';
-} else {
-    // incorrect password
-    $loginmsg = 'wrong password';
-    $failed = $this->throttle->saveFailedLogin($user->{'email'});
+                $response->setResult($userResponse);
+                // success
+                $loginmsg = '';
+            } else {
+                // incorrect password
+                $loginmsg = 'wrong password';
+                $failed = $this->throttle->saveFailedLogin($user->{'email'});
 
-    $userResponse = json_decode('{}');
-    $userResponse->{'name'} = $user->{'name'};
-    $userResponse->{'username'} = $user->{'name'};
-    $userResponse->{'email'} = $user->{'email'};
-    $newCaptcha = $this->throttle->createCaptcha($user->{'email'});
-    if ($newCaptcha != null) {
-        $userResponse->{'captcha'} = $newCaptcha->{'question'};
-    }
+                $userResponse = json_decode('{}');
+                $userResponse->{'name'} = $user->{'name'};
+                $userResponse->{'username'} = $user->{'name'};
+                $userResponse->{'email'} = $user->{'email'};
+                $newCaptcha = $this->throttle->createCaptcha($user->{'email'});
+                if ($newCaptcha != null) {
+                    $userResponse->{'captcha'} = $newCaptcha->{'question'};
+                }
 
-    $response->setResult($userResponse);
-}
-
+                $response->setResult($userResponse);
+            }
         } else {
             $loginmsg = 'wrong user';
-        }      
+        }
         // user found
-
-
-
-        
 
         return $response;
     }
@@ -265,7 +244,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
         $response = new Response();
         $response->setCode(401);
 
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         $loginmsg = 'Wrong login';
 
@@ -289,7 +268,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
             if (empty($updateMsg)) {
                 $response = $this->getPublicInfo($email);
             } else {
-                $response->setError(500, 'createUserWithSecret error ' . $updateMsg);
+                $response->setError(500, 'createUserWithSecret error '.$updateMsg);
             }
         } else {
             // incorrect password
@@ -309,8 +288,8 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
     /**
      * Verify token.
      *
-     * @param string $token : token
-     * @param string $requiredRole  : role (editor ...)
+     * @param string $token        : token
+     * @param string $requiredRole : role (editor ...)
      *
      * @return Response object
      */
@@ -374,7 +353,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
         $response = new Response();
         $response->setCode(401);
 
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         $loginmsg = 'Wrong login';
 
@@ -402,7 +381,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
             } else {
                 // @codeCoverageIgnoreStart
                 // ignore test coverage : it should not happen and it is too specific
-                $response->setError(500, 'resetPassword error ' . $updateMsg);
+                $response->setError(500, 'resetPassword error '.$updateMsg);
                 // @codeCoverageIgnoreEnd
             }
         }
@@ -432,7 +411,6 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
                     $info->{'captcha'} = $captchaObject->{'question'};
                 }
 
-
                 $response->setResult($info);
                 $response->setCode(200);
             }
@@ -441,13 +419,13 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
         return $response;
     }
 
-    public function createCaptchaIfRequired($email) {
+    public function createCaptchaIfRequired($email)
+    {
         $captchaResult = null;
         if ($this->throttle->isCaptchaRequired($email)) {
-                    
             $captchaResult = $this->throttle->createCaptcha($email);
-
         }
+
         return $captchaResult;
     }
 
@@ -472,7 +450,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
     {
         $response = new Response();
         $response->setCode(400);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         return $response;
     }
@@ -481,7 +459,7 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
      * Control if the current user has access to API.
      *
      * @param \stdClass $user         object
-     * @param string   $requiredRole required role
+     * @param string    $requiredRole required role
      *
      * @return bool true if access is authorized
      */
@@ -544,10 +522,10 @@ if ($captchaValidated && password_verify($password, $user->{'password'})) {
     /**
      * Create a new user.
      *
-     * @param string $username       : username
-     * @param string $emailParam       : email
-     * @param string $password       : password
-     * @param string $mode           : values 'create' or 'update'
+     * @param string $username   : username
+     * @param string $emailParam : email
+     * @param string $password   : password
+     * @param string $mode       : values 'create' or 'update'
      *
      * @return string empty string if success
      */

@@ -1,4 +1,6 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 define('EMPTYSTR', '');
 /**
@@ -6,7 +8,6 @@ define('EMPTYSTR', '');
  */
 class StringUtils
 {
-
     /**
      * Starts with string ?
      *
@@ -18,6 +19,7 @@ class StringUtils
     public static function startsWith(string $haystack, string $needle)
     {
         $length = strlen($needle);
+
         return substr($haystack, 0, $length) === $needle;
     }
 
@@ -32,6 +34,7 @@ class StringUtils
     public static function endsWith(string $haystack, string $needle)
     {
         $length = strlen($needle);
+
         return substr($haystack, -$length) === $needle;
     }
 }

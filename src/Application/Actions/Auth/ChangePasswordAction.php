@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
@@ -7,11 +8,10 @@ use App\Infrastructure\Services\AuthService;
 use Psr\Http\Message\ResponseInterface as Response;
 
 /**
- * Change password
+ * Change password.
  */
 class ChangePasswordAction extends AuthAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -22,7 +22,7 @@ class ChangePasswordAction extends AuthAction
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
 
-        $service = new AuthService($this->getPrivateDirPath() . '/users');
+        $service = new AuthService($this->getPrivateDirPath().'/users');
 
         // login and get token
         // eg : { "user": "test@example.com", "password":"Sample#123456"}

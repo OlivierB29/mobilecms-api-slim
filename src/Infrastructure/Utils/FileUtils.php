@@ -1,7 +1,9 @@
-<?php namespace App\Infrastructure\Utils;
+<?php
+
+namespace App\Infrastructure\Utils;
 
 /**
- * File utilities
+ * File utilities.
  */
 class FileUtils
 {
@@ -10,6 +12,7 @@ class FileUtils
         $file_info = new \finfo(FILEINFO_MIME_TYPE);
         $mime_type = $file_info->buffer(\file_get_contents($file));
         unset($file_info);
+
         return $mime_type;
     }
 
@@ -31,10 +34,10 @@ class FileUtils
     // }
 
     /**
-     * Copy a directory to another
+     * Copy a directory to another.
      *
      * @param string $source : source
-     * @param string $dest : dest
+     * @param string $dest   : dest
      */
     public function copydir($source, $dest)
     {
@@ -43,11 +46,11 @@ class FileUtils
         }
         foreach ($iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item) {
             if ($item->isDir()) {
-                if (!file_exists($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) {
-                    mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                if (!file_exists($dest.DIRECTORY_SEPARATOR.$iterator->getSubPathName())) {
+                    mkdir($dest.DIRECTORY_SEPARATOR.$iterator->getSubPathName());
                 }
             } else {
-                copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                copy($item, $dest.DIRECTORY_SEPARATOR.$iterator->getSubPathName());
             }
         }
     }
@@ -65,19 +68,21 @@ class FileUtils
         }
         rmdir($dir);
     }
+
     /**
-        * Copy a directory without recursion
-        *
-        * @param string $src : source
-        * @param string $dst : dest
-        */
-    public function copyDirectoryWithoutRecursion($src, $dst) {
+     * Copy a directory without recursion.
+     *
+     * @param string $src : source
+     * @param string $dst : dest
+     */
+    public function copyDirectoryWithoutRecursion($src, $dst)
+    {
         $dir = opendir($src);
         @mkdir($dst);
-        while(false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                if (!is_dir($src . '/' . $file)) {
-                    copy($src . '/' . $file, $dst . '/' . $file);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (!is_dir($src.'/'.$file)) {
+                    copy($src.'/'.$file, $dst.'/'.$file);
                 }
             }
         }

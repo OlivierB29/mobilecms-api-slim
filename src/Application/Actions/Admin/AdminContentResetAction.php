@@ -1,20 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
+use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Services\ContentService;
 use Psr\Http\Message\ResponseInterface as Response;
 
-use App\Infrastructure\Services\ContentService;
-
-use App\Infrastructure\Services\AuthService;
-
 /**
- * Reset password
+ * Reset password.
  */
 class AdminContentResetAction extends AdminAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -24,7 +22,7 @@ class AdminContentResetAction extends AdminAction
 
         $this->checkConfiguration();
         $service = new ContentService($this->getPrivateDirPath());
-        $authService = new AuthService($this->getPrivateDirPath() . '/users');
+        $authService = new AuthService($this->getPrivateDirPath().'/users');
 
         // save a record and update the index. eg : /mobilecmsapi/v1/content/calendar
         // step 1 : update Record
@@ -47,6 +45,7 @@ class AdminContentResetAction extends AdminAction
             unset($myobjectJson);
             $response = $service->publishById($this->getParam('type'), 'email', $id);
         }
+
         return $this->withResponse($response);
     }
 }

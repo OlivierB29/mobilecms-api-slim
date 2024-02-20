@@ -1,14 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\File;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use App\Infrastructure\Services\FileService;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class BasicUploadGetAction extends FileAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -26,6 +26,7 @@ class BasicUploadGetAction extends FileAction
         $response->setCode(200);
 
         $response->setResult($uploadResult);
+
         return $this->withResponse($response);
     }
 }

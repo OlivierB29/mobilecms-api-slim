@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
@@ -7,11 +8,10 @@ use App\Infrastructure\Services\AuthService;
 use Psr\Http\Message\ResponseInterface as Response;
 
 /**
- * Authenticate and return a token
+ * Authenticate and return a token.
  */
 class AuthenticateAction extends AuthAction
 {
-
     /**
      * {@inheritdoc}
      */
@@ -35,7 +35,7 @@ class AuthenticateAction extends AuthAction
             if (isset($logindata->{'captchaanswer'})) {
                 $captchaanswer = $logindata->{'captchaanswer'};
             }
-            $service = new AuthService($this->getPrivateDirPath() . '/users');
+            $service = new AuthService($this->getPrivateDirPath().'/users');
 
             $response = $service->getToken($this->getUser($logindata), $logindata->{'password'}, $captchaanswer);
             unset($logindata);
@@ -47,6 +47,7 @@ class AuthenticateAction extends AuthAction
         } finally {
             // @codeCoverageIgnoreEnd
         }
+
         return $this->withResponse($response);
     }
 }

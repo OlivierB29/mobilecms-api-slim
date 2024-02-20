@@ -1,32 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+use App\Infrastructure\Rest\Response as RestResponse;
+use App\Infrastructure\Utils\Properties;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
-
-
-use App\Application\Actions\Action;
-
-use App\Infrastructure\Utils\Properties;
-use App\Infrastructure\Rest\Response as RestResponse;
 
 abstract class RestAction extends Action
 {
     protected $usepost = false;
 
-
     /**
      * @param LoggerInterface $logger
-     *
      */
     public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
     }
-
 
     /**
      * Get main working directory.
@@ -45,7 +39,7 @@ abstract class RestAction extends Action
      */
     public function getPublicDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'publicdir'};
+        return $this->getRootDir().$this->getConf()->{'publicdir'};
     }
 
     /**
@@ -55,7 +49,7 @@ abstract class RestAction extends Action
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'media'};
+        return $this->getRootDir().$this->getConf()->{'media'};
     }
 
     /**
@@ -65,53 +59,54 @@ abstract class RestAction extends Action
      */
     public function getPrivateDirPath(): string
     {
-        return $this->getRootDir() . $this->getConf()->{'privatedir'};
+        return $this->getRootDir().$this->getConf()->{'privatedir'};
     }
 
     /**
-    * get JSON conf
-    * @return \stdClass JSON conf
-    */
+     * get JSON conf.
+     *
+     * @return \stdClass JSON conf
+     */
     public function getConf()
     {
         return Properties::getInstance()->getConf();
     }
 
     /**
-    * get conf
-    * @return Properties  conf
-    */
+     * get conf.
+     *
+     * @return Properties conf
+     */
     public function getProperties()
     {
         return Properties::getInstance();
     }
 
     /**
-     * replace it later
+     * replace it later.
      */
-    public function getParam(string $arg) : string
+    public function getParam(string $arg): string
     {
         return $this->resolveArg($arg);
     }
-    
-
 
     /**
      * Initialize a default Response object.
      *
      * @return RestResponse object
      */
-    protected function getDefaultResponse() : RestResponse
+    protected function getDefaultResponse(): RestResponse
     {
         $response = new RestResponse();
         $response->setCode(400);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         return $response;
     }
 
     /**
-     * @param  RestResponse $resp
+     * @param RestResponse $resp
+     *
      * @return ResponseInterface
      */
     protected function withResponse(RestResponse $resp): ResponseInterface
@@ -137,11 +132,9 @@ abstract class RestAction extends Action
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new HttpBadRequestException($this->request, 'Malformed JSON input.');
             }
-    
+
             return $input;
         }
-    
-
 
         throw new \Exception('request body');
     }
@@ -156,7 +149,7 @@ abstract class RestAction extends Action
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new HttpBadRequestException($this->request, 'Malformed JSON input.');
             }
-    
+
             return $input;
         }
     }
@@ -181,7 +174,7 @@ abstract class RestAction extends Action
         $result = \strip_tags($input);
         $result = $this->xss_clean($result);
         $result = \htmlspecialchars($result, ENT_NOQUOTES, 'UTF-8');
-        ;
+
         return $result;
     }
 
@@ -189,7 +182,7 @@ abstract class RestAction extends Action
     protected function xss_clean($data)
     {
         // Fix &entity\n;
-        $data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
+        $data = str_replace(['&amp;', '&lt;', '&gt;'], ['&amp;amp;', '&amp;lt;', '&amp;gt;'], $data);
         $data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
         $data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
         $data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');

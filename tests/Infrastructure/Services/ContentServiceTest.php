@@ -1,11 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Services;
 
-use PHPUnit\Framework\TestCase;
-
 use App\Infrastructure\Services\ContentService;
+use PHPUnit\Framework\TestCase;
 
 final class ContentServiceTest extends TestCase
 {
@@ -64,7 +64,7 @@ final class ContentServiceTest extends TestCase
         $service = new ContentService($this->dir);
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
-        $file = $this->dir . '/calendar/10.json';
+        $file = $this->dir.'/calendar/10.json';
 
         $this->assertEquals(400, $response->getCode());
     }
@@ -75,7 +75,7 @@ final class ContentServiceTest extends TestCase
         $service = new ContentService($this->dir);
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
-        $file = $this->dir . '/calendar/10.json';
+        $file = $this->dir.'/calendar/10.json';
 
         $this->assertEquals(200, $response->getCode());
 
@@ -88,12 +88,11 @@ final class ContentServiceTest extends TestCase
         $service = new ContentService('tests-data2/public1');
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
-        $file = 'tests-data2/public1' . '/calendar/210.json';
+        $file = 'tests-data2/public1'.'/calendar/210.json';
 
         $this->assertEquals(200, $response->getCode());
 
         $this->assertJsonStringEqualsJsonFile($file, $recordStr);
-
 
         $response = $service->publishById('calendar', 'id', '210');
     }
@@ -104,7 +103,7 @@ final class ContentServiceTest extends TestCase
         $service = new ContentService('tests-data2/public2');
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
-        $file = 'tests-data2/public2' . '/calendar/220.json';
+        $file = 'tests-data2/public2'.'/calendar/220.json';
 
         $this->assertEquals(200, $response->getCode());
 
@@ -119,12 +118,13 @@ final class ContentServiceTest extends TestCase
         $service = new ContentService($this->dir);
         $response = $service->update('calendar', 'id', json_decode($recordStr));
 
-        $file = $this->dir . '/calendar/5.json';
+        $file = $this->dir.'/calendar/5.json';
 
         $this->assertEquals(200, $response->getCode());
 
         $this->assertJsonStringEqualsJsonFile($file, $recordStr);
     }
+
     public function testPublish()
     {
         $service = new ContentService($this->dir);

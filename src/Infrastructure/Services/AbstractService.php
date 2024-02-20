@@ -1,14 +1,12 @@
-<?php namespace App\Infrastructure\Services;
+<?php
+
+namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\Properties;
 
 abstract class AbstractService
 {
-
-
-
-
     /**
      * Main directory (eg: /opt/foobar/data ).
      */
@@ -23,7 +21,7 @@ abstract class AbstractService
 
             $this->recordConf->loadRecordConf($this->getDatabaseDir(), $this->getConfFileName($type));
         }
- 
+
         return $this->recordConf;
     }
 
@@ -36,16 +34,15 @@ abstract class AbstractService
         if (empty(\realpath($this->databasedir))) {
             throw new \Exception('databasedir : invalid path');
         }
-    
-        return $this->databasedir ;
-    }
 
-    
+        return $this->databasedir;
+    }
 
     protected function getConfFileName(string $type): string
     {
         $this->checkType($type);
-        return \realpath($this->getDatabaseDir() . '/' . $type . '/index/conf.json');
+
+        return \realpath($this->getDatabaseDir().'/'.$type.'/index/conf.json');
     }
 
     protected function checkType(string $type)
@@ -73,7 +70,7 @@ abstract class AbstractService
     {
         $response = new Response();
         $response->setCode(400);
-        $response->setResult(new \stdClass);
+        $response->setResult(new \stdClass());
 
         return $response;
     }

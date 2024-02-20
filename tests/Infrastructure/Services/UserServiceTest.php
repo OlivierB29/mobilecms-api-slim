@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Services;
 
+use App\Infrastructure\Services\UserService;
 use PHPUnit\Framework\TestCase;
-use \App\Infrastructure\Services\UserService;
 
 final class UserServiceTest extends TestCase
 {
@@ -14,7 +15,6 @@ final class UserServiceTest extends TestCase
     {
         $this->service = new UserService('tests-data/userservice');
     }
-
 
     public function testCanRead()
     {
@@ -30,13 +30,12 @@ final class UserServiceTest extends TestCase
         );
     }
 
-
-
     public function testGetJsonUserFileEmptyEmail()
     {
         $this->expectException(\Exception::class);
         $this->service->getJsonUserFile('');
     }
+
     public function testGetJsonUserFileEmptyDatabase()
     {
         $this->expectException(\Exception::class);

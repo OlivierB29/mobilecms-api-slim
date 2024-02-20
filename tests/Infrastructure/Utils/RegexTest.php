@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Infrastructure\Utils;
 
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ final class RegexTest extends TestCase
 
         $endpoint = 'content';
         // Regex example : /content/calendar/some-accents_àéü.json
-        $test = preg_match('/\/' . $endpoint . '\/([-a-zA-Z0-9_]*)\/([\p{L})-_\.]+)/ui', '/content/aaa/a_b-c.json', $matches, PREG_OFFSET_CAPTURE);
+        $test = preg_match('/\/'.$endpoint.'\/([-a-zA-Z0-9_]*)\/([\p{L})-_\.]+)/ui', '/content/aaa/a_b-c.json', $matches, PREG_OFFSET_CAPTURE);
         $this->assertEquals(1, $test);
         $this->assertEquals('aaa', $matches[1][0]);
         $this->assertEquals('a_b-c.json', $matches[2][0]);

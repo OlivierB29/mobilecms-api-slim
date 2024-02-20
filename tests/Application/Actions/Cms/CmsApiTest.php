@@ -1,19 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Tests\Application\Actions\Cms;
 
-use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
-use App\Application\Handlers\HttpErrorHandler;
-
-use DI\Container;
-use Slim\Middleware\ErrorMiddleware;
-
-use Tests\AuthApiTest;
-use App\Infrastructure\Utils\Properties;
-
 use App\Infrastructure\Utils\FileUtils;
+use Tests\AuthApiTest;
 
 final class CmsApiTest extends AuthApiTest
 {
@@ -27,7 +20,7 @@ final class CmsApiTest extends AuthApiTest
 
     public function testTypes()
     {
-        $this->path = $this->getApi() . '/cmsapi/content';
+        $this->path = $this->getApi().'/cmsapi/content';
         $this->SERVER = ['REQUEST_URI' => $this->path,    'REQUEST_METHOD' => 'GET', 'HTTP_ORIGIN' => 'foobar'];
         $response = $this->request('GET', $this->path);
 
@@ -42,16 +35,13 @@ final class CmsApiTest extends AuthApiTest
 
     public function testPostSuccess()
     {
-
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = $this->getApi() . '/cmsapi/content/calendar';
+        $this->path = $this->getApi().'/cmsapi/content/calendar';
 
-
-        $recordStr = file_get_contents($this->API->getPublicDirPath() . '/big.json');
+        $recordStr = file_get_contents($this->API->getPublicDirPath().'/big.json');
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
         $response = $this->request('POST', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -86,16 +76,13 @@ final class CmsApiTest extends AuthApiTest
 
     public function testPostHtml()
     {
-
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = $this->getApi() . '/cmsapi/content/calendar';
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar';
 
         $recordStr = file_get_contents('tests-data/public/html.json');
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
         $response = $this->request('POST', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -107,16 +94,13 @@ final class CmsApiTest extends AuthApiTest
 
     public function testPostBBCode()
     {
-
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = $this->getApi() . '/cmsapi/content/calendar';
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar';
 
         $recordStr = file_get_contents('tests-data/public/bbcode.json');
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
         $response = $this->request('POST', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -126,16 +110,13 @@ final class CmsApiTest extends AuthApiTest
 
     public function testUpdateBBCode()
     {
-
         // echo 'testPostSuccess: ' . $this->memory();
-        $this->path = $this->getApi() . '/cmsapi/content/calendar';
+        $this->path = $this->getApi().'/cmsapi/content/calendar';
 
-
-        $recordStr = file_get_contents($this->API->getPublicDirPath() . '/6.json');
+        $recordStr = file_get_contents($this->API->getPublicDirPath().'/6.json');
         $this->POST = ['requestbody' => $recordStr];
         unset($recordStr);
         $response = $this->request('POST', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -145,10 +126,8 @@ final class CmsApiTest extends AuthApiTest
 
     public function testEmptyToken()
     {
-        $this->path = $this->getApi() . '/cmsapi/content/calendar';
-        $this->headers['Authorization']= '';
-
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar';
+        $this->headers['Authorization'] = '';
 
         $this->GET = ['requestbody' => '{}'];
         $response = $this->request('GET', $this->path);
@@ -158,12 +137,10 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarList()
     {
-        $this->path = $this->getApi() . '/cmsapi/content/calendar' . $this->requestparams;
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar'.$this->requestparams;
 
         $this->GET = ['requestbody' => '{}'];
         $response = $this->request('GET', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -176,10 +153,9 @@ final class CmsApiTest extends AuthApiTest
     public function testGetByGuest()
     {
         $this->setGuest();
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1';
+        $this->path = $this->getApi().'/cmsapi/content/calendar/1';
 
         $response = $this->request('GET', $this->path);
-
 
         $this->assertEquals(401, $response->getCode());
         $this->assertTrue($response != null);
@@ -189,11 +165,9 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarRecord()
     {
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/1' . $this->requestparams;
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar/1'.$this->requestparams;
 
         $response = $this->request('GET', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
@@ -202,7 +176,6 @@ final class CmsApiTest extends AuthApiTest
         $this->assertTrue($response->getResult() != null);
         $this->assertTrue($response->getResult()->{'id'} === '1');
 
-       
         $this->assertTrue($response->getResult()->{'type'} === 'calendar');
 
         $this->assertFalse(empty($response->getResult()->{'date'}));
@@ -211,10 +184,9 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetCalendarError()
     {
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/999999999';
+        $this->path = $this->getApi().'/cmsapi/content/calendar/999999999';
 
         $response = $this->request('GET', $this->path);
-
 
         $this->assertEquals(404, $response->getCode());
     }
@@ -223,21 +195,17 @@ final class CmsApiTest extends AuthApiTest
     {
         $id = 'exampleid';
 
-
         //clone backup to directory
-        $recordfile = $this->API->getPublicDirPath() . '/calendar/' . $id . '.json';
-        copy($this->API->getPublicDirPath() . '/calendar/backup/' . $id . '.json', $recordfile);
+        $recordfile = $this->API->getPublicDirPath().'/calendar/'.$id.'.json';
+        copy($this->API->getPublicDirPath().'/calendar/backup/'.$id.'.json', $recordfile);
 
         $fileutils = new FileUtils();
-        $mediadir = $this->API->getMediaDirPath() . '/calendar/' . $id;
-        $fileutils->copydir($this->API->getMediaDirPath() . '/calendar/backup/' . $id, $mediadir);
+        $mediadir = $this->API->getMediaDirPath().'/calendar/'.$id;
+        $fileutils->copydir($this->API->getMediaDirPath().'/calendar/backup/'.$id, $mediadir);
 
-        $this->path = $this->getApi() . '/cmsapi/content/calendar/' . $id;
-
-
+        $this->path = $this->getApi().'/cmsapi/content/calendar/'.$id;
 
         $response = $this->request('DELETE', $this->path);
-
 
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
@@ -250,59 +218,50 @@ final class CmsApiTest extends AuthApiTest
 
     public function testDeleteList()
     {
-
-
         //clone backup to directory
         $ids = ['101', '102', '103'];
         foreach ($ids as $id) {
-            $recordfile = $this->API->getPublicDirPath() . '/calendar/' . $id . '.json';
-            copy($this->API->getPublicDirPath() . '/calendar/backuplist/' . $id . '.json', $recordfile);
+            $recordfile = $this->API->getPublicDirPath().'/calendar/'.$id.'.json';
+            copy($this->API->getPublicDirPath().'/calendar/backuplist/'.$id.'.json', $recordfile);
         }
 
-        $this->path = $this->getApi() . '/cmsapi/deletelist/calendar';
-
+        $this->path = $this->getApi().'/cmsapi/deletelist/calendar';
 
         $this->POST = ['requestbody' => \json_encode($ids)];
         $response = $this->request('POST', $this->path);
-
 
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
         foreach ($ids as $id) {
-            $recordfile = $this->API->getPublicDirPath() . '/calendar/' . $id . '.json';
+            $recordfile = $this->API->getPublicDirPath().'/calendar/'.$id.'.json';
             $this->assertTrue(!file_exists($recordfile));
 
-            $mediadir = $this->API->getMediaDirPath() . '/calendar/' . $id;
+            $mediadir = $this->API->getMediaDirPath().'/calendar/'.$id;
             $this->assertTrue(!is_dir($mediadir));
         }
 
         $this->assertJsonStringEqualsJsonString('{}', $response->getEncodedResult());
     }
 
-
-
     public function testGetIndex()
     {
-        $this->path = $this->getApi() . '/cmsapi/index/calendar' . $this->requestparams;
-
+        $this->path = $this->getApi().'/cmsapi/index/calendar'.$this->requestparams;
 
         $response = $this->request('GET', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
 
         $this->assertTrue($response != null);
-        $index_data = file_get_contents($this->API->getPublicDirPath() . '/calendar/index/index.json');
+        $index_data = file_get_contents($this->API->getPublicDirPath().'/calendar/index/index.json');
 
         $this->assertJsonStringEqualsJsonString($index_data, $response->getEncodedResult());
     }
 
     public function testPostRebuildIndex()
     {
-        $this->path = $this->getApi() . '/cmsapi/index/calendar' . $this->requestparams;
-
+        $this->path = $this->getApi().'/cmsapi/index/calendar'.$this->requestparams;
 
         $response = $this->request('POST', $this->path);
 
@@ -311,41 +270,37 @@ final class CmsApiTest extends AuthApiTest
 
     public function testGetMetadata()
     {
-        $this->path = $this->getApi() . '/cmsapi/metadata/calendar';
-
+        $this->path = $this->getApi().'/cmsapi/metadata/calendar';
 
         $response = $this->request('GET', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
 
         $this->assertTrue($response != null);
-        $index_data = file_get_contents($this->API->getPublicDirPath() . '/calendar/index/metadata.json');
+        $index_data = file_get_contents($this->API->getPublicDirPath().'/calendar/index/metadata.json');
 
         $this->assertJsonStringEqualsJsonString($index_data, $response->getEncodedResult());
     }
 
     public function testTemplate()
     {
-        $this->path = $this->getApi() . '/cmsapi/template/calendar';
-
+        $this->path = $this->getApi().'/cmsapi/template/calendar';
 
         $response = $this->request('GET', $this->path);
-
 
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
 
         $this->assertTrue($response != null);
-        $index_data = file_get_contents($this->API->getPublicDirPath() . '/calendar/index/new.json');
+        $index_data = file_get_contents($this->API->getPublicDirPath().'/calendar/index/new.json');
 
         $this->assertJsonStringEqualsJsonString($index_data, $response->getEncodedResult());
     }
 
     public function testStatus()
     {
-        $this->path = $this->getApi() . '/cmsapi/status';
+        $this->path = $this->getApi().'/cmsapi/status';
         $this->SERVER = ['REQUEST_URI' => $this->path,    'REQUEST_METHOD' => 'GET', 'HTTP_ORIGIN' => 'foobar'];
         $response = $this->request('GET', $this->path);
 
