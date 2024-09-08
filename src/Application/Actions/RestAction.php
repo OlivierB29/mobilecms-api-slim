@@ -171,8 +171,7 @@ abstract class RestAction extends Action
 
     protected function striptags($input)
     {
-        $result = \strip_tags($input);
-        $result = $this->xss_clean($result);
+        $result = $this->xss_clean($input);
         $result = \htmlspecialchars($result, ENT_NOQUOTES, 'UTF-8');
 
         return $result;
