@@ -29,6 +29,8 @@ use App\Application\Actions\Cms\IndexPostAction;
 use App\Application\Actions\Cms\MetadataGetAction;
 use App\Application\Actions\Cms\StatusGetAction;
 use App\Application\Actions\Cms\TemplateGetAction;
+use App\Application\Actions\Cms\WebGetByIdAction;
+use App\Application\Actions\Cms\WebGetListAction;
 use App\Application\Actions\File\BasicUploadGetAction;
 use App\Application\Actions\File\BasicUploadPostAction;
 use App\Application\Actions\File\DeleteAction;
@@ -115,5 +117,12 @@ return function (App $app) {
     });
     $app->group(ApiConstants::API.'/cmsapi/template', function (Group $group) {
         $group->get('/{type}', TemplateGetAction::class);
+    });
+
+    // authorize option in CustomJwtAuthentication
+    $app->group(ApiConstants::API.'/webapi/content', function (Group $group) {
+            $group->get('/{type}/{id}', WebGetByIdAction::class);
+            $group->get('/{type}', WebGetListAction::class);
+
     });
 };

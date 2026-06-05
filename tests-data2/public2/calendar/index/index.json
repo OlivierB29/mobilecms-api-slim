@@ -20,6 +20,16 @@
         "attachments": []
     },
     {
+        "id": "220",
+        "date": "2016-11-20",
+        "activity": "activitya",
+        "title": "some seminar of activity A",
+        "description": "some infos",
+        "media": [],
+        "images": [],
+        "attachments": []
+    },
+    {
         "id": "3",
         "date": "2016-11-17",
         "activity": "activityb",

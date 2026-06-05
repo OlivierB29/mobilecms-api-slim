@@ -5,6 +5,11 @@
         "role": "admin"
     },
     {
+        "name": "captchatest@example.com",
+        "email": "captchatest@example.com",
+        "role": "editor"
+    },
+    {
         "name": "editor@example.com",
         "email": "editor@example.com",
         "role": "editor"
@@ -20,13 +25,13 @@
         "role": "guest"
     },
     {
-        "name": "test@example.com",
-        "email": "test@example.com",
+        "name": "test role",
+        "email": "role@example.com",
         "role": "editor"
     },
     {
-        "name": "test role",
-        "email": "role@example.com",
+        "name": "test@example.com",
+        "email": "test@example.com",
         "role": "editor"
     }
 ]

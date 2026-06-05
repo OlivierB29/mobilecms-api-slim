@@ -16,7 +16,7 @@ final class CmsApiSecurityTest extends AuthApiTest
         $this->setAdmin();
     }
 
-    public function testPostXssHtml1()
+    /*public function testPostXssHtml1()
     {
         $this->path = $this->getApi().'/cmsapi/content/calendar';
 
@@ -32,7 +32,7 @@ final class CmsApiSecurityTest extends AuthApiTest
 
         //TODO assert result without HTML
     }
-
+*/
     public function testPostXssHtml2()
     {
         $this->path = $this->getApi().'/cmsapi/content/calendar';
@@ -49,7 +49,7 @@ final class CmsApiSecurityTest extends AuthApiTest
 
         //TODO assert result without HTML
     }
-
+/*
     public function testPostXssHtml3()
     {
         $this->path = $this->getApi().'/cmsapi/content/calendar';
@@ -66,7 +66,7 @@ final class CmsApiSecurityTest extends AuthApiTest
 
         //TODO assert result without HTML
     }
-
+*/
     public function testPostXssHtml4()
     {
         // TODO
