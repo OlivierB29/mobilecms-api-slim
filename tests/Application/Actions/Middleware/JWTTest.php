@@ -32,7 +32,7 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-        $payload = $this->util->initPayload($username, $email, $role);
+        $payload = $this->util->initPayloadArray($username, $email, $role);
 
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
@@ -79,7 +79,7 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-        $payload = $this->util->initPayload($username, $email, $role);
+        $payload = $this->util->initPayloadArray($username, $email, $role);
 
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
