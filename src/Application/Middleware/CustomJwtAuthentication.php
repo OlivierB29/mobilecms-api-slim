@@ -27,8 +27,7 @@ SOFTWARE.
 */
 
 /**
- * @see       https://github.com/tuupola/slim-jwt-auth
- * @see       https://appelsiini.net/projects/slim-jwt-auth
+ * @see       https://github.com/JimTools/jwt-auth
  *
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
@@ -43,6 +42,7 @@ use Closure;
 use DomainException;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -366,7 +366,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             $jsonUser = $service->getJsonUserFromToken($token);
 
             if ('php-jwt' === $jwtImpl) {
-                $decoded = JWT::decode(
+                $decoded = $this->decodePhpJwtToken(
                     $token,
                     $jsonUser->{'salt'},
                     (array) $this->options['algorithm']
@@ -391,6 +391,30 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
             throw $exception;
         }
+    }
+
+    /**
+     * Decode a token with firebase/php-jwt, trying each allowed algorithm.
+     *
+     * @param string[] $allowedAlgorithms
+     */
+    private function decodePhpJwtToken(string $token, string $secret, array $allowedAlgorithms): \stdClass
+    {
+        $lastException = null;
+
+        foreach ($allowedAlgorithms as $algorithm) {
+            try {
+                return JWT::decode($token, new Key($secret, $algorithm));
+            } catch (Exception $exception) {
+                $lastException = $exception;
+            }
+        }
+
+        if ($lastException instanceof Exception) {
+            throw $lastException;
+        }
+
+        throw new RuntimeException('Unable to decode token.');
     }
 
     /**

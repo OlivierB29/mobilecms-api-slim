@@ -24,7 +24,7 @@
         "phpmailer/phpmailer": "^6.2",
         "slim/psr7": "^1.5",
         "slim/slim": "^4.10",
-        "tuupola/slim-jwt-auth": "^3.8.0"
+        "jimtools/jwt-auth": "^1.1"
 
     },
     "require-dev": {
@@ -40,6 +40,11 @@
         "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
+        },
+        "policy": {
+            "advisories": {
+                "ignore-id": ["PKSA-y2cr-5h3j-g3ys"]
+            }
         }
     },
     "autoload": {
