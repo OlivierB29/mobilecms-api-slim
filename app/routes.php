@@ -57,7 +57,8 @@ return function (App $app) {
     });
 
     $app->group(ApiConstants::API.'/authapi', function (Group $group) {
-        $group->get('/publicinfo/{id}', PublicInfoAction::class);
+        $group->get('/publicinfo', PublicInfoAction::class);
+      //  $group->options('/publicinfo', PublicInfoAction::class);
         $group->post('/publicinfo', PublicInfoPostAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 
