@@ -21,9 +21,7 @@ final class AuthServiceTest extends TestCase
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
-            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
-        }
+
     }
 
     public function testCreateUser()
@@ -97,9 +95,7 @@ final class AuthServiceTest extends TestCase
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
 
-        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
-            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
-        }
+
         $result = $this->service->login('test@example.com', 'Sample#123456', null);
 
         $this->assertTrue('' === $result);
@@ -110,9 +106,7 @@ final class AuthServiceTest extends TestCase
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
-            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
-        }
+
 
         $result = $this->service->getToken('test@example.com', 'Sample#123456');
         $this->assertTrue($result->getCode() === 200);

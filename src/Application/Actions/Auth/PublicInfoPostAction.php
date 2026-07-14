@@ -27,7 +27,7 @@ class PublicInfoPostAction extends AuthAction
         $userdata = $this->getRequestBody();
         if (isset($userdata->{'email'})) {
             $response = $service->getPublicInfo($userdata->{'email'});
-        } elseif (isset($userdata->{'user'})) {
+        } else if (isset($userdata->{'user'})) {
             $response = $service->getPublicInfo($userdata->{'user'});
         }
 

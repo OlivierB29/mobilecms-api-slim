@@ -37,6 +37,7 @@ namespace App\Application\Middleware;
 use App\ApiConstants;
 use App\Infrastructure\Rest\JwtToken;
 use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\Properties;
 use Closure;
 use DomainException;
@@ -360,7 +361,12 @@ class CustomJwtAuthentication implements MiddlewareInterface
             // CUSTOM : start
             $decoded = null;
 
-            $service = new AuthService(Properties::getInstance()->getRootDir().Properties::getInstance()->getConf()->{'privatedir'}.'/users');
+            $service = new AuthService(new FileUtils()->concatDirectories(
+                Properties::getInstance()->getRootDir(),
+                Properties::getInstance()->getConf()->{'privatedir'},
+                '/users'
+            ));
+
             $jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
 
             $jsonUser = $service->getJsonUserFromToken($token);
@@ -517,7 +523,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
     /**
      * Set the logger.
      */
-    private function logger(LoggerInterface $logger = null): void
+    private function logger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

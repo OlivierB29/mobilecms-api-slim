@@ -22,9 +22,7 @@ class PublicInfoAction extends AuthAction
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
 
-        $service = new AuthService($this->getPrivateDirPath().'/users');
-
-        $response = $service->getPublicInfo($this->getParam('id'));
+        $response->setCode(200);
 
         return $this->withResponse($response);
     }

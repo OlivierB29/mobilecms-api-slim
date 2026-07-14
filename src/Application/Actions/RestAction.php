@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Actions;
 
 use App\Infrastructure\Rest\Response as RestResponse;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\Properties;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -14,12 +15,15 @@ abstract class RestAction extends Action
 {
     protected $usepost = false;
 
+    protected $fileutils ;
+
     /**
      * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
         parent::__construct($logger);
+        $this->fileutils = new FileUtils();
     }
 
     /**
@@ -39,7 +43,7 @@ abstract class RestAction extends Action
      */
     public function getPublicDirPath(): string
     {
-        return $this->getRootDir().$this->getConf()->{'publicdir'};
+        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'publicdir'});
     }
 
     /**
@@ -49,7 +53,7 @@ abstract class RestAction extends Action
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir().$this->getConf()->{'media'};
+        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'media'});
     }
 
     /**
@@ -59,7 +63,7 @@ abstract class RestAction extends Action
      */
     public function getPrivateDirPath(): string
     {
-        return $this->getRootDir().$this->getConf()->{'privatedir'};
+        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'privatedir'});
     }
 
     /**

@@ -19,9 +19,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-        if (\file_exists($this->throttle->getCaptchaFileName('test@example.com'))) {
-            \unlink($this->throttle->getCaptchaFileName('test@example.com'));
-        }
+
     }
 
     public function testOptions()

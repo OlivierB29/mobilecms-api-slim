@@ -98,13 +98,13 @@ class UserService
         if (file_exists($file)) {
             $jsonUser = JsonUtils::readJsonFile($file);
 
-            if (isset($jsonUser->{'name'}) && isset($jsonUser->{'password'})) {
+            if (isset($jsonUser->{'email'}) && isset($jsonUser->{'password'})) {
                 $result = $jsonUser;
             } else {
                 throw new \Exception('empty user ');
             }
         } else {
-            throw new \Exception('not found');
+            throw new \Exception('user not found:'. $email);
         }
 
         return $result;
