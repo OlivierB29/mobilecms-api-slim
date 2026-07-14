@@ -27,10 +27,6 @@ PHP 8
 `sudo apt install php-curl php-xdebug`
 
 # VS Code Debugging
-- Check version
-Ubuntu 20.04 : XDebug v2.x.x
-Debian 12
-
 
 - Install and enable in php.ini :
 https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
