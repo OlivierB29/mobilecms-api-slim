@@ -4,7 +4,7 @@ namespace Tests;
 
 use App\Infrastructure\Services\AuthService;
 
-abstract class AuthApiTest extends ApiTest
+abstract class AuthApiUtility extends ApiUtility
 {
     protected $user;
     protected $token;

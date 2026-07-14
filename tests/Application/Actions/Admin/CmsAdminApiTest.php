@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Cms;
 
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-final class CmsAdminApiTest extends AuthApiTest
+final class CmsAdminApiTest extends AuthApiUtility
 {
     protected function setUp(): void
     {

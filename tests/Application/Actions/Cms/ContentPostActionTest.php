@@ -6,9 +6,9 @@ namespace Tests\Application\Actions\Cms;
 
 use App\Application\Actions\ActionPayload;
 use DI\Container;
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-class ContentPostActionTest extends AuthApiTest
+class ContentPostActionTest extends AuthApiUtility
 {
     public function testPostBbCode()
     {

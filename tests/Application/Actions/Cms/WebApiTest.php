@@ -6,9 +6,9 @@ namespace Tests\Application\Actions\Cms;
 
 use App\Application\Actions\ActionPayload;
 use App\Infrastructure\Utils\FileUtils;
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-final class WebApiTest extends AuthApiTest
+final class WebApiTest extends AuthApiUtility
 {
     protected $requestparams = '?timestamp=1599654646';
 

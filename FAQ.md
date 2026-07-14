@@ -20,17 +20,11 @@ Assume `www/html/` is the web root context.
 - `composer start`
 - `php composer.phar start`
 
-# Debian 12
-`sudo apt install php-gd php-mbstring php-xml php-imagick`
-`sudo apt install composer php-curl php-xdebug`
-
 # Server on Ubuntu
-With a default Ubuntu, you may need : 
-PHP 7.x
-`sudo apt install php-xdebug libapache2-mod-php php-gd php-mbstring php-xml php-imagick`
 
-PHP 8.0
-`sudo apt install  php8.0-gd php8.0-mbstring php8.0-xml php8.0-imagick`
+PHP 8
+`sudo apt install php-gd php-mbstring php-xml php-imagick`
+`sudo apt install php-curl php-xdebug`
 
 # VS Code Debugging
 - Check version

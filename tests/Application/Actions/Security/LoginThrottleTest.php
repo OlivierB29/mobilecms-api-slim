@@ -6,9 +6,9 @@ namespace Tests\Application\Actions\Security;
 
 use App\Infrastructure\Services\ThrottleService;
 use App\Infrastructure\Utils\JsonUtils;
-use  Tests\ApiTest;
+use  Tests\AuthApiUtility;
 
-final class LoginThrottleTest extends ApiTest
+final class LoginThrottleTest extends AuthApiUtility
 {
     protected $requestparams = '?timestamp=1599654646';
     protected $throttle;

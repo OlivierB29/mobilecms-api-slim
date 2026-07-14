@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Security;
 
-use Tests\ApiTest;
+use Tests\ApiUtility;
 
-final class RouteSecurityTest extends ApiTest
+final class RouteSecurityTest extends ApiUtility
 {
     protected $requestparams = '?timestamp=1599654646';
 

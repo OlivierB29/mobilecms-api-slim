@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Application\Actions\Auth;
 
 use App\Infrastructure\Services\ThrottleService;
-use Tests\ApiTest;
+use Tests\AuthApiUtility;
 
-final class AuthenticationApiTest extends ApiTest
+final class AuthenticationApiTest extends AuthApiUtility
 {
     private $throttle;
 
