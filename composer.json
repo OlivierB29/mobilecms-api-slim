@@ -28,12 +28,8 @@
 
     },
     "require-dev": {
-        "jangregor/phpstan-prophecy": "^0.8.1",
-        "phpstan/extension-installer": "^1.1.0",
-        "phpstan/phpstan": "^0.12.90",
-        "php-coveralls/php-coveralls": "^2.2.0",
-        "phpunit/phpunit": "^10"
-
+        "phpunit/phpunit": "^10",
+        "rector/rector": "^2.5"
     },
  "config": {
         "process-timeout": 0,

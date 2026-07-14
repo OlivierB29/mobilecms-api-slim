@@ -216,11 +216,11 @@ abstract class FileAction extends RestAction
             throw new \Exception('Record not found');
         }
 
-        foreach ($files as $formKey => $file) {
+        foreach ($files as $file) {
             if (\property_exists($tmpRecord->getResult(), 'media')) {
-                foreach ($tmpRecord->getResult()->{'media'} as $media => $fileInRecord) {
+                foreach ($tmpRecord->getResult()->{'media'} as $fileInRecord) {
                     if ($fileInRecord->url === $file->url) {
-                        foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
+                        foreach ($fileInRecord->thumbnails as $thumbnailFile) {
                             $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
                             if (file_exists($thumbnailPath)) {
                                 if (!unlink($thumbnailPath)) {
