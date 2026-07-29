@@ -53,7 +53,8 @@
         }
     },
     "scripts": {
-        "start": "php -S localhost:8888 -t public-dev",
+        "olddev": "php -S localhost:8888 -t public-dev",
+        "dev": "php -S localhost:8888 -t webhost",
         "test": "phpunit",
         "dist": "rm -rf vendor dist && composer install --no-dev && mkdir dist && cp -R public app src vendor dist"
     }
