@@ -71,7 +71,7 @@ class ActionError implements JsonSerializable
      *
      * @return self
      */
-    public function setDescription(?string $description = null): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
