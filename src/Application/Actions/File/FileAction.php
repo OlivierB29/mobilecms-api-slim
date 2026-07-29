@@ -71,7 +71,7 @@ abstract class FileAction extends RestAction
         }
     }
 
-    public function setFiles(array $files = null)
+    public function setFiles(array $files)
     {
         // Useful for tests
         // http://stackoverflow.com/questions/21096537/simulating-http-request-for-unit-testing
