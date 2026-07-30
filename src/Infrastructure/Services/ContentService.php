@@ -337,6 +337,21 @@ class ContentService extends AbstractService
         return $response;
     }
 
+    public function getAllObjectsFromIndexByType(string $type): Response
+    {
+        $response = $this->getDefaultResponse();
+
+        // Read the JSON file
+        //$file = $this->getDatabaseDir().'/'.$type.'/index/index.json';
+        $data = JsonUtils::readJsonFile($this->getIndexFileName($type));
+        if (isset($data)) {
+            $response->setCode(200);
+            $response->setResult($data);
+        }
+
+        return $response;
+    }
+
     /**
      * Return an index file path.
      *
