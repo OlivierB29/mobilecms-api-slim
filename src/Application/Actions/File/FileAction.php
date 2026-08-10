@@ -91,7 +91,7 @@ abstract class FileAction extends RestAction
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir().$this->getConf()->{'media'};
+        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'media'});
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class FileAction extends RestAction
      */
     public function getRecordDirPath($type, $id): string
     {
-        return $this->getMediaDirPath().'/'.$type.'/'.$id;
+        return $this->fileutils->concatDirectories($this->getMediaDirPath(), $type).'/'.$id;
     }
 
     /**
