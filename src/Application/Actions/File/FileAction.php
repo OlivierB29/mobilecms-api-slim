@@ -220,14 +220,7 @@ abstract class FileAction extends RestAction
             if (\property_exists($tmpRecord->getResult(), 'media')) {
                 foreach ($tmpRecord->getResult()->{'media'} as $fileInRecord) {
                     if ($fileInRecord->url === $file->url) {
-                        foreach ($fileInRecord->thumbnails as $thumbnailFile) {
-                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
-                            if (file_exists($thumbnailPath)) {
-                                if (!unlink($thumbnailPath)) {
-                                    throw new \Exception('delete '.$thumbnailPath.' KO');
-                                }
-                            }
-                        }
+                        $this->deleteThumbailFiles($fileInRecord, $datatype, $id);
                     }
                 }
             }
@@ -256,5 +249,22 @@ abstract class FileAction extends RestAction
         $response->setCode(200);
 
         return $response;
+    }
+
+    protected function deleteThumbailFiles(stdClass $fileInRecord, string $datatype, string $id): bool {
+        
+
+    if ($fileInRecord->thumbnails !== null) {
+                        foreach ($fileInRecord->thumbnails as $thumbnailFile) {
+                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
+                            if (file_exists($thumbnailPath)) {
+                                if (!unlink($thumbnailPath)) {
+                                    throw new \Exception('delete '.$thumbnailPath.' KO');
+                                }
+                            }
+                        }
+    }
+
+    return true;
     }
 }
