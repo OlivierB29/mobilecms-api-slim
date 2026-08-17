@@ -1,0 +1,37 @@
+[
+    {
+        "name": "admin@example.com",
+        "email": "admin@example.com",
+        "role": "admin"
+    },
+    {
+        "name": "captchatest@example.com",
+        "email": "captchatest@example.com",
+        "role": "editor"
+    },
+    {
+        "name": "editor@example.com",
+        "email": "editor@example.com",
+        "role": "editor"
+    },
+    {
+        "name": "guest@example.com",
+        "email": "guest@example.com",
+        "role": "guest"
+    },
+    {
+        "name": "updated",
+        "email": "modifypassword@example.com",
+        "role": "guest"
+    },
+    {
+        "name": "test role",
+        "email": "role@example.com",
+        "role": "editor"
+    },
+    {
+        "name": "test@example.com",
+        "email": "test@example.com",
+        "role": "editor"
+    }
+]

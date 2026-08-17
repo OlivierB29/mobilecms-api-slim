@@ -1,0 +1,19 @@
+[
+    {
+        "id": "Liens",
+        "title": "Liens",
+        "description": "",
+        "attachments": [
+            {
+                "url": "http:\/\/www.cnkendo-dr.com",
+                "title": "CNKDR",
+                "description": "Site du comit\u00e9 national de kendo et disciplines rattach\u00e9es"
+            },
+            {
+                "url": "https:\/\/judo-bretagne.ffjudo.com\/",
+                "title": "Ligue de Bretagne de Judo et D.R.",
+                "description": ""
+            }
+        ]
+    }
+]

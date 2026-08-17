@@ -1,0 +1,39 @@
+[
+    {
+        "id": "kendo",
+        "name": "kendo",
+        "logo": "kendo.png",
+        "mapicon": "kendo-32px.png",
+        "calendar": "true",
+        "clublist": "true",
+        "color": "rgb(124, 179, 66)"
+    },
+    {
+        "id": "iaido",
+        "name": "iaido",
+        "logo": "iaido.png",
+        "mapicon": "iaido-32px.png",
+        "calendar": "true",
+        "clublist": "true",
+        "color": "rgb(240, 147, 0)"
+    },
+    {
+        "id": "chanbara",
+        "name": "chanbara",
+        "logo": "chanbara.png",
+        "mapicon": "chanbara-32px.png",
+        "calendar": "true",
+        "clublist": "true",
+        "color": "rgb(63, 81, 181)"
+    },
+    {
+        "id": "crkdr",
+        "name": "crkdr",
+        "logo": "logocrkdr128x128.png",
+        "mapicon": "",
+        "calendar": "true",
+        "clublist": "false",
+        "color": "red"
+    }
+]
+

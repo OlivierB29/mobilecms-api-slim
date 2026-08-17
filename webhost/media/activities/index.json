@@ -1,0 +1,24 @@
+[
+    {
+        "id": "kendo",
+        "name": "kendo",
+        "logo": "kendo.png",
+        "calendar": "true",
+        "clublist": "true"
+    },
+    {
+        "id": "iaido",
+        "name": "iaido",
+        "logo": "iaido.png",
+        "calendar": "true",
+        "clublist": "true"
+    },
+    {
+        "id": "chanbara",
+        "name": "chanbara",
+        "logo": "chanbara.png",
+        "calendar": "true",
+        "clublist": "true"
+    }
+]
+

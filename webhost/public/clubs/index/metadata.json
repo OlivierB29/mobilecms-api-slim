@@ -1,0 +1,11 @@
+[
+    {"name" : "id" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "title" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "activity" , "primary" : "false", "type" : "text", "length":"255", "editor":"choice", "choices" : ["kendo", "iaido", "chanbara", "naginata", "jodo"]},
+    {"name" : "description" , "primary" : "false", "type" : "string", "length":"255", "editor":"text"},
+    {"name" : "department" , "primary" : "false", "type" : "string", "length":"255", "editor":"choice", "choices" : ["29", "22", "35", "56"]},
+    {"name" : "city" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "url" , "primary" : "false", "type" : "string", "length":"1000", "editor":"line"},
+    {"name" : "coordinates" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"}
+    
+]
