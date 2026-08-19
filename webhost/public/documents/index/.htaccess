@@ -1,0 +1,4 @@
+# Apache 2.4
+<IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE application/json application/javascript text/css               
+</IfModule>

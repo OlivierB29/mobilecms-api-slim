@@ -71,7 +71,7 @@ abstract class FileAction extends RestAction
         }
     }
 
-    public function setFiles(array $files = null)
+    public function setFiles(array $files)
     {
         // Useful for tests
         // http://stackoverflow.com/questions/21096537/simulating-http-request-for-unit-testing
@@ -91,7 +91,7 @@ abstract class FileAction extends RestAction
      */
     public function getMediaDirPath(): string
     {
-        return $this->getRootDir().$this->getConf()->{'media'};
+        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'media'});
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class FileAction extends RestAction
      */
     public function getRecordDirPath($type, $id): string
     {
-        return $this->getMediaDirPath().'/'.$type.'/'.$id;
+        return $this->fileutils->concatDirectories($this->getMediaDirPath(), $type).'/'.$id;
     }
 
     /**
@@ -216,18 +216,11 @@ abstract class FileAction extends RestAction
             throw new \Exception('Record not found');
         }
 
-        foreach ($files as $formKey => $file) {
+        foreach ($files as $file) {
             if (\property_exists($tmpRecord->getResult(), 'media')) {
-                foreach ($tmpRecord->getResult()->{'media'} as $media => $fileInRecord) {
+                foreach ($tmpRecord->getResult()->{'media'} as $fileInRecord) {
                     if ($fileInRecord->url === $file->url) {
-                        foreach ($fileInRecord->thumbnails as $thumbnails => $thumbnailFile) {
-                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
-                            if (file_exists($thumbnailPath)) {
-                                if (!unlink($thumbnailPath)) {
-                                    throw new \Exception('delete '.$thumbnailPath.' KO');
-                                }
-                            }
-                        }
+                        $this->deleteThumbailFiles($fileInRecord, $datatype, $id);
                     }
                 }
             }
@@ -256,5 +249,22 @@ abstract class FileAction extends RestAction
         $response->setCode(200);
 
         return $response;
+    }
+
+    protected function deleteThumbailFiles(stdClass $fileInRecord, string $datatype, string $id): bool {
+        
+
+    if ($fileInRecord->thumbnails !== null) {
+                        foreach ($fileInRecord->thumbnails as $thumbnailFile) {
+                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
+                            if (file_exists($thumbnailPath)) {
+                                if (!unlink($thumbnailPath)) {
+                                    throw new \Exception('delete '.$thumbnailPath.' KO');
+                                }
+                            }
+                        }
+    }
+
+    return true;
     }
 }

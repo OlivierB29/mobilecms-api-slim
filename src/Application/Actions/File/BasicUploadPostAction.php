@@ -45,33 +45,61 @@ class BasicUploadPostAction extends FileAction
         return $this->withResponse($response);
     }
 
-    private function uploadFilesSlim($type, $id, $files): array
+    private function uploadFilesSlim($type, $id, $inputFiles): array
     {
         $result = [];
-
+        $files = $inputFiles['uploadfiles'];
         if (!isset($files) || count($files) === 0) {
             throw new HttpBadRequestException($this->request, 'no file.');
         }
 
         // Basic upload verification
         foreach ($files as $fileControl) {
-            if (!$this->isAllowedExtension($fileControl->getClientFilename())) {
-                throw new HttpBadRequestException($this->request, 'forbidden file type');
-            }
+                    if ($fileControl !== null && !$this->isFileAllowed($fileControl)) {
+                        throw new HttpBadRequestException($this->request, 'forbidden file type');
+                    }
         }
-        /*
-                foreach ($files as $tmpfile) {
-                    throw new \Exception("files ? " . $tmpfile->getClientFilename());
-                }
-        */
+
 
         foreach ($files as $file) {
-            $fileResult = $this->uploadFile($type, $id, $file);
-            array_push($result, $fileResult);
+            if ($file !== null) {
+                $fileResult = $this->uploadFile($type, $id, $file);
+                array_push($result, $fileResult);
+            }
+
         }
 
         return $result;
     }
+
+    protected function isFileAllowed(UploadedFileInterface $file): bool
+    {
+        $result = false;
+        if ($file !== null) {
+            $fileExtension = $this->getExtension($file->getClientFilename());
+            $result = $this->isExtensionPermitted($fileExtension);
+        }
+
+        return $result;
+    }
+
+        /**
+     * Basic upload verification.
+     *
+     * @param string $file file name
+     *
+     * @return bool
+     */
+    protected function isExtensionPermitted(string $extension): bool
+    {
+        $result = false;
+        if ($extension !== '') {
+            $result = in_array(strtolower($extension), $this->fileExtensions);
+        }
+
+        return $result;
+    }
+
 
     private function writeStream(string $file, StreamInterface $s)
     {

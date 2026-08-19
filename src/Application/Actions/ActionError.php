@@ -71,7 +71,7 @@ class ActionError implements JsonSerializable
      *
      * @return self
      */
-    public function setDescription(?string $description = null): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -81,7 +81,7 @@ class ActionError implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : mixed
     {
         $payload = [
             'type'        => $this->type,

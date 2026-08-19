@@ -15,7 +15,7 @@ use Tuupola\Http\Factory\UploadedFileFactory;
 
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 
-abstract class ApiTest extends TestCase
+abstract class ApiUtility extends TestCase
 {
     protected $path = '';
     protected $headers = [];

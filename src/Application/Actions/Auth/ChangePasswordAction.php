@@ -29,10 +29,7 @@ class ChangePasswordAction extends AuthAction
 
         $logindata = $this->getRequestBody();
 
-        $captchaanswer = null;
-        if (isset($logindata->{'captchaanswer'})) {
-            $captchaanswer = $logindata->{'captchaanswer'};
-        }
+
 
         //TODO : user contains either email of name
 
@@ -40,8 +37,7 @@ class ChangePasswordAction extends AuthAction
         $response = $service->changePassword(
             $this->getUser($logindata),
             $logindata->{'password'},
-            $logindata->{'newpassword'},
-            $captchaanswer
+            $logindata->{'newpassword'}
         );
 
         unset($logindata);

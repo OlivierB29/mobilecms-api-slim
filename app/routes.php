@@ -12,6 +12,8 @@ use App\Application\Actions\Admin\AdminIndexGetAction;
 use App\Application\Actions\Admin\AdminIndexPostAction;
 use App\Application\Actions\Admin\AdminTypesGetAction;
 use App\Application\Actions\Admin\MetadataAction;
+use App\Application\Actions\Admin\ThemeAction;
+use App\Application\Actions\Admin\ThemeBannerUploadAction;
 use App\Application\Actions\Auth\AuthenticateAction;
 use App\Application\Actions\Auth\ChangePasswordAction;
 use App\Application\Actions\Auth\PublicInfoAction;
@@ -57,7 +59,8 @@ return function (App $app) {
     });
 
     $app->group(ApiConstants::API.'/authapi', function (Group $group) {
-        $group->get('/publicinfo/{id}', PublicInfoAction::class);
+        $group->get('/publicinfo', PublicInfoAction::class);
+      //  $group->options('/publicinfo', PublicInfoAction::class);
         $group->post('/publicinfo', PublicInfoPostAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 
@@ -92,6 +95,8 @@ return function (App $app) {
     $app->group(ApiConstants::API.'/adminapi', function (Group $group) {
         $group->get('/content', AdminTypesGetAction::class);
         $group->get('/metadata/{type}', MetadataAction::class);
+        $group->map(['GET', 'POST'], '/theme', ThemeAction::class);
+        $group->post('/theme/banner', ThemeBannerUploadAction::class);
 
         $group->get('/content/{type}/{id}', AdminContentGetAction::class);
         $group->get('/content/{type}', AdminContentGetListAction::class);

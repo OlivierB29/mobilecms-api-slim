@@ -31,13 +31,10 @@ class AuthenticateAction extends AuthAction
                 throw new \Exception('no password data');
             }
 
-            $captchaanswer = null;
-            if (isset($logindata->{'captchaanswer'})) {
-                $captchaanswer = $logindata->{'captchaanswer'};
-            }
+
             $service = new AuthService($this->getPrivateDirPath().'/users');
 
-            $response = $service->getToken($this->getUser($logindata), $logindata->{'password'}, $captchaanswer);
+            $response = $service->getToken($this->getUser($logindata), $logindata->{'password'});
             unset($logindata);
             // free variables before response
         } catch (\Exception $e) {

@@ -168,7 +168,7 @@ class ContentService extends AbstractService
             $response->setResult(JsonUtils::readJsonFile($file));
             $response->setCode(200);
         } else {
-            $response->setError(404, 'not found '.$type.'/'.$keyvalue);
+            $response->setError(404, 'Record not found '.$type.'/'.$keyvalue);
         }
 
         return $response;
@@ -193,7 +193,7 @@ class ContentService extends AbstractService
             $response->setCode(200);
         } else {
             // @codeCoverageIgnoreStart
-            $response->setError(404, 'not found '.$type.' : '.$keyvalue);
+            $response->setError(404, 'records to delete not found '.$type.' : '.$keyvalue);
             // @codeCoverageIgnoreEnd
         }
 
@@ -234,7 +234,7 @@ class ContentService extends AbstractService
             $response->setCode(200);
         } else {
             // @codeCoverageIgnoreStart
-            $response->setError(404, 'not found '.$file);
+            $response->setError(404, 'File not found '.$file);
             // @codeCoverageIgnoreEnd
         }
 
@@ -271,7 +271,7 @@ class ContentService extends AbstractService
                 $response->setCode(200);
             } else {
                 // element not found
-                $response->setError(404, 'not found '.$keyname.' : '.$keyvalue);
+                $response->setError(404, 'Recordnot found '.$keyname.' : '.$keyvalue);
             }
         } else {
             // return all
@@ -329,6 +329,21 @@ class ContentService extends AbstractService
         // Read the JSON file
         $file = $this->getDatabaseDir().'/'.$filename;
         $data = JsonUtils::readJsonFile($file);
+        if (isset($data)) {
+            $response->setCode(200);
+            $response->setResult($data);
+        }
+
+        return $response;
+    }
+
+    public function getAllObjectsFromIndexByType(string $type): Response
+    {
+        $response = $this->getDefaultResponse();
+
+        // Read the JSON file
+        //$file = $this->getDatabaseDir().'/'.$type.'/index/index.json';
+        $data = JsonUtils::readJsonFile($this->getIndexFileName($type));
         if (isset($data)) {
             $response->setCode(200);
             $response->setResult($data);
@@ -656,7 +671,7 @@ class ContentService extends AbstractService
                 $response->setCode(200);
             } else {
                 // @codeCoverageIgnoreStart
-                $response->setError(404, 'not found '.$type.' : '.$id);
+                $response->setError(404, 'Records not found '.$type.' : '.$id);
                 // @codeCoverageIgnoreEnd
             }
         }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Security;
 
-use Tests\ApiTest;
+use Tests\ApiUtility;
 
-final class RouteSecurityTest extends ApiTest
+final class RouteSecurityTest extends ApiUtility
 {
     protected $requestparams = '?timestamp=1599654646';
 
@@ -25,7 +25,7 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v43/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v50/debugapi"}', $response->getEncodedResult());
     }
 
     public function testXssRoute2()
@@ -38,7 +38,7 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v43/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v50/debugapi"}', $response->getEncodedResult());
     }
 
     public function testXssRoute3()
@@ -51,6 +51,6 @@ final class RouteSecurityTest extends ApiTest
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v43/debugapi"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{"uri": "/mobilecmsapi/v50/debugapi"}', $response->getEncodedResult());
     }
 }

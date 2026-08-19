@@ -6,6 +6,7 @@ namespace Tests\Application\Actions\Middleware;
 
 use App\Infrastructure\Rest\JwtToken;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Tests\TestCase;
 
 final class JWTTest extends TestCase
@@ -31,7 +32,7 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-        $payload = $this->util->initPayload($username, $email, $role);
+        $payload = $this->util->initPayloadArray($username, $email, $role);
 
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
@@ -78,7 +79,7 @@ final class JWTTest extends TestCase
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
 
-        $payload = $this->util->initPayload($username, $email, $role);
+        $payload = $this->util->initPayloadArray($username, $email, $role);
 
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
@@ -89,6 +90,6 @@ final class JWTTest extends TestCase
 
         $this->expectException(\Exception::class);
 
-        JWT::decode($phpjwtToken, 'wrongsecret', $this->allowed_algs);
+        JWT::decode($phpjwtToken, new Key('wrongsecret', $alg));
     }
 }

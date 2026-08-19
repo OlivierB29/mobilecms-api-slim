@@ -1,0 +1,11 @@
+[
+
+    {"name" : "id" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "title" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "description" , "primary" : "false", "type" : "string", "length":"255", "editor":"text"},
+    {"name" : "updated" , "primary" : "false", "type" : "string", "length":"255", "editor":"line"},
+    {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist"},
+    {"name" : "attachments" , "primary" : "false", "type" : "array",  "editor":"attachmentlist"}
+    
+
+]

@@ -29,7 +29,7 @@ class FileService extends AbstractService
     {
         $result = [];
         $scanned_directory = array_diff(scandir($dir), ['..', '.']);
-        foreach ($scanned_directory as $key => $value) {
+        foreach ($scanned_directory as $value) {
             $filePath = $dir.DIRECTORY_SEPARATOR.$value;
             if (is_file($filePath)) {
                 array_push($result, $this->getFileResponse($filePath, $value));
@@ -48,7 +48,7 @@ class FileService extends AbstractService
     public function updateDescriptions($dir, $existing)
     {
         $result = $this->getDescriptions($dir);
-        foreach ($result as $key => $value) {
+        foreach ($result as $value) {
             $url = $value->{'url'};
             $existingFile = JsonUtils::getByKey($existing, 'url', $url);
             if (isset($existingFile)) {
@@ -163,7 +163,7 @@ class FileService extends AbstractService
         $utils = new ImageUtils();
         $utils->setQuality($quality);
         $utils->setDriver($driver);
-        foreach ($files as $formKey => $file) {
+        foreach ($files as $file) {
             // /var/www/html/media/calendar/1
 
             // upload

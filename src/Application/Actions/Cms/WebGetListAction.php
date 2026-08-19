@@ -13,6 +13,6 @@ class WebGetListAction extends CmsAction
      */
     protected function action(): Response
     {
-        return $this->withResponse($this->getService()->getAllObjects($this->resolveArg('type')));
+         return $this->withResponse($this->getService()->getAllObjectsFromIndexByType($this->resolveArg('type')));
     }
 }

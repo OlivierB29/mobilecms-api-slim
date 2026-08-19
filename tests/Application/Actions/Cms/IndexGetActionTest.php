@@ -9,9 +9,9 @@ use App\Application\Actions\ActionPayload;
 use App\Application\Handlers\HttpErrorHandler;
 use DI\Container;
 use Slim\Middleware\ErrorMiddleware;
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-class IndexGetActionTest extends AuthApiTest
+class IndexGetActionTest extends AuthApiUtility
 {
     public function testGetIndex()
     {
@@ -53,8 +53,8 @@ class IndexGetActionTest extends AuthApiTest
         $response = $app->handle($request);
 
         // Assert
-        $expectedError = new ActionError(ActionError::RESOURCE_NOT_FOUND, 'Internal Server Error');
-        $expectedPayload = new ActionPayload(500, null, $expectedError);
+        $expectedError = new ActionError(ActionError::RESOURCE_NOT_FOUND, 'Bad Request');
+        $expectedPayload = new ActionPayload(400, null, $expectedError);
 
         $this->assertResponse($expectedPayload, $response);
     }

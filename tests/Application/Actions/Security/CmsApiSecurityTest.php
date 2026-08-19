@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Security;
 
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-final class CmsApiSecurityTest extends AuthApiTest
+final class CmsApiSecurityTest extends AuthApiUtility
 {
     protected $requestparams = '?timestamp=1599654646';
 

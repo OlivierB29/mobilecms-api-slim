@@ -1,0 +1,5 @@
+{
+    "sortby": "id",
+    "sortdirection": "asc",
+    "typethumbnailsizes":[32, 48, 64, 128, 256]
+}

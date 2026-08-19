@@ -17,29 +17,29 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8",
         "ext-json": "*",
+        "jimtools/jwt-auth": "^1.1",
         "monolog/monolog": "^2.8",
-        "php-di/php-di": "^6.4",
+        "php-di/php-di": "^7.1",
         "phpmailer/phpmailer": "^6.2",
         "slim/psr7": "^1.5",
-        "slim/slim": "^4.10",
-        "tuupola/slim-jwt-auth": "^3.8.0"
-
+        "slim/slim": "^4.15"
     },
     "require-dev": {
-        "jangregor/phpstan-prophecy": "^0.8.1",
-        "phpstan/extension-installer": "^1.1.0",
-        "phpstan/phpstan": "^0.12.90",
-        "php-coveralls/php-coveralls": "^2.2.0",
-        "phpunit/phpunit": "^9"
-
+        "phpunit/phpunit": "^10",
+        "rector/rector": "^2.5"
     },
  "config": {
         "process-timeout": 0,
         "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
+        },
+        "policy": {
+            "advisories": {
+                "ignore-id": ["PKSA-y2cr-5h3j-g3ys"]
+            }
         }
     },
     "autoload": {
@@ -53,7 +53,8 @@
         }
     },
     "scripts": {
-        "start": "php -S localhost:8888 -t public-dev",
+        "olddev": "php -S localhost:8888 -t public-dev",
+        "dev": "php -S localhost:8888 -t webhost",
         "test": "phpunit",
         "dist": "rm -rf vendor dist && composer install --no-dev && mkdir dist && cp -R public app src vendor dist"
     }

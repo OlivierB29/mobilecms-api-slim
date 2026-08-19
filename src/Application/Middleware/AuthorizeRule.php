@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Middleware;
 
 /**
- * @see       https://github.com/tuupola/slim-jwt-auth
+ * @see       https://github.com/JimTools/jwt-auth
  */
 
 use Psr\Http\Message\ServerRequestInterface;

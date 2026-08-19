@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Application\Actions\File;
 
 use App\Infrastructure\Utils\FileUtils;
-use Tests\AuthApiTest;
+use Tests\AuthApiUtility;
 
-final class FileApiTest extends AuthApiTest
+final class FileApiTest extends AuthApiUtility
 {
     protected function setUp(): void
     {

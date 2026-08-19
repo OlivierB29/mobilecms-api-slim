@@ -13,6 +13,6 @@ class StatusGetAction extends CmsAction
      */
     protected function action(): Response
     {
-        return $this->respondWithData(json_decode('{"result":"true"}'));
+        return $this->respondWithData(json_decode('{}'), 200);
     }
 }

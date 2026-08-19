@@ -20,27 +20,28 @@ Assume `www/html/` is the web root context.
 - `composer start`
 - `php composer.phar start`
 
-# Debian 12
+# Server on Ubuntu 26 / Debian 13
+
+PHP 8
 `sudo apt install php-gd php-mbstring php-xml php-imagick`
-`sudo apt install composer php-curl php-xdebug`
-
-# Server on Ubuntu
-With a default Ubuntu, you may need : 
-PHP 7.x
-`sudo apt install php-xdebug libapache2-mod-php php-gd php-mbstring php-xml php-imagick`
-
-PHP 8.0
-`sudo apt install  php8.0-gd php8.0-mbstring php8.0-xml php8.0-imagick`
+`sudo apt install php-curl php-xdebug`
 
 # VS Code Debugging
-- Check version
-Ubuntu 20.04 : XDebug v2.x.x
-Debian 12
 
+- composer run dev
+- get php.ini path with http://localhost:8888/phpinfo.php
+- Install
 
-- Install and enable in php.ini :
+- and enable in php.ini :
 https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
 
+```
+#zend_extension is not necessary anymore
+#zend_extension=xdebug
+
+xdebug.mode = debug
+xdug.start_with_request = yes`
+```
 - Start a debug session
 - Add a breakpoint
 - Run `composer test`

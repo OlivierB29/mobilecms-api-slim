@@ -27,8 +27,7 @@ SOFTWARE.
 */
 
 /**
- * @see       https://github.com/tuupola/slim-jwt-auth
- * @see       https://appelsiini.net/projects/slim-jwt-auth
+ * @see       https://github.com/JimTools/jwt-auth
  *
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
@@ -38,11 +37,13 @@ namespace App\Application\Middleware;
 use App\ApiConstants;
 use App\Infrastructure\Rest\JwtToken;
 use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\Properties;
 use Closure;
 use DomainException;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -360,13 +361,18 @@ class CustomJwtAuthentication implements MiddlewareInterface
             // CUSTOM : start
             $decoded = null;
 
-            $service = new AuthService(Properties::getInstance()->getRootDir().Properties::getInstance()->getConf()->{'privatedir'}.'/users');
+            $service = new AuthService(new FileUtils()->concatDirectories(
+                Properties::getInstance()->getRootDir(),
+                Properties::getInstance()->getConf()->{'privatedir'},
+                '/users'
+            ));
+
             $jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
 
             $jsonUser = $service->getJsonUserFromToken($token);
 
             if ('php-jwt' === $jwtImpl) {
-                $decoded = JWT::decode(
+                $decoded = $this->decodePhpJwtToken(
                     $token,
                     $jsonUser->{'salt'},
                     (array) $this->options['algorithm']
@@ -391,6 +397,30 @@ class CustomJwtAuthentication implements MiddlewareInterface
 
             throw $exception;
         }
+    }
+
+    /**
+     * Decode a token with firebase/php-jwt, trying each allowed algorithm.
+     *
+     * @param string[] $allowedAlgorithms
+     */
+    private function decodePhpJwtToken(string $token, string $secret, array $allowedAlgorithms): \stdClass
+    {
+        $lastException = null;
+
+        foreach ($allowedAlgorithms as $algorithm) {
+            try {
+                return JWT::decode($token, new Key($secret, $algorithm));
+            } catch (Exception $exception) {
+                $lastException = $exception;
+            }
+        }
+
+        if ($lastException instanceof Exception) {
+            throw $lastException;
+        }
+
+        throw new RuntimeException('Unable to decode token.');
     }
 
     /**
@@ -493,7 +523,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
     /**
      * Set the logger.
      */
-    private function logger(LoggerInterface $logger = null): void
+    private function logger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

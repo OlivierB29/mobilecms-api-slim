@@ -140,6 +140,11 @@ class JwtToken
         return base64_encode('{ "sub": "'.$email.'", "name": "'.$username.'", "role": "'.$role.'"}');
     }
 
+    public function initPayloadArray(string $username, string $email, string $role): array
+    {
+        return [ "sub" => $email, "name" => $username, "role" => $role ];
+    }
+
     /**
      * Concat token fields.
      *

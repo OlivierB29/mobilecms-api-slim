@@ -1,0 +1,30 @@
+{
+    "defaultlocale": "fr",
+    "title": "Kendo Iaido Chanbara Association",
+    "fulltitle": "Kendo Iaido Chanbara Association",
+    "keywords": "kendo,iaido,chanbara,jodo,naginata",
+    "socialnetworks": [
+        {
+            "title": "Facebook",
+            "url": "https:\/\/www.facebook.com\/",
+            "icon": "bi-facebook"
+        },
+        {
+            "title": "Youtube",
+            "url": "https:\/\/www.youtube.com\/",
+            "icon": "bi-youtube"
+        },
+        {
+            "title": "Discord",
+            "url": "https:\/\/discordapp.com\/",
+            "icon": "bi-discord"
+        }
+    ],
+    "googlecalendar": {
+        "embedurl": "https:\/\/calendar.google.com\/calendar"
+    },
+    "banner": {
+        "imageurl": "media\/theme\/banner\/banner2.jpg",
+        "imagealt": "AssociationKendoIaidoChanbara "
+    }
+}
