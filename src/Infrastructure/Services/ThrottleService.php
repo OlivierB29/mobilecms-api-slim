@@ -45,7 +45,9 @@ class ThrottleService
         // TODO add failed login
         if (\file_exists($file)) {
             $history = JsonUtils::readJsonFile($file);
-            $failedList = $history->{'failed'};
+            $failedList = isset($history->{'failed'}) && is_array($history->{'failed'})
+                ? $history->{'failed'}
+                : [];
         } else {
             $history = \json_decode('{}');
             $failedList = [];
@@ -72,7 +74,9 @@ class ThrottleService
         // TODO add failed login
         if (file_exists($file)) {
             $history = JsonUtils::readJsonFile($file);
-            $failedList = $history->{'failed'};
+            $failedList = isset($history->{'failed'}) && is_array($history->{'failed'})
+                ? $history->{'failed'}
+                : [];
             $result = count($failedList);
         }
 
@@ -90,7 +94,9 @@ class ThrottleService
         // TODO add failed login
         if (file_exists($file)) {
             $history = JsonUtils::readJsonFile($file);
-            $failedList = $history->{'failed'};
+            $failedList = isset($history->{'failed'}) && is_array($history->{'failed'})
+                ? $history->{'failed'}
+                : [];
         } else {
             $history = \json_decode('{}');
             $failedList = [];

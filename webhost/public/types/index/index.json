@@ -6,5 +6,6 @@
   {"type":"contacts", "labels": [ {"i18n":"en", "label":"Contacts"}, {"i18n":"fr", "label":"Contacts"}]},
   {"type":"links", "labels": [ {"i18n":"en", "label":"Links"}, {"i18n":"fr", "label":"Liens"}]},
   {"type":"structure", "labels": [ {"i18n":"en", "label":"Structure"}, {"i18n":"fr", "label":"Organisation"}]},
-  {"type":"reports", "labels": [ {"i18n":"en", "label":"Reports"}, {"i18n":"fr", "label":"Comptes Rendus"}]}
+  {"type":"reports", "labels": [ {"i18n":"en", "label":"Reports"}, {"i18n":"fr", "label":"Comptes Rendus"}]},
+  {"type":"theme", "labels": [ {"i18n":"en", "label":"Theme"}, {"i18n":"fr", "label":"Apparence"}]}
 ]

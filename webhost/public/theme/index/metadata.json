@@ -1,0 +1,6 @@
+[
+
+    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line", "generated":"title"},
+    {"name" : "banner" , "primary" : "false", "type" : "array",  "editor":"medialist"}
+
+]
