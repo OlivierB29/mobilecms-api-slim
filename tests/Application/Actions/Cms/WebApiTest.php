@@ -31,7 +31,7 @@ final class WebApiTest extends AuthApiUtility
 
         $this->assertTrue($response != null);
 
-        $this->assertTrue(strpos($response->getEncodedResult(), '{"filename":"1.json","id":"1"}') !== false);
+        $this->assertTrue(strpos($response->getEncodedResult(), 'yet another seminar of activity') !== false);
     }
 
 

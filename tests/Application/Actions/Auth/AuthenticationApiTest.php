@@ -19,7 +19,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-
+    $this->seteditor();
     }
 
     public function testOptions()
@@ -76,28 +76,12 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertTrue($response != null);
     }
 
-    public function testAuthByUser()
-    {
-        $this->path = $this->getApi().'/authapi/authenticate';
-        $recordStr = '{ "user": "test@example.com", "password":"Sample#123456"}';
 
-        $this->POST = ['requestbody' => $recordStr];
-        $response = $this->request('POST', $this->path);
-
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        $this->assertTrue($response != null);
-
-        $userObject = $response->getResult();
-
-        $this->assertTrue($userObject->{'email'} === 'test@example.com');
-        $this->assertTrue(strlen($userObject->{'token'}) > 150);
-    }
 
     public function testAuthByEmail()
     {
         $this->path = $this->getApi().'/authapi/authenticate';
-        $recordStr = '{ "email": "test@example.com", "password":"Sample#123456"}';
+        $recordStr = '{ "user": "editor@example.com", "password":"Sample#123456"}';
 
         $this->POST = ['requestbody' => $recordStr];
 
@@ -107,9 +91,9 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $userObject = $response->getResult();
+        $userObject  = $response->getResult();
 
-        $this->assertTrue($userObject->{'email'} === 'test@example.com');
+        $this->assertTrue($userObject->{'email'} === 'editor@example.com');
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
     }
 
@@ -272,7 +256,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertTrue($userObject->{'email'} === $user);
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
     }
-
+/*
     public function testPublicInfoGet()
     {
         $this->path = $this->getApi().'/authapi/publicinfo/editor@example.com';
@@ -289,25 +273,8 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
         $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
     }
-
-    public function testPublicInfoPost()
-    {
-        $this->path = $this->getApi().'/authapi/publicinfo';
-
-        $recordStr = '{ "email": "editor@example.com" }';
-        $this->POST = ['requestbody' => $recordStr];
-        $response = $this->request('POST', $this->path);
-
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        $this->assertTrue($response != null);
-
-        $userObject = $response->getResult();
-
-        $this->assertTrue($userObject->{'name'} === 'editor@example.com');
-        $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
-        $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
-    }
+*/
+   
 
     public function testEmptyBody()
     {

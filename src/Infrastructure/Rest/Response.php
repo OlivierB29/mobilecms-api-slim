@@ -13,7 +13,7 @@ class Response
     /**
      * result.data.
      */
-    private $result;
+    private mixed $result = null;
 
     private $error = '';
 
@@ -27,7 +27,7 @@ class Response
      */
     public function __construct()
     {
-        $this->result = '{}';
+        $this->result = \json_decode('{}');
     }
 
     /**

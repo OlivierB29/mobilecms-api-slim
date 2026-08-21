@@ -242,7 +242,10 @@ abstract class ApiUtility extends TestCase
 
     protected function toUploadedFileInterface(array $files): array
     {
-        $result = [];
+
+        $result = [
+            'uploadfiles' => [],
+        ];
         /*
                 $files = [
                 ['name'=>$filename,'type'=>'application/pdf','tmp_name'=> $mockUploadedFile,'error'=>0,'size'=>24612]
@@ -265,7 +268,7 @@ abstract class ApiUtility extends TestCase
                 $clientFilename,
                 $clientMediaType
             );
-            array_push($result, $uploadedFile);
+            array_push($result['uploadfiles'], $uploadedFile);
         }
 
         return $result;

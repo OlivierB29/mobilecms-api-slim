@@ -151,7 +151,6 @@ class AuthService
                     unset($jwt);
                 }
 
-                $response->setCode(200);
                 $userResponse = json_decode('{}');
                 $userResponse->{'name'} = $user->{'name'};
                 $userResponse->{'username'} = $user->{'name'};
@@ -165,7 +164,7 @@ class AuthService
                 }
                  */
                 $userResponse->{'token'} = $token;
-
+                $response->setCode(200);
                 $response->setResult($userResponse);
                 // success
                 $loginmsg = '';

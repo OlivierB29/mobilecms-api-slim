@@ -48,20 +48,24 @@ class BasicUploadPostAction extends FileAction
     private function uploadFilesSlim($type, $id, $inputFiles): array
     {
         $result = [];
-        $files = $inputFiles['uploadfiles'];
-        if (!isset($files) || count($files) === 0) {
-            throw new HttpBadRequestException($this->request, 'no file.');
+
+        if (!isset($inputFiles) || count($inputFiles) === 0) {
+            throw new HttpBadRequestException($this->request, 'empty file structure.');
+        }
+
+        if (!isset($inputFiles['uploadfiles']) || count($inputFiles['uploadfiles']) === 0) {
+            throw new HttpBadRequestException($this->request, 'empty files array.');
         }
 
         // Basic upload verification
-        foreach ($files as $fileControl) {
+        foreach ($inputFiles['uploadfiles'] as $fileControl) {
                     if ($fileControl !== null && !$this->isFileAllowed($fileControl)) {
                         throw new HttpBadRequestException($this->request, 'forbidden file type');
                     }
         }
 
 
-        foreach ($files as $file) {
+        foreach ($inputFiles['uploadfiles'] as $file) {
             if ($file !== null) {
                 $fileResult = $this->uploadFile($type, $id, $file);
                 array_push($result, $fileResult);

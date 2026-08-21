@@ -197,7 +197,7 @@ final class FileApiTest extends AuthApiUtility
         $mockUploadedFile = realpath('tests-data/fileapi/save/').'/'.'upload_tmp123456.jpg';
         copy('tests-data/fileapi/save/'.$filename, $mockUploadedFile);
         $files = [
-            ['name'=>$filename, 'type'=>'image/jpeg', 'tmp_name'=> $mockUploadedFile, 'error'=>0, 'size'=>146955],
+                ['name'=>$filename, 'type'=>'image/jpeg', 'tmp_name'=> $mockUploadedFile, 'error'=>0, 'size'=>146955],
         ];
 
         $response = $this->fileRequest('POST', $this->path, $files);

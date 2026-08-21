@@ -13,6 +13,16 @@ use Tests\AuthApiUtility;
 
 class IndexGetActionTest extends AuthApiUtility
 {
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->setEditor();
+
+    }
+
+
     public function testGetIndex()
     {
         $app = $this->getAppInstance();

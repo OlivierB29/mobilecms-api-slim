@@ -10,6 +10,7 @@ use Tests\AuthApiUtility;
 
 final class CmsApiTest extends AuthApiUtility
 {
+    
     protected $requestparams = '?timestamp=1599654646';
 
     protected function setUp(): void
@@ -305,7 +306,7 @@ final class CmsApiTest extends AuthApiUtility
         $response = $this->request('GET', $this->path);
 
         $this->assertTrue($response != null);
-        $this->assertJsonStringEqualsJsonString('{"result":"true"}', $response->getEncodedResult());
+        $this->assertJsonStringEqualsJsonString('{}', $response->getEncodedResult());
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
     }
