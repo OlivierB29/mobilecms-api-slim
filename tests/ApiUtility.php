@@ -7,11 +7,11 @@ use App\Application\Actions\ActionPayload;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\Properties;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Factory\UploadedFileFactory;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request;
 use Slim\Psr7\Uri;
-use Tuupola\Http\Factory\StreamFactory;
-use Tuupola\Http\Factory\UploadedFileFactory;
 
 // reminder : PHPUnit autoloader seems to import files with an alphabetic order.
 

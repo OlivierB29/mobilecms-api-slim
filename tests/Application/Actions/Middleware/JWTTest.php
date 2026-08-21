@@ -27,7 +27,7 @@ final class JWTTest extends TestCase
         $username = 'test';
         $email = 'test@example.com';
         $role = 'guest';
-        $key = 'secret';
+        $key = str_repeat('a', 64);
         $alg = 'HS512';
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
@@ -48,7 +48,7 @@ final class JWTTest extends TestCase
         $username = 'test';
         $email = 'test@example.com';
         $role = 'guest';
-        $key = 'secret';
+        $key = str_repeat('a', 64);
         $alg = 'HS512';
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
@@ -74,7 +74,7 @@ final class JWTTest extends TestCase
         $username = 'test';
         $email = 'test@example.com';
         $role = 'guest';
-        $key = 'secret';
+        $key = str_repeat('a', 64);
         $alg = 'HS512';
 
         $token = $this->util->createTokenFromUser($username, $email, $role, $key);
@@ -84,12 +84,12 @@ final class JWTTest extends TestCase
         $phpjwtToken = JWT::encode($payload, $key, $alg);
 
         $this->assertFalse(
-            $this->util->verifyToken($token, 'wrongsecret')
+            $this->util->verifyToken($token, str_repeat('b', 64))
         );
         //$jwt, $key, array $allowed_algs = array()
 
         $this->expectException(\Exception::class);
 
-        JWT::decode($phpjwtToken, new Key('wrongsecret', $alg));
+        JWT::decode($phpjwtToken, new Key(str_repeat('b', 64), $alg));
     }
 }

@@ -17,9 +17,9 @@
         }
     ],
     "require": {
-        "php": ">=8",
+        "php": ">=8.2",
         "ext-json": "*",
-        "jimtools/jwt-auth": "^1.1",
+        "jimtools/jwt-auth": "^3.0",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^7.1",
         "phpmailer/phpmailer": "^6.2",
