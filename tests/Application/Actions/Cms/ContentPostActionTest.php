@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Cms;
 
-use App\Application\Actions\ActionPayload;
-use DI\Container;
 use Tests\AuthApiUtility;
 
 class ContentPostActionTest extends AuthApiUtility
@@ -19,33 +17,18 @@ class ContentPostActionTest extends AuthApiUtility
     }
 
 
-    public function testPostText()
+    public function testPostGeneratesIdInResponse()
     {
-        $app = $this->getAppInstance();
+        $this->path = $this->getApi().'/cmsapi/content/news';
+        $this->POST = ['requestbody' => '{"status":"draft","title":"generated from post","media":[],"date":"2026-08-22","activity":"kendo","description":"<p>aaaaaa</p>"}'];
+        $response = $this->request('POST', $this->path);
 
-        /** @var Container $container */
-        $container = $app->getContainer();
+        $this->assertEquals(200, $response->getCode());
+        $this->assertEquals('2026-08-22-generated-from-post', $response->getResult()->id);
 
-        // API
-        $request = $this->createRequest('POST', $this->getApi().'/cmsapi/content/calendar', $this->headers);
-
-        $contents = \json_decode(file_get_contents('tests-data/public/text.json'));
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $request = $request->withParsedBody($contents);
-        }
-
-        $response = $app->handle($request);
-
-        $payloadObject = $response->getBody();
-        $payload = (string) $response->getBody();
-
-        // Assert
-        $index_data = '{}';
-
-        $expectedPayload = new ActionPayload(200, $index_data);
-        $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
-
-        $this->assertResponse($expectedPayload, $response);
+        $file = $this->API->getPublicDirPath().'/news/2026-08-22-generated-from-post.json';
+        $this->assertFileExists($file);
+        unlink($file);
     }
     
 }

@@ -4,6 +4,7 @@ namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
+use App\Infrastructure\Utils\StringUtils;
 
 /**
  * Function used for sorting.
@@ -378,6 +379,8 @@ class ContentService extends AbstractService
         $this->checkParams($type, $keyname);
         $response = $this->getDefaultResponse();
 
+        $this->assignGeneratedId($type, $keyname, $record);
+
         if (!empty($record) && !empty($record->{$keyname})) {
             $response->setResult($record);
 
@@ -396,6 +399,73 @@ class ContentService extends AbstractService
         }
 
         return $response;
+    }
+
+    /**
+     * Generate a record id from metadata "generated" fields when the client did not send one.
+     * eg metadata: {"name":"id","generated":"date,title"} + date/title -> "2026-08-23-aaaaaaaaaa"
+     */
+    private function assignGeneratedId(string $type, string $keyname, \stdClass $record): void
+    {
+        if (!empty($record->{$keyname})) {
+            return;
+        }
+
+        $sources = $this->getGeneratedIdSources($type, $keyname);
+        if ($sources === []) {
+            return;
+        }
+
+        $parts = [];
+        foreach ($sources as $field) {
+            if (empty($record->{$field})) {
+                continue;
+            }
+            $slug = StringUtils::slugify((string) $record->{$field});
+            if ($slug !== '') {
+                $parts[] = $slug;
+            }
+        }
+
+        if ($parts === []) {
+            return;
+        }
+
+        $baseId = implode('-', $parts);
+        $id = $baseId;
+        $suffix = 2;
+        while (file_exists($this->getItemFileName($type, $id, $record))) {
+            $id = $baseId.'-'.$suffix;
+            ++$suffix;
+        }
+
+        $record->{$keyname} = $id;
+    }
+
+    /**
+     * @return string[] field names used to build the id, empty if not generated
+     */
+    private function getGeneratedIdSources(string $type, string $keyname): array
+    {
+        $file = $this->getMetadataFileName($type);
+        if (!file_exists($file)) {
+            return [];
+        }
+
+        $metadata = JsonUtils::readJsonFile($file);
+        if (!is_array($metadata)) {
+            return [];
+        }
+
+        foreach ($metadata as $field) {
+            if (isset($field->name) && $field->name === $keyname && !empty($field->generated)) {
+                $names = explode(',', (string) $field->generated);
+
+                return array_values(array_filter(array_map('trim', $names)));
+            }
+        }
+
+        return [];
     }
 
     /**
