@@ -45,6 +45,9 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use InvalidArgumentException;
+use JimTools\JwtAuth\Rules\RequestMethodRule;
+use JimTools\JwtAuth\Rules\RequestPathRule;
+use JimTools\JwtAuth\Rules\RuleInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -53,18 +56,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
 use Slim\Exception\HttpForbiddenException;
+use Slim\Psr7\Factory\ResponseFactory;
 use SplStack;
-// CUSTOM
-use Tuupola\Http\Factory\ResponseFactory;
-use Tuupola\Middleware\DoublePassTrait;
-use Tuupola\Middleware\JwtAuthentication\RequestMethodRule;
-use Tuupola\Middleware\JwtAuthentication\RequestPathRule;
-use Tuupola\Middleware\JwtAuthentication\RuleInterface;
 
 class CustomJwtAuthentication implements MiddlewareInterface
 {
-    use DoublePassTrait;
-
     /**
      * PSR-3 compliant logger.
      *
@@ -132,13 +128,11 @@ class CustomJwtAuthentication implements MiddlewareInterface
         /* This also means $options["rules"] overrides $options["path"] */
         /* and $options["ignore"] */
         if (!isset($options['rules'])) {
-            $this->rules->push(new RequestMethodRule([
-                'ignore' => ['OPTIONS'],
-            ]));
-            $this->rules->push(new RequestPathRule([
-                'path'   => $this->options['path'],
-                'ignore' => $this->options['ignore'],
-            ]));
+            $this->rules->push(new RequestMethodRule());
+            $this->rules->push(new RequestPathRule(
+                paths: (array) $this->options['path'],
+                ignore: (array) $this->options['ignore'],
+            ));
         }
     }
 

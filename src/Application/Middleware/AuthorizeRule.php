@@ -8,14 +8,10 @@ namespace App\Application\Middleware;
  * @see       https://github.com/JimTools/jwt-auth
  */
 
+use JimTools\JwtAuth\Rules\RuleInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-// wtf ???
-// Error: Interface 'Psr\Http\Message\RuleInterface' not found
-// use Psr\Http\Message\RuleInterface;
-// implements RuleInterface
-
-class AuthorizeRule
+class AuthorizeRule implements RuleInterface
 {
     private $userrole = null;
 
