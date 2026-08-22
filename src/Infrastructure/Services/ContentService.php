@@ -403,7 +403,8 @@ class ContentService extends AbstractService
 
     /**
      * Generate a record id from metadata "generated" fields when the client did not send one.
-     * eg metadata: {"name":"id","generated":"date,title"} + date/title -> "2026-08-23-aaaaaaaaaa"
+     * eg metadata: {"name":"id","generated":"date,title"} + date/title -> "2026-aaaaaaaaaa"
+     * Date fields contribute only the year.
      */
     private function assignGeneratedId(string $type, string $keyname, \stdClass $record): void
     {
@@ -411,7 +412,8 @@ class ContentService extends AbstractService
             return;
         }
 
-        $sources = $this->getGeneratedIdSources($type, $keyname);
+        $metadata = $this->loadMetadata($type);
+        $sources = $this->getGeneratedIdSources($metadata, $keyname);
         if ($sources === []) {
             return;
         }
@@ -421,7 +423,7 @@ class ContentService extends AbstractService
             if (empty($record->{$field})) {
                 continue;
             }
-            $slug = StringUtils::slugify((string) $record->{$field});
+            $slug = $this->slugForGeneratedId($metadata, $field, (string) $record->{$field});
             if ($slug !== '') {
                 $parts[] = $slug;
             }
@@ -443,9 +445,9 @@ class ContentService extends AbstractService
     }
 
     /**
-     * @return string[] field names used to build the id, empty if not generated
+     * @return array metadata fields
      */
-    private function getGeneratedIdSources(string $type, string $keyname): array
+    private function loadMetadata(string $type): array
     {
         $file = $this->getMetadataFileName($type);
         if (!file_exists($file)) {
@@ -457,6 +459,17 @@ class ContentService extends AbstractService
             return [];
         }
 
+        return $metadata;
+    }
+
+    /**
+     * @param array  $metadata type metadata
+     * @param string $keyname  primary key name
+     *
+     * @return string[] field names used to build the id, empty if not generated
+     */
+    private function getGeneratedIdSources(array $metadata, string $keyname): array
+    {
         foreach ($metadata as $field) {
             if (isset($field->name) && $field->name === $keyname && !empty($field->generated)) {
                 $names = explode(',', (string) $field->generated);
@@ -466,6 +479,17 @@ class ContentService extends AbstractService
         }
 
         return [];
+    }
+
+    private function slugForGeneratedId(array $metadata, string $fieldName, string $value): string
+    {
+        foreach ($metadata as $field) {
+            if (isset($field->name, $field->editor) && $field->name === $fieldName && $field->editor === 'date') {
+                return StringUtils::slugify(substr($value, 0, 4));
+            }
+        }
+
+        return StringUtils::slugify($value);
     }
 
     /**

@@ -24,9 +24,9 @@ class ContentPostActionTest extends AuthApiUtility
         $response = $this->request('POST', $this->path);
 
         $this->assertEquals(200, $response->getCode());
-        $this->assertEquals('2026-08-22-generated-from-post', $response->getResult()->id);
+        $this->assertEquals('2026-generated-from-post', $response->getResult()->id);
 
-        $file = $this->API->getPublicDirPath().'/news/2026-08-22-generated-from-post.json';
+        $file = $this->API->getPublicDirPath().'/news/2026-generated-from-post.json';
         $this->assertFileExists($file);
         unlink($file);
     }

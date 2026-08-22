@@ -76,18 +76,18 @@ final class ContentServiceTest extends TestCase
         $response = $service->post('news', 'id', $record);
 
         $this->assertEquals(200, $response->getCode());
-        $this->assertEquals('2026-08-23-aaaaaaaaaa', $response->getResult()->id);
+        $this->assertEquals('2026-aaaaaaaaaa', $response->getResult()->id);
 
-        $file = $this->dir.'/news/2026-08-23-aaaaaaaaaa.json';
+        $file = $this->dir.'/news/2026-aaaaaaaaaa.json';
         $this->assertFileExists($file);
 
         $collision = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
         $collisionResponse = $service->post('news', 'id', $collision);
         $this->assertEquals(200, $collisionResponse->getCode());
-        $this->assertEquals('2026-08-23-aaaaaaaaaa-2', $collisionResponse->getResult()->id);
+        $this->assertEquals('2026-aaaaaaaaaa-2', $collisionResponse->getResult()->id);
 
         unlink($file);
-        unlink($this->dir.'/news/2026-08-23-aaaaaaaaaa-2.json');
+        unlink($this->dir.'/news/2026-aaaaaaaaaa-2.json');
     }
 
     public function testPostKeepsClientIdWhenProvided()
