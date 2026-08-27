@@ -387,7 +387,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             */
             return $jsonUser;
         } catch (Exception $exception) {
-            $this->log(LogLevel::WARNING, $exception->getMessage(), [$token]);
+            $this->log(LogLevel::WARNING, 'JWT validation failed');
 
             throw $exception;
         }

@@ -21,7 +21,9 @@ abstract class FileAction extends RestAction
     /**
      * Default umask for directories and files.
      */
-    protected $umask = 0775;
+    protected $filesUmask = 0644;
+    
+    protected $directoryUmask = 0750;
 
     protected $files;
 

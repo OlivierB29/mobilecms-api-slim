@@ -117,8 +117,10 @@ class BasicUploadPostAction extends FileAction
 
         // create directory if it doesn't exist
         if (!file_exists($destdir)) {
-            mkdir($destdir, $this->umask, true);
-            chmod($destdir, $this->umask);
+            mkdir($destdir, $this->directoryUmask, true);
+            
+        } else {
+            chmod($destdir, $this->directoryUmask);
         }
 
         // upload
@@ -135,7 +137,7 @@ class BasicUploadPostAction extends FileAction
                 throw new HttpInternalServerErrorException($this->request, 'Upload error '.$file->getClientFilename());
             }
 
-            chmod($destfile, $this->umask);
+            chmod($destfile, $this->filesUmask);
             $title = $file->getClientFilename();
             $url = $file->getClientFilename();
 
