@@ -17,16 +17,22 @@ class ContentPostAction extends CmsAction
 
         $body = $this->getRequestBody();
         $putResponse = $this->getService()->post($this->getParam('type'), self::ID, $body);
+        if ($putResponse->getCode() !== 200) {
+            return $this->withResponse($putResponse);
+        }
+
         $myobjectJson = $putResponse->getResult();
-        unset($putResponse);
 
         // step 2 : publish to index
         $id = $myobjectJson->{self::ID};
-        unset($myobjectJson);
 
         // issue : sometimes, the index is not refreshed
         $response = $this->getService()->publishById($this->getParam('type'), self::ID, $id);
         // $response = $this->getService()->rebuildIndex($this->getParam('type'), self::ID);
+
+        if ($response->getCode() === 200) {
+            $response->setResult($myobjectJson);
+        }
 
         return $this->withResponse($response);
     }

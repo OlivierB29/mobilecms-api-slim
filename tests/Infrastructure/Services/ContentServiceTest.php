@@ -69,6 +69,41 @@ final class ContentServiceTest extends TestCase
         $this->assertEquals(400, $response->getCode());
     }
 
+    public function testPostGeneratesIdFromMetadata()
+    {
+        $record = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
+        $service = new ContentService($this->dir);
+        $response = $service->post('news', 'id', $record);
+
+        $this->assertEquals(200, $response->getCode());
+        $this->assertEquals('2026-aaaaaaaaaa', $response->getResult()->id);
+
+        $file = $this->dir.'/news/2026-aaaaaaaaaa.json';
+        $this->assertFileExists($file);
+
+        $collision = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
+        $collisionResponse = $service->post('news', 'id', $collision);
+        $this->assertEquals(200, $collisionResponse->getCode());
+        $this->assertEquals('2026-aaaaaaaaaa-2', $collisionResponse->getResult()->id);
+
+        unlink($file);
+        unlink($this->dir.'/news/2026-aaaaaaaaaa-2.json');
+    }
+
+    public function testPostKeepsClientIdWhenProvided()
+    {
+        $recordStr = '{"id":"client-id-keep","date":"2026-08-23","title":"aaaaaaaaaa","status":"draft"}';
+        $service = new ContentService($this->dir);
+        $response = $service->post('news', 'id', json_decode($recordStr));
+
+        $this->assertEquals(200, $response->getCode());
+        $this->assertEquals('client-id-keep', $response->getResult()->id);
+
+        $file = $this->dir.'/news/client-id-keep.json';
+        $this->assertFileExists($file);
+        unlink($file);
+    }
+
     public function testBasicPost()
     {
         $recordStr = '{"id":"10","date":"2015-09-01","activity":"activitya","title":"some seminar of activity A","organization":"Some org","description":"<some infos","url":"","location":"","startdate":"","enddate":"","updated":"","updatedby":""}';

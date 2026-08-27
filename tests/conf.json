@@ -7,12 +7,12 @@
   "fileextensions":["jpg","jpeg","png","gif","pdf","docx","xlsx","pptx","odt","ods","odp","mp4","m4v"],
   "imagequality":97,
   "jwt": "oldphp-jwt",
-  "crossdomain": "true",
+  "crossdomain": "false",
   "enablecleaninputs": "true",
-  "https": "false",
-  "debugapiexceptions": "true",
+
+
   "postformdata": "parsedbody",
-  "errorlog": "true",
+  
   "logfile": "unittests.log",
 
   "enablemail": "false",
