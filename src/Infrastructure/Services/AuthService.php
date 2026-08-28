@@ -136,7 +136,7 @@ class AuthService
                 $token = null;
                 $jwt = new JwtToken();
                 if ('php-jwt' === $this->jwtImpl) {
-                    $payload = $jwt->initPayload($user->{'name'}, $user->{'email'}, $user->{'role'});
+                    $payload = $jwt->initPayloadArray($user->{'name'}, $user->{'email'}, $user->{'role'});
 
                     $token = JWT::encode($payload, $user->{'salt'}, $this->phpJwtAlgorithm);
                 } else {

@@ -1,6 +1,6 @@
 {
   "imagedriver": "imagick",
-  "jwt": "customphp-jwt",
+  "jwt": "php-jwt",
   "postformdata": "phpinput",
   "publicdir": "/../tests-data/public",
   "privatedir": "/../tests-data/private",

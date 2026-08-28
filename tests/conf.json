@@ -6,7 +6,7 @@
   "imagedriver": "imagick",
   "fileextensions":["jpg","jpeg","png","gif","pdf","docx","xlsx","pptx","odt","ods","odp","mp4","m4v"],
   "imagequality":97,
-  "jwt": "oldphp-jwt",
+  "jwt": "php-jwt",
   "crossdomain": "false",
   "enablecleaninputs": "true",
 
