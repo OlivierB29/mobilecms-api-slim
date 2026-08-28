@@ -376,12 +376,12 @@ class ContentService extends AbstractService
      */
     public function post(string $type, string $keyname, \stdClass $record)
     {
-        $this->checkParams($type, $keyname);
+
         $response = $this->getDefaultResponse();
 
         $this->assignGeneratedId($type, $keyname, $record);
 
-        if (!empty($record) && !empty($record->{$keyname})) {
+        if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
             $response->setResult($record);
 
             // detect id

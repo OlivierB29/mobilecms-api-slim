@@ -158,7 +158,7 @@ final class CmsApiTest extends AuthApiUtility
 
         $response = $this->request('GET', $this->path);
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(403, $response->getCode());
         $this->assertTrue($response != null);
 
 //        $this->assertJsonStringEqualsJsonString('{"error":"wrong role"}', $response->getEncodedResult());

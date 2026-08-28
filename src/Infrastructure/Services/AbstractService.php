@@ -52,14 +52,7 @@ abstract class AbstractService
         }
     }
 
-    protected function checkParams(string $type, string $id)
-    {
-        $this->checkType($type);
 
-        if (empty($id)) {
-            throw new \Exception('empty id');
-        }
-    }
 
     /**
      * Initialize a default Response object.

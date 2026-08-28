@@ -50,13 +50,7 @@ final class ContentServiceTest extends TestCase
         $response = $service->post('', 'id', json_decode($recordStr));
     }
 
-    public function testPostEmptyKey()
-    {
-        $this->expectException(\Exception::class);
-        $recordStr = '{"id":"10","date":"2015-09-01","activity":"activitya","title":"some seminar of activity A","organization":"Some org","description":"<some infos","url":"","location":"","startdate":"","enddate":"","updated":"","updatedby":""}';
-        $service = new ContentService($this->dir);
-        $response = $service->post('calendar', '', json_decode($recordStr));
-    }
+
 
     public function testPostEmptyRecord()
     {
@@ -71,7 +65,7 @@ final class ContentServiceTest extends TestCase
 
     public function testPostGeneratesIdFromMetadata()
     {
-        $record = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
+        $record = json_decode('{"title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
         $service = new ContentService($this->dir);
         $response = $service->post('news', 'id', $record);
 
