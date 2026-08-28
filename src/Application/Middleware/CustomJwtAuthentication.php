@@ -185,6 +185,13 @@ class CustomJwtAuthentication implements MiddlewareInterface
             if (!$permitted) {
                 throw new HttpForbiddenException($request, 'operation not permitted');
             }
+        } catch (HttpForbiddenException $exception) {
+            $response = (new ResponseFactory())->createResponse(403, $exception->getMessage());
+
+            return $this->processError($response, [
+                'message' => $exception->getMessage(),
+                'uri'     => (string) $request->getUri(),
+            ]);
         } catch (DomainException $exception) {
             //   $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process1');
 
@@ -198,14 +205,6 @@ class CustomJwtAuthentication implements MiddlewareInterface
             // $this->log(LogLevel::WARNING, 'Http401_CustomJwt_process2');
 
             $response = (new ResponseFactory())->createResponse(401, $exception->getMessage());
-
-            return $this->processError($response, [
-                'message' => $exception->getMessage(),
-                'uri'     => (string) $request->getUri(),
-            ]);
-        } catch (HttpForbiddenException $exception) {
-            $response = (new ResponseFactory())->createResponse(403, $exception->getMessage());
-            //  $this->log(LogLevel::WARNING, 'Http403_CustomJwt_process');
 
             return $this->processError($response, [
                 'message' => $exception->getMessage(),
@@ -400,21 +399,25 @@ class CustomJwtAuthentication implements MiddlewareInterface
      */
     private function decodePhpJwtToken(string $token, string $secret, array $allowedAlgorithms): \stdClass
     {
-        $lastException = null;
-
-        foreach ($allowedAlgorithms as $algorithm) {
-            try {
-                return JWT::decode($token, new Key($secret, $algorithm));
-            } catch (Exception $exception) {
-                $lastException = $exception;
-            }
+        /* php-jwt 6+ reads the algorithm from the token header. Validate it
+         * against the configured allow-list before constructing the Key. */
+        $segments = explode('.', $token);
+        if (count($segments) !== 3) {
+            throw new DomainException('Wrong number of segments');
         }
 
-        if ($lastException instanceof Exception) {
-            throw $lastException;
+        $header = json_decode(
+            JWT::urlsafeB64Decode($segments[0]),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+        $algorithm = $header['alg'] ?? null;
+        if (!is_string($algorithm) || !in_array($algorithm, $allowedAlgorithms, true)) {
+            throw new DomainException('Algorithm not allowed');
         }
 
-        throw new RuntimeException('Unable to decode token.');
+        return JWT::decode($token, new Key($secret, $algorithm));
     }
 
     /**

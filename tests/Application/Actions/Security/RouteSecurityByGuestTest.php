@@ -23,7 +23,7 @@ final class RouteSecurityByGuestTest extends AuthApiUtility
 
         $response = $this->request('GET', $this->path);
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(403, $response->getCode());
         $this->assertTrue($response != null);
     }
 
@@ -34,7 +34,7 @@ final class RouteSecurityByGuestTest extends AuthApiUtility
 
         $response = $this->request('GET', $this->path);
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(403, $response->getCode());
         $this->assertTrue($response != null);
     }
 
@@ -45,7 +45,7 @@ final class RouteSecurityByGuestTest extends AuthApiUtility
 
         $response = $this->request('GET', $this->path);
 
-        $this->assertEquals(401, $response->getCode());
+        $this->assertEquals(403, $response->getCode());
         $this->assertTrue($response != null);
     }
 }
