@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Utils;
 
 use App\Infrastructure\Utils\Properties;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class PropertiesTest extends TestCase
+final class PropertiesTest extends ApiUtility
 {
     private $conf;
 

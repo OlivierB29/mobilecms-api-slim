@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\UserService;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class UserServiceTest extends TestCase
+final class UserServiceTest extends ApiUtility
 {
     private $service;
 

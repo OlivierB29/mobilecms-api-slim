@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Utils;
 
 use App\Infrastructure\Utils\MailUtils;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class MailUtilsTest extends TestCase
+final class MailUtilsTest extends ApiUtility
 {
     public function testFrom()
     {

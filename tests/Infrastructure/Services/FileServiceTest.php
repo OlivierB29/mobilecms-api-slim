@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\FileService;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class FileServiceTest extends TestCase
+final class FileServiceTest extends ApiUtility
 {
     private $dir = 'tests-data/fileservice';
 

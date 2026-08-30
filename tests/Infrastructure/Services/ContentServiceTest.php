@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\ContentService;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class ContentServiceTest extends TestCase
+
+final class ContentServiceTest extends ApiUtility
 {
     private $dir = 'tests-data/public';
 
@@ -59,7 +60,7 @@ final class ContentServiceTest extends TestCase
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
         $file = $this->dir.'/calendar/10.json';
-
+        
         $this->assertEquals(400, $response->getCode());
     }
 
@@ -163,7 +164,7 @@ final class ContentServiceTest extends TestCase
             echo $response->getResult();
             echo $response->getMessage();
         }
-
+        
         $this->assertEquals(200, $response->getCode());
     }
 

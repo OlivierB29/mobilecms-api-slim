@@ -7,9 +7,10 @@ namespace Tests\Application\Actions\Middleware;
 use App\Infrastructure\Rest\JwtToken;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Tests\TestCase;
+use Tests\ApiUtility;
 
-final class JWTTest extends TestCase
+
+final class JWTTest extends ApiUtility
 {
     private $util;
 

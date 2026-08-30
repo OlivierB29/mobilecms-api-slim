@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Tests\Application\Actions\Middleware;
 
 use App\Infrastructure\Rest\JwtToken;
-use Tests\TestCase;
+use Tests\ApiUtility;
 
-final class JwtTokenTest extends TestCase
+
+final class JwtTokenTest extends ApiUtility
 {
     private $util;
 

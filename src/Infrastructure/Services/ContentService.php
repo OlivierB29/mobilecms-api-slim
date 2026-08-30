@@ -379,6 +379,12 @@ class ContentService extends AbstractService
 
         $response = $this->getDefaultResponse();
 
+        if (empty(get_object_vars($record))) {
+            $response->setError(400, 'Empty object record');
+            return $response;
+        }
+
+
         $this->assignGeneratedId($type, $keyname, $record);
         
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {

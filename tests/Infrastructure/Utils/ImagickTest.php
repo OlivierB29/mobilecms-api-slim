@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Utils;
 
 use App\Infrastructure\Utils\ImageUtils;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class ImagickTest extends TestCase
+final class ImagickTest extends ApiUtility
 {
     public function testResizeJpeg()
     {

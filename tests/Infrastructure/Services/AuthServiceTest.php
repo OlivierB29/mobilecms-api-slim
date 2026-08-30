@@ -6,9 +6,10 @@ namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Services\ThrottleService;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class AuthServiceTest extends TestCase
+
+final class AuthServiceTest extends ApiUtility
 {
     private $service;
     private $throttle;

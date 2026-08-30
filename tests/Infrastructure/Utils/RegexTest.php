@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Infrastructure\Utils;
 
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class RegexTest extends TestCase
+final class RegexTest extends ApiUtility
 {
     public function testPath()
     {

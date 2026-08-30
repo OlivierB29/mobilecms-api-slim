@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Infrastructure\Utils;
 
 use App\Infrastructure\Utils\StringUtils;
-use PHPUnit\Framework\TestCase;
+use Tests\ApiUtility;
 
-final class StringUtilsTest extends TestCase
+final class StringUtilsTest extends ApiUtility
 {
     public function testStartsWith()
     {
