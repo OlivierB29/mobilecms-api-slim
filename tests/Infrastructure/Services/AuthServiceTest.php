@@ -24,7 +24,7 @@ final class AuthServiceTest extends TestCase
 
     }
 
-    public function testCreateUser()
+    public function testServiceCreateUser()
     {
         $mail = 'testcreate@example.com';
         $file = 'tests-data/userservice/'.$mail.'.json';
@@ -38,7 +38,7 @@ final class AuthServiceTest extends TestCase
         unlink($file);
     }
 
-    public function testCreateUserEmptyEmail()
+    public function testServiceCreateUserEmptyEmail()
     {
         $mail = '';
         $password = 'foo';
@@ -47,7 +47,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue(strpos($createresult, 'EmptyEmail') !== false);
     }
 
-    public function testCreateUserInvalidEmail()
+    public function testServiceCreateUserInvalidEmail()
     {
         $mail = 'foobar';
         $password = 'foo';
@@ -56,7 +56,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue(strpos($createresult, 'InvalidEmail') !== false);
     }
 
-    public function testCreateUserAlreadyExists()
+    public function testServiceCreateUserAlreadyExists()
     {
         $mail = 'testcreate@example.com';
         $file = 'tests-data/userservice/'.$mail.'.json';
@@ -71,7 +71,7 @@ final class AuthServiceTest extends TestCase
         unlink($file);
     }
 
-    public function testCreateUserEmptyPassword()
+    public function testServiceCreateUserEmptyPassword()
     {
         $mail = 'testcreate@example.com';
         $password = '';
@@ -80,7 +80,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue(strpos($createresult, 'EmptyPassword') !== false);
     }
 
-    public function testCreateUserEmptyUsername()
+    public function testServiceCreateUserEmptyUsername()
     {
         $mail = 'testcreate@example.com';
         $password = 'foo';
@@ -101,7 +101,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue('' === $result);
     }
 
-    public function testGetToken()
+    public function testServiceGetToken()
     {
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
@@ -119,13 +119,13 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue(strlen($user->{'token'}) > 100);
     }
 
-    public function testEmptyToken()
+    public function testServiceEmptyToken()
     {
         $this->expectException(\Exception::class);
         $result = $this->service->verifyToken(null, 'editor');
     }
 
-    public function testVerifyToken()
+    public function testServiceVerifyToken()
     {
         $getTokenResponse = $this->service->getToken('test@example.com', 'Sample#123456');
 
@@ -133,10 +133,10 @@ final class AuthServiceTest extends TestCase
 
         $result = $this->service->verifyToken($user->{'token'}, 'editor');
 
-        $this->assertTrue($result->getCode() === 200);
+         $this->assertEquals(200, $result->getCode());
     }
 
-    public function testVerifyWrongToken()
+    public function testServiceVerifyWrongToken()
     {
         $getTokenResponse = $this->service->getToken('test@example.com', 'Sample#123456');
 
@@ -147,7 +147,7 @@ final class AuthServiceTest extends TestCase
         $this->assertTrue($result->getCode() === 401);
     }
 
-    public function testInsufficentEditorRole()
+    public function testServiceInsufficentEditorRole()
     {
         $getTokenResponse = $this->service->getToken('guest@example.com', 'Sample#123456');
 
@@ -155,10 +155,10 @@ final class AuthServiceTest extends TestCase
 
         $result = $this->service->verifyToken($user->{'token'}, 'editor');
 
-        $this->assertTrue($result->getCode() === 403);
+        $this->assertEquals(403, $result->getCode());
     }
 
-    public function testInsufficentAdminRole()
+    public function testServiceInsufficentAdminRole()
     {
         $getTokenResponse = $this->service->getToken('test@example.com', 'Sample#123456');
 
@@ -166,10 +166,10 @@ final class AuthServiceTest extends TestCase
 
         $result = $this->service->verifyToken($user->{'token'}, 'admin');
 
-        $this->assertTrue($result->getCode() === 403);
+        $this->assertEquals(403, $result->getCode());
     }
 
-    public function testVerifyEditorByAdmin()
+    public function testServiceVerifyEditorByAdmin()
     {
         $getTokenResponse = $this->service->getToken('admin@example.com', 'Sample#123456');
 
@@ -177,10 +177,11 @@ final class AuthServiceTest extends TestCase
 
         $result = $this->service->verifyToken($user->{'token'}, 'editor');
 
-        $this->assertTrue($result->getCode() === 200);
+
+        $this->assertEquals(200, $result->getCode());
     }
 
-    public function testVerifyAdmin()
+    public function testServiceVerifyAdmin()
     {
         $getTokenResponse = $this->service->getToken('admin@example.com', 'Sample#123456');
 
@@ -188,7 +189,7 @@ final class AuthServiceTest extends TestCase
 
         $result = $this->service->verifyToken($user->{'token'}, 'admin');
 
-        $this->assertTrue($result->getCode() === 200);
+        $this->assertEquals(200, $result->getCode());
     }
 
     public function testTokenKo()

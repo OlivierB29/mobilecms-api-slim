@@ -1,6 +1,6 @@
 [
 
-    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line"},
+    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line", "generated":"date,title"},
     {"name" : "title" , "primary" : "false", "type" : "string",  "editor":"line"},
     {"name" : "date" , "primary" : "false", "type" : "string",  "editor":"date"},
     {"name" : "organization" , "primary" : "false", "type" : "string",  "editor":"line"},

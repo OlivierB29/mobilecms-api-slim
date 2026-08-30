@@ -380,7 +380,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         $this->assignGeneratedId($type, $keyname, $record);
-
+        
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
             $response->setResult($record);
 
@@ -415,7 +415,7 @@ class ContentService extends AbstractService
         $metadata = $this->loadMetadata($type);
         $sources = $this->getGeneratedIdSources($metadata, $keyname);
         if ($sources === []) {
-            return;
+            throw new \Exception('No generated ID sources available');
         }
 
         $parts = [];
@@ -430,7 +430,7 @@ class ContentService extends AbstractService
         }
 
         if ($parts === []) {
-            return;
+            throw new \Exception('No valid sources for generated ID');
         }
 
         $baseId = implode('-', $parts);
