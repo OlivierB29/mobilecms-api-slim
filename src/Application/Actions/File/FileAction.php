@@ -37,6 +37,10 @@ abstract class FileAction extends RestAction
 
     protected $fileExtensions = [];
 
+    protected $fileMimeTypes = [];
+
+    protected $uploadMaxFileSize = 0;
+
     protected $imagequality = 100;
 
     protected $imagedriver = 'gd';
@@ -66,11 +70,29 @@ abstract class FileAction extends RestAction
         $this->thumbnailsizes = $this->getConf()->{'thumbnailsizes'};
         $this->pdfthumbnailsizes = [100, 200];
         $this->fileExtensions = $this->getConf()->{'fileextensions'};
+        $this->fileMimeTypes = $this->getConf()->{'mimetypes'} ?? [];
+        $this->uploadMaxFileSize = $this->parseFileSize($this->getConf()->{'uploadmaxfilesize'} ?? 0);
         $this->imagequality = $this->getProperties()->getInteger('imagequality', 100);
 
         if (!empty($this->getProperties()->getString('imagedriver'))) {
             $this->imagedriver = $this->getProperties()->getString('imagedriver');
         }
+    }
+
+    protected function parseFileSize($value): int
+    {
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (!preg_match('/^\s*(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)?\s*$/i', (string) $value, $matches)) {
+            return 0;
+        }
+
+        $units = ['B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3];
+        $power = $units[strtoupper($matches[2] ?? 'B')];
+
+        return (int) round((float) $matches[1] * (1024 ** $power));
     }
 
     public function setFiles(array $files)

@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response; //400
 use Psr\Http\Message\StreamInterface; //500
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpInternalServerErrorException;
 
 class BasicUploadPostAction extends FileAction
@@ -59,9 +60,23 @@ class BasicUploadPostAction extends FileAction
 
         // Basic upload verification
         foreach ($inputFiles['uploadfiles'] as $fileControl) {
-                    if ($fileControl !== null && !$this->isFileAllowed($fileControl)) {
-                        throw new HttpBadRequestException($this->request, 'forbidden file type');
-                    }
+            if ($fileControl === null) {
+                continue;
+            }
+
+            $uploadError = $fileControl->getError();
+            if ($uploadError !== UPLOAD_ERR_OK) {
+                $statusCode = in_array($uploadError, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? 413 : 400;
+                throw new HttpException($this->request, 'Upload error '.$uploadError, $statusCode);
+            }
+
+            if ($this->getUploadSize($fileControl) > $this->uploadMaxFileSize && $this->uploadMaxFileSize > 0) {
+                throw new HttpException($this->request, 'Uploaded file exceeds the maximum allowed size.', 413);
+            }
+
+            if (!$this->isFileAllowed($fileControl)) {
+                throw new HttpException($this->request, 'Unsupported file type.', 415);
+            }
         }
 
 
@@ -81,10 +96,18 @@ class BasicUploadPostAction extends FileAction
         $result = false;
         if ($file !== null) {
             $fileExtension = $this->getExtension($file->getClientFilename());
-            $result = $this->isExtensionPermitted($fileExtension);
+            $result = $this->isExtensionPermitted($fileExtension)
+                && in_array($file->getClientMediaType(), $this->fileMimeTypes, true);
         }
 
         return $result;
+    }
+
+    private function getUploadSize(UploadedFileInterface $file): int
+    {
+        $size = $file->getSize();
+
+        return $size === null ? 0 : $size;
     }
 
         /**

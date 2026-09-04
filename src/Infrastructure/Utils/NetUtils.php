@@ -28,6 +28,6 @@ class NetUtils
             $ipaddress = 'UNKNOWN';
         }
 
-        return $ipaddress;
+        return $ipaddress ?: 'UNKNOWN';
     }
 }

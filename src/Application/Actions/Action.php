@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 
@@ -64,6 +65,8 @@ abstract class Action
             return $this->action();
         } catch (DomainRecordNotFoundException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
+        } catch (HttpException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new HttpInternalServerErrorException($this->request, $e->getMessage());
         }
