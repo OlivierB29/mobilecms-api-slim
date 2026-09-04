@@ -5,6 +5,7 @@ namespace App\Infrastructure\Services;
 use App\Infrastructure\Rest\JwtToken;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
+use App\Infrastructure\Utils\NetUtils;
 use App\Infrastructure\Utils\Properties;
 use Firebase\JWT\JWT;
 
@@ -123,6 +124,14 @@ class AuthService
 
         // if someone forgot to do this before
         $email = strtolower($emailParam);
+        $ip = NetUtils::getClientIp();
+
+        $retryAfter = $this->throttle->getRetryAfter($email, $ip);
+        if ($retryAfter > 0) {
+            $response->setError(429, 'Too many login attempts');
+
+            return $response;
+        }
 
         // return the existing user
         $user = $this->service->getJsonUser($email);
@@ -131,7 +140,7 @@ class AuthService
 
             // password
             if ( password_verify($password, $user->{'password'})) {
-                $this->throttle->archiveOldFailed($user->{'email'});
+                $this->throttle->clearFailedLogins($email, $ip);
 
                 $token = null;
                 $jwt = new JwtToken();
@@ -171,7 +180,7 @@ class AuthService
             } else {
                 // incorrect password
                 $loginmsg = 'wrong password';
-                $failed = $this->throttle->saveFailedLogin($user->{'email'});
+                $this->throttle->recordFailedLogin($email, $ip);
 
                 $userResponse = json_decode('{}');
                 $userResponse->{'name'} = $user->{'name'};
@@ -183,6 +192,7 @@ class AuthService
             }
         } else {
             $loginmsg = 'wrong user';
+            $this->throttle->recordFailedLogin($email, $ip);
         }
         // user found
 

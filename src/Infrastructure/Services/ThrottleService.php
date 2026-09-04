@@ -11,6 +11,12 @@ use App\Infrastructure\Utils\NetUtils;
  */
 class ThrottleService
 {
+    private const LOCKOUTS = [
+        5 => 60,
+        10 => 300,
+        20 => 1800,
+    ];
+
     /**
      * database directory.
      */
@@ -27,9 +33,56 @@ class ThrottleService
         $this->databasedir = $databasedir;
     }
 
-    public function getLoginHistoryFileName(string $user)
+    public function getLoginHistoryFileName(string $user, ?string $ip = null)
     {
+        if ($ip !== null) {
+            return $this->databasedir.'/'.'history'.'/'.hash('sha256', strtolower($user).'|'.$ip).'.json';
+        }
+
         return $this->databasedir.'/'.'history'.'/'.$user.'.json';
+    }
+
+    public function getRetryAfter(string $user, string $ip): int
+    {
+        $failedList = $this->getFailedLoginList($user, $ip);
+        $count = count($failedList);
+        $duration = 0;
+
+        foreach (self::LOCKOUTS as $threshold => $seconds) {
+            if ($count >= $threshold) {
+                $duration = $seconds;
+            }
+        }
+
+        if ($duration === 0 || $count === 0) {
+            return 0;
+        }
+
+        $lastFailure = $failedList[$count - 1];
+        $retryAfter = ((int) $lastFailure->{'timestamp'}) + $duration - time();
+
+        return max(0, $retryAfter);
+    }
+
+    public function recordFailedLogin(string $user, string $ip): int
+    {
+        $file = $this->getLoginHistoryFileName($user, $ip);
+        $history = $this->readHistory($file);
+        $failedList = $this->getFailedList($history);
+
+        $failedList[] = $this->createFailedLoginRecord($user, $ip);
+        $history->{'failed'} = $failedList;
+        JsonUtils::writeJsonFile($file, $history);
+
+        return count($failedList);
+    }
+
+    public function clearFailedLogins(string $user, string $ip): void
+    {
+        $file = $this->getLoginHistoryFileName($user, $ip);
+        if (file_exists($file)) {
+            JsonUtils::writeJsonFile($file, json_decode('{"failed":[]}'));
+        }
     }
 
 
@@ -119,12 +172,40 @@ class ThrottleService
    
 
 
-    public function createFailedLoginRecord(string $user)
+    public function createFailedLoginRecord(string $user, ?string $ip = null)
     {
         $result = \json_decode('{}');
         $result->{'date'} = date('D M d Y G:i');
-        $result->{'ip'} = NetUtils::getClientIp();
+        $result->{'timestamp'} = time();
+        $result->{'ip'} = $ip ?? NetUtils::getClientIp();
 
         return $result;
+    }
+
+    private function getFailedLoginList(string $user, string $ip): array
+    {
+        return $this->getFailedList($this->readHistory($this->getLoginHistoryFileName($user, $ip)));
+    }
+
+    private function readHistory(string $file): \stdClass
+    {
+        if (!file_exists($file)) {
+            return json_decode('{}');
+        }
+
+        $history = JsonUtils::readJsonFile($file);
+
+        return $history instanceof \stdClass ? $history : json_decode('{}');
+    }
+
+    private function getFailedList(\stdClass $history): array
+    {
+        if (!isset($history->{'failed'}) || !is_array($history->{'failed'})) {
+            return [];
+        }
+
+        return array_values(array_filter($history->{'failed'}, function ($failed) {
+            return isset($failed->{'timestamp'});
+        }));
     }
 }
