@@ -228,7 +228,8 @@ final class FileApiTest extends AuthApiUtility
         ];
 
         // mock HTTP parameters
-        $this->expectException(\Slim\Exception\HttpInternalServerErrorException::class);
+        $this->expectException(\Slim\Exception\HttpBadRequestException::class);
+        $this->expectExceptionCode(400);
         $response = $this->request('POST', $this->path, $files);
 
         $this->assertEquals(500, $response->getCode());
@@ -251,7 +252,8 @@ final class FileApiTest extends AuthApiUtility
             ['name'=>$filename, 'type'=>'image/bmp', 'tmp_name'=> $mockUploadedFile, 'error'=>0, 'size'=>24612],
         ];
 
-        $this->expectException(\Slim\Exception\HttpInternalServerErrorException::class);
+        $this->expectException(\Slim\Exception\HttpException::class);
+        $this->expectExceptionCode(415);
         $response = $this->fileRequest('POST', $this->path, $files);
         $this->assertEquals(500, $response->getCode());
 
@@ -259,6 +261,21 @@ final class FileApiTest extends AuthApiUtility
         $expected = '{"error":"forbidden file type"}';
 
         $this->assertJsonStringEqualsJsonString($expected, $response->getEncodedResult());
+    }
+
+    public function testUploadFileTooLarge()
+    {
+        $record = '/calendar/3';
+        $this->path = $this->getApi().'/fileapi/basicupload'.$record;
+        $filename = 'testupload.pdf';
+        $mockUploadedFile = realpath('tests-data/fileapi/save/').'/upload_tmp123456789.pdf';
+        $files = [
+            ['name'=>$filename, 'type'=>'application/pdf', 'tmp_name'=>$mockUploadedFile, 'error'=>0, 'size'=>10 * 1024 * 1024 + 1],
+        ];
+
+        $this->expectException(\Slim\Exception\HttpException::class);
+        $this->expectExceptionCode(413);
+        $this->fileRequest('POST', $this->path, $files);
     }
 
     public function testThumbnailsByRecord()
