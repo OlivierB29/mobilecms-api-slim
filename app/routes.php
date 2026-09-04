@@ -66,7 +66,7 @@ return function (App $app) {
 
         $group->post('/changepassword', ChangePasswordAction::class);
         $group->post('/resetpassword', ResetPasswordAction::class);
-        $group->post('/register', RegisterAction::class);
+
     });
 
     $app->group(ApiConstants::API.'/debugapi', function (Group $group) {
