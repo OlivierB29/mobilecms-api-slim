@@ -385,6 +385,7 @@ class ContentService extends AbstractService
         }
 
 
+        $this->assignTimestampFields($type, $record);
         $this->assignGeneratedId($type, $keyname, $record);
         
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
@@ -510,6 +511,7 @@ class ContentService extends AbstractService
         $response = $this->getDefaultResponse();
 
         if (!empty($record)) {
+            $this->assignTimestampFields($type, $record);
             $response->setResult($record);
             // detect id
             $id = $record->{$keyname};
@@ -530,6 +532,18 @@ class ContentService extends AbstractService
         }
 
         return $response;
+    }
+
+    /**
+     * Set metadata fields that record the time of the latest save.
+     */
+    private function assignTimestampFields(string $type, \stdClass $record): void
+    {
+        foreach ($this->loadMetadata($type) as $field) {
+            if (isset($field->name, $field->type) && $field->type === 'timestamp') {
+                $record->{$field->name} = time();
+            }
+        }
     }
 
     /**

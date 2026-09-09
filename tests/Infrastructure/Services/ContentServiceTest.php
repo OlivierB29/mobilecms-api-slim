@@ -99,6 +99,27 @@ final class ContentServiceTest extends ApiUtility
         unlink($file);
     }
 
+    public function testTimestampFieldsAreSetOnSave()
+    {
+        $service = new ContentService($this->dir);
+        $record = json_decode('{"id":"timestamp-test","date":"2026-08-23","title":"timestamp"}');
+
+        $before = time();
+        $response = $service->post('calendar', 'id', $record);
+        $after = time();
+
+        $this->assertGreaterThanOrEqual($before, $response->getResult()->modified);
+        $this->assertLessThanOrEqual($after, $response->getResult()->modified);
+
+        $record->modified = 1;
+        $response = $service->update('calendar', 'id', $record);
+
+        $this->assertGreaterThanOrEqual($before, $response->getResult()->modified);
+        $this->assertGreaterThanOrEqual(1, $response->getResult()->modified);
+
+        unlink($this->dir.'/calendar/timestamp-test.json');
+    }
+
     public function testBasicPost()
     {
         $recordStr = '{"id":"10","date":"2015-09-01","activity":"activitya","title":"some seminar of activity A","organization":"Some org","description":"<some infos","url":"","location":"","startdate":"","enddate":"","updated":"","updatedby":""}';
@@ -109,7 +130,11 @@ final class ContentServiceTest extends ApiUtility
 
         $this->assertEquals(200, $response->getCode());
 
-        $this->assertJsonStringEqualsJsonFile($file, $recordStr);
+        $savedRecord = json_decode(file_get_contents($file));
+        $this->assertGreaterThan(0, $savedRecord->modified);
+        unset($savedRecord->modified);
+
+        $this->assertJsonStringEqualsJsonString($recordStr, json_encode($savedRecord));
     }
 
     public function testPostWithIndexMostRecent()
