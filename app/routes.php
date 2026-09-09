@@ -55,8 +55,8 @@ return function (App $app) {
 
         return $response;
     });
-    $app->get('/agenda/events.ics', EventsActionGetAction::class);
-    $app->get(ApiConstants::ROOT.'/agenda/events.ics', EventsActionGetAction::class);
+
+    $app->get(ApiConstants::API.'/agenda/events.ics', EventsActionGetAction::class);
     $app->group(ApiConstants::API.'/cmsapi/status', function (Group $group) {
         $group->get('', StatusGetAction::class);
     });

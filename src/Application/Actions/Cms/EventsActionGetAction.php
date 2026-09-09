@@ -17,11 +17,12 @@ class EventsActionGetAction extends CmsAction
         $lines = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
-            'PRODID:-//MobileCMS//Agenda//EN',
+            'PRODID:'.$this->getConf()->{'eventprodid'},
             'CALSCALE:GREGORIAN',
             'METHOD:PUBLISH',
-            'X-WR-CALNAME:MobileCMS Agenda',
+            'X-WR-CALNAME:'.$this->getConf()->{'eventxwrcalname'},
         ];
+        $sitePrefix = $this->getConf()->{'eventsiteprefix'};
 
         foreach ($eventsResponse->getResult() as $eventReference) {
             $eventResponse = $this->getService()->getRecord('calendar', (string) $eventReference->id);
@@ -31,8 +32,8 @@ class EventsActionGetAction extends CmsAction
 
             $event = $eventResponse->getResult();
             $lines[] = 'BEGIN:VEVENT';
-            $lines[] = 'UID:'.self::escape((string) ($event->id ?? $eventReference->id)).'@mobilecms';
-            $lines[] = 'URL:'.self::escape(self::$SITEPREFIX.(string) ($event->id ?? $eventReference->id));
+            $lines[] = 'UID:'.self::escape((string) ($event->id ?? $eventReference->id)).$this->getConf()->{'eventcalname'};
+            $lines[] = 'URL:'.self::escape($sitePrefix.(string) ($event->id ?? $eventReference->id));
 
             if (!empty($event->startdate)) {
                 $lines[] = 'DTSTART:'.self::formatDateTime((string) $event->date, (string) $event->startdate);
@@ -48,7 +49,7 @@ class EventsActionGetAction extends CmsAction
             $lines[] = 'SUMMARY:'.self::escape((string) ($event->title ?? ''));
             $description = strip_tags((string) ($event->description ?? ''));
             if ($description !== '') {
-                $lines[] = 'DESCRIPTION:'.self::escape($description);
+                $lines[] = 'DESCRIPTION:'.self::escape($sitePrefix.(string) ($event->id ?? $eventReference->id));
             }
             if (!empty($event->location)) {
                 $lines[] = 'LOCATION:'.self::escape((string) $event->location);
