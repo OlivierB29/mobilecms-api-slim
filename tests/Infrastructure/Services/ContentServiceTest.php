@@ -85,6 +85,34 @@ final class ContentServiceTest extends ApiUtility
         unlink($this->dir.'/news/2026-aaaaaaaaaa-2.json');
     }
 
+    public function testSlugForGeneratedIdUsesYearForDateFields()
+    {
+        $service = new ContentService($this->dir);
+        $method = new \ReflectionMethod(ContentService::class, 'slugForGeneratedId');
+        $method->setAccessible(true);
+
+        $metadata = [json_decode('{"name":"date","editor":"date"}')];
+
+        $this->assertEquals(
+            '2026',
+            $method->invoke($service, $metadata, 'date', '2026-08-23')
+        );
+    }
+
+    public function testSlugForGeneratedIdSlugifiesNonDateFields()
+    {
+        $service = new ContentService($this->dir);
+        $method = new \ReflectionMethod(ContentService::class, 'slugForGeneratedId');
+        $method->setAccessible(true);
+
+        $metadata = [json_decode('{"name":"title","editor":"text"}')];
+
+        $this->assertEquals(
+            'ete-kendo',
+            $method->invoke($service, $metadata, 'title', 'Été kendo')
+        );
+    }
+
     public function testPostKeepsClientIdWhenProvided()
     {
         $recordStr = '{"id":"client-id-keep","date":"2026-08-23","title":"aaaaaaaaaa","status":"draft"}';

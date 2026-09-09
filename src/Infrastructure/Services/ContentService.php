@@ -426,15 +426,33 @@ class ContentService extends AbstractService
         }
 
         $parts = [];
+        $dateParts = [];
         foreach ($sources as $field) {
             if (empty($record->{$field})) {
                 continue;
             }
             $slug = $this->slugForGeneratedId($metadata, $field, (string) $record->{$field});
             if ($slug !== '') {
-                $parts[] = $slug;
+                $isDate = false;
+                foreach ($metadata as $metadataField) {
+                    if (isset($metadataField->name, $metadataField->editor)
+                        && $metadataField->name === $field
+                        && $metadataField->editor === 'date'
+                    ) {
+                        $isDate = true;
+                        break;
+                    }
+                }
+
+                if ($isDate) {
+                    $dateParts[] = $slug;
+                } else {
+                    $parts[] = $slug;
+                }
             }
         }
+
+        $parts = array_merge($parts, $dateParts);
 
         if ($parts === []) {
             throw new \Exception('No valid sources for generated ID');
