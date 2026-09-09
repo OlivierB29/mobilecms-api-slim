@@ -1,15 +1,14 @@
 [
 
-    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line"},
+    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line", "generated":"title"},
         {"name" : "status" , "primary" : "false", "type" : "text",  "editor":"choice", "choices" : ["draft", "published"], "translate" : "false"},
-    {"name" : "title" , "primary" : "false", "type" : "string",  "editor":"line"},
+    {"name" : "title" , "primary" : "false", "mandatory" : "true", "type" : "string",  "editor":"line"},
     {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist"},
-    {"name" : "date" , "primary" : "false", "type" : "string",  "editor":"date"},
-	{"name" : "enddate" , "primary" : "false", "type" : "string",  "editor":"date"},
+    {"name" : "date" , "primary" : "false", "mandatory" : "true", "type" : "string",  "editor":"date"},
+	{"name" : "enddate" , "primary" : "false", "mandatory" : "false", "type" : "string",  "editor":"date"},
     {"name" : "organization" , "primary" : "false", "type" : "string",  "editor":"line"},
     {"name" : "activity" , "primary" : "false", "type" : "text",  "editor":"choice", "choices" : ["kendo", "iaido", "chanbara", "crkdr"], "translate" : "false"},
     {"name" : "description" , "primary" : "false", "type" : "string",  "editor":"text"},
-    {"name" : "location" , "primary" : "false", "type" : "string",  "editor":"line"},
-    {"name" : "attachments" , "primary" : "false", "type" : "array",  "editor":"attachmentlist"}
+    {"name" : "location" , "primary" : "false", "type" : "string",  "editor":"line"}
 
 ]

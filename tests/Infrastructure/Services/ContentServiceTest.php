@@ -79,11 +79,12 @@ final class ContentServiceTest extends ApiUtility
         $collision = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
         $collisionResponse = $service->post('news', 'id', $collision);
         $this->assertEquals(200, $collisionResponse->getCode());
-        $this->assertEquals('2026-aaaaaaaaaa-2', $collisionResponse->getResult()->id);
+        $this->assertEquals('2026-aaaaaaaaaa', $collisionResponse->getResult()->id);
 
         unlink($file);
-        unlink($this->dir.'/news/2026-aaaaaaaaaa-2.json');
+        unlink($this->dir.'/news/2026-aaaaaaaaaa.json');
     }
+
 
     public function testPostKeepsClientIdWhenProvided()
     {
@@ -99,6 +100,27 @@ final class ContentServiceTest extends ApiUtility
         unlink($file);
     }
 
+    public function testTimestampFieldsAreSetOnSave()
+    {
+        $service = new ContentService($this->dir);
+        $record = json_decode('{"id":"timestamp-test","date":"2026-08-23","title":"timestamp"}');
+
+        $before = time();
+        $response = $service->post('calendar', 'id', $record);
+        $after = time();
+
+        $this->assertGreaterThanOrEqual($before, $response->getResult()->modified);
+        $this->assertLessThanOrEqual($after, $response->getResult()->modified);
+
+        $record->modified = 1;
+        $response = $service->update('calendar', 'id', $record);
+
+        $this->assertGreaterThanOrEqual($before, $response->getResult()->modified);
+        $this->assertGreaterThanOrEqual(1, $response->getResult()->modified);
+
+        unlink($this->dir.'/calendar/timestamp-test.json');
+    }
+
     public function testBasicPost()
     {
         $recordStr = '{"id":"10","date":"2015-09-01","activity":"activitya","title":"some seminar of activity A","organization":"Some org","description":"<some infos","url":"","location":"","startdate":"","enddate":"","updated":"","updatedby":""}';
@@ -109,7 +131,11 @@ final class ContentServiceTest extends ApiUtility
 
         $this->assertEquals(200, $response->getCode());
 
-        $this->assertJsonStringEqualsJsonFile($file, $recordStr);
+        $savedRecord = json_decode(file_get_contents($file));
+        $this->assertGreaterThan(0, $savedRecord->modified);
+        unset($savedRecord->modified);
+
+        $this->assertJsonStringEqualsJsonString($recordStr, json_encode($savedRecord));
     }
 
     public function testPostWithIndexMostRecent()

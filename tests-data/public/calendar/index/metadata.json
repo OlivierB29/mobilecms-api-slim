@@ -9,6 +9,8 @@
     {"name" : "location" , "primary" : "false", "type" : "string",  "editor":"line"},
     {"name" : "images" , "primary" : "false", "type" : "array",  "editor":"imagelist"},
     {"name" : "attachments" , "primary" : "false", "type" : "array",  "editor":"attachmentlist"},
-    {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist"}
+    {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist", "requiredfields": "[modified, id"},
+    {"name" : "status" , "primary" : "false", "type" : "text",  "editor":"choice", "choices" : ["draft", "published"], "translate" : "true"},
+    {"name" : "modified" , "primary" : "false", "type" : "timestamp"}
 
 ]

@@ -26,6 +26,7 @@ use App\Application\Actions\Cms\ContentGetListAction;
 use App\Application\Actions\Cms\ContentPostAction;
 use App\Application\Actions\Cms\ContentTypesGetAction;
 use App\Application\Actions\Cms\DeleteListAction;
+use App\Application\Actions\Cms\EventsActionGetAction;
 use App\Application\Actions\Cms\IndexGetAction;
 use App\Application\Actions\Cms\IndexPostAction;
 use App\Application\Actions\Cms\MetadataGetAction;
@@ -54,6 +55,8 @@ return function (App $app) {
 
         return $response;
     });
+
+    $app->get(ApiConstants::API.'/agenda/events.ics', EventsActionGetAction::class);
     $app->group(ApiConstants::API.'/cmsapi/status', function (Group $group) {
         $group->get('', StatusGetAction::class);
     });

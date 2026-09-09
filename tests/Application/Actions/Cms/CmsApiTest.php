@@ -34,6 +34,21 @@ final class CmsApiTest extends AuthApiUtility
         $this->assertEquals(200, $response->getCode());
     }
 
+    public function testAgendaIcs()
+    {
+        $response = $this->getAppInstance()->handle($this->createRequest('GET', '/mobilecmsapi/agenda/events.ics'));
+        $calendar = (string) $response->getBody();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame('text/calendar; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $calendar);
+        $this->assertStringContainsString('UID:1@mobilecms', $calendar);
+        $this->assertStringContainsString('URL:http://localhost:5173/#/calendrier/detail/1', $calendar);
+        $this->assertStringContainsString('DTSTART;VALUE=DATE:20150901', $calendar);
+        $this->assertStringContainsString('SUMMARY:some seminar of activity A', $calendar);
+        $this->assertStringEndsWith("END:VCALENDAR\r\n", $calendar);
+    }
+
     public function testPostSuccess()
     {
         // echo 'testPostSuccess: ' . $this->memory();
