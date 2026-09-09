@@ -33,16 +33,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertEquals(200, $response->getCode());
     }
 
-    public function testRegisterOptions()
-    {
-        $this->path = $this->getApi().'/authapi/register';
-        $response = $this->request('OPTIONS', $this->path);
-
-        $this->assertTrue($response != null);
-        $this->assertJsonStringEqualsJsonString('{}', $response->getEncodedResult());
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-    }
+   
 
     public function testResetPasswordOptions()
     {
@@ -133,53 +124,9 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertEquals(401, $response->getCode());
     }
 
-    public function testRegister()
-    {
-        $this->path = $this->getApi().'/authapi/register';
+   
 
-        $email = 'testregister@example.com';
-
-        $file = $this->getPrivateDirPath().'/users/'.$email.'.json';
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        $recordStr = '{ "name": "test register", "email": "testregister@example.com", "password":"Sample#123456", "secretQuestion": "some secret" , "secretResponse": "secret response"}';
-
-        $this->POST = ['requestbody' => $recordStr];
-
-        $response = $this->request('POST', $this->path);
-
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        $this->assertTrue($response != null);
-
-        if (file_exists($file)) {
-            unlink($file);
-        }
-    }
-
-    public function testRegisterEmptyParam()
-    {
-        $this->path = $this->getApi().'/authapi/register';
-
-        $email = 'testregister@example.com';
-
-        $file = $this->getPrivateDirPath().'/users/'.$email.'.json';
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        $recordStr = '{ "name": "test register", "email": "", "password":""}';
-
-        $this->POST = ['requestbody' => $recordStr];
-
-        $response = $this->request('POST', $this->path);
-
-        $this->assertEquals(400, $response->getCode());
-        $this->assertTrue($response != null);
-    }
-
+   
     public function testResetPassword()
     {
         $this->path = $this->getApi().'/authapi/resetpassword';

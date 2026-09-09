@@ -52,6 +52,7 @@ function compareIndexReverse(string $key)
     };
 }
 
+
 /**
  * Read and save data from JSON files.
  * Future plans : consider http://stackoverflow.com/questions/13899342/can-we-use-json-as-a-database
@@ -386,7 +387,10 @@ class ContentService extends AbstractService
 
 
         $this->assignTimestampFields($type, $record);
-        $this->assignGeneratedId($type, $keyname, $record);
+        if (empty($record->{$keyname})) {
+            IdGeneratorUtils::assignGeneratedId($type, $keyname, $record,  $this->loadMetadata($type));
+        }
+        
         
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
             $response->setResult($record);
@@ -408,67 +412,7 @@ class ContentService extends AbstractService
         return $response;
     }
 
-    /**
-     * Generate a record id from metadata "generated" fields when the client did not send one.
-     * eg metadata: {"name":"id","generated":"date,title"} + date/title -> "2026-aaaaaaaaaa"
-     * Date fields contribute only the year.
-     */
-    private function assignGeneratedId(string $type, string $keyname, \stdClass $record): void
-    {
-        if (!empty($record->{$keyname})) {
-            return;
-        }
-
-        $metadata = $this->loadMetadata($type);
-        $sources = $this->getGeneratedIdSources($metadata, $keyname);
-        if ($sources === []) {
-            throw new \Exception('No generated ID sources available');
-        }
-
-        $parts = [];
-        $dateParts = [];
-        foreach ($sources as $field) {
-            if (empty($record->{$field})) {
-                continue;
-            }
-            $slug = $this->slugForGeneratedId($metadata, $field, (string) $record->{$field});
-            if ($slug !== '') {
-                $isDate = false;
-                foreach ($metadata as $metadataField) {
-                    if (isset($metadataField->name, $metadataField->editor)
-                        && $metadataField->name === $field
-                        && $metadataField->editor === 'date'
-                    ) {
-                        $isDate = true;
-                        break;
-                    }
-                }
-
-                if ($isDate) {
-                    $dateParts[] = $slug;
-                } else {
-                    $parts[] = $slug;
-                }
-            }
-        }
-
-        $parts = array_merge($parts, $dateParts);
-
-        if ($parts === []) {
-            throw new \Exception('No valid sources for generated ID');
-        }
-
-        $baseId = implode('-', $parts);
-        $id = $baseId;
-        $suffix = 2;
-        while (file_exists($this->getItemFileName($type, $id, $record))) {
-            $id = $baseId.'-'.$suffix;
-            ++$suffix;
-        }
-
-        $record->{$keyname} = $id;
-    }
-
+  
     /**
      * @return array metadata fields
      */
@@ -485,36 +429,6 @@ class ContentService extends AbstractService
         }
 
         return $metadata;
-    }
-
-    /**
-     * @param array  $metadata type metadata
-     * @param string $keyname  primary key name
-     *
-     * @return string[] field names used to build the id, empty if not generated
-     */
-    private function getGeneratedIdSources(array $metadata, string $keyname): array
-    {
-        foreach ($metadata as $field) {
-            if (isset($field->name) && $field->name === $keyname && !empty($field->generated)) {
-                $names = explode(',', (string) $field->generated);
-
-                return array_values(array_filter(array_map('trim', $names)));
-            }
-        }
-
-        return [];
-    }
-
-    private function slugForGeneratedId(array $metadata, string $fieldName, string $value): string
-    {
-        foreach ($metadata as $field) {
-            if (isset($field->name, $field->editor) && $field->name === $fieldName && $field->editor === 'date') {
-                return StringUtils::slugify(substr($value, 0, 4));
-            }
-        }
-
-        return StringUtils::slugify($value);
     }
 
     /**

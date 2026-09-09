@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class EventsActionGetAction extends CmsAction
 {
+    private static string $SITEPREFIX = 'http://localhost:5173/#/calendrier/detail/';
+
     protected function action(): Response
     {
         $eventsResponse = $this->getService()->getAllObjects('calendar');
@@ -30,6 +32,7 @@ class EventsActionGetAction extends CmsAction
             $event = $eventResponse->getResult();
             $lines[] = 'BEGIN:VEVENT';
             $lines[] = 'UID:'.self::escape((string) ($event->id ?? $eventReference->id)).'@mobilecms';
+            $lines[] = 'URL:'.self::escape(self::$SITEPREFIX.(string) ($event->id ?? $eventReference->id));
 
             if (!empty($event->startdate)) {
                 $lines[] = 'DTSTART:'.self::formatDateTime((string) $event->date, (string) $event->startdate);

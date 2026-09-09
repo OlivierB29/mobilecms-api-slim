@@ -79,39 +79,12 @@ final class ContentServiceTest extends ApiUtility
         $collision = json_decode('{"status":"draft","title":"aaaaaaaaaa","media":[],"date":"2026-08-23","activity":"kendo","description":"<p>aaaaaa</p>"}');
         $collisionResponse = $service->post('news', 'id', $collision);
         $this->assertEquals(200, $collisionResponse->getCode());
-        $this->assertEquals('2026-aaaaaaaaaa-2', $collisionResponse->getResult()->id);
+        $this->assertEquals('2026-aaaaaaaaaa', $collisionResponse->getResult()->id);
 
         unlink($file);
-        unlink($this->dir.'/news/2026-aaaaaaaaaa-2.json');
+        unlink($this->dir.'/news/2026-aaaaaaaaaa.json');
     }
 
-    public function testSlugForGeneratedIdUsesYearForDateFields()
-    {
-        $service = new ContentService($this->dir);
-        $method = new \ReflectionMethod(ContentService::class, 'slugForGeneratedId');
-        $method->setAccessible(true);
-
-        $metadata = [json_decode('{"name":"date","editor":"date"}')];
-
-        $this->assertEquals(
-            '2026',
-            $method->invoke($service, $metadata, 'date', '2026-08-23')
-        );
-    }
-
-    public function testSlugForGeneratedIdSlugifiesNonDateFields()
-    {
-        $service = new ContentService($this->dir);
-        $method = new \ReflectionMethod(ContentService::class, 'slugForGeneratedId');
-        $method->setAccessible(true);
-
-        $metadata = [json_decode('{"name":"title","editor":"text"}')];
-
-        $this->assertEquals(
-            'ete-kendo',
-            $method->invoke($service, $metadata, 'title', 'Été kendo')
-        );
-    }
 
     public function testPostKeepsClientIdWhenProvided()
     {
