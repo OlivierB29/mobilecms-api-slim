@@ -1,9 +1,9 @@
 [
 
-    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line", "generated":"title"},
+    {"name" : "id" , "primary" : "true", "type" : "string",  "editor":"line", "generated":"date,title"},
         {"name" : "status" , "primary" : "false", "type" : "text",  "editor":"choice", "choices" : ["draft", "published"], "translate" : "false"},
     {"name" : "title" , "primary" : "false", "mandatory" : "true", "type" : "string",  "editor":"line"},
-    {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist"},
+    {"name" : "media" , "primary" : "false", "type" : "array",  "editor":"medialist", "requiredfields": "title, id"},
     {"name" : "date" , "primary" : "false", "mandatory" : "true", "type" : "string",  "editor":"date"},
 	{"name" : "enddate" , "primary" : "false", "mandatory" : "false", "type" : "string",  "editor":"date"},
     {"name" : "organization" , "primary" : "false", "type" : "string",  "editor":"line"},
