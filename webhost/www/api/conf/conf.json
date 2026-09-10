@@ -3,7 +3,7 @@
   "jwt": "php-jwt",
   "postformdata": "phpinput",
   "publicdir": "public",
-  "privatedir": "../webhost-private",
+  "privatedir": "../private",
   "media": "media",
   "thumbnailsizes":[150, 300, 672, 768, 1024],
   "fileextensions":["jpg","jpeg","png","gif","pdf","docx","xlsx","pptx","odt","ods","odp","mp4","m4v"],
