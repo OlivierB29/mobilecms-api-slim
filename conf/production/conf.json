@@ -1,0 +1,33 @@
+{
+  "publicdir": "/public",
+  "privatedir": "/../private",
+  "media": "/media",
+  "imagedriver": "imagick",
+  "jwt": "oldphp-jwt",
+  "postformdata": "phpinput",
+  "thumbnailsizes":[150, 300, 672, 768, 1024],
+  "fileextensions":["jpg","jpeg","png","gif","pdf","docx","xlsx","pptx","odt","ods","odp","mp4","m4v"],
+  "imagequality":70,
+  "crossdomain": "false",
+  "enablecleaninputs": "true",
+  "https": "true",
+  "debugapiexceptions": "true",
+  "errorlog": "true",
+  "enableheaders": "true",
+  
+  "imagick": "false",
+
+  "enablemail": "true",
+  "debugnotifications": "false",
+  "enablesmtp":"false",
+  "mailsender": "no-reply@mydomain.com",
+  "smtphost": "YOUR_SMTP_HOST",
+  "smtpport":465,
+  "smtpsecure": "ssl",
+  "smtpusername": "no-reply@mydomain.com",
+  "smtppassword": "MY_SMTP_PASSWORD",
+  "eventcalname": "@mydomain",
+  "eventprodid": "-//mydomain//NONSGML v1.0//EN",
+  "eventxwrcalname": "Calendrier mydomain",
+  "eventsiteprefix": "https://mydomain.com/#/calendrier/detail/"
+}
