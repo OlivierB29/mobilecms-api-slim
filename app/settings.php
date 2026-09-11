@@ -7,7 +7,7 @@ use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
-    Properties::init($_SERVER['DOCUMENT_ROOT'], $_SERVER['DOCUMENT_ROOT'].'../private/conf/conf.json');
+    Properties::init($_SERVER['DOCUMENT_ROOT'], $_SERVER['DOCUMENT_ROOT'].'/../private/conf/conf.json');
 
     // Global Settings Object
     $containerBuilder->addDefinitions([
