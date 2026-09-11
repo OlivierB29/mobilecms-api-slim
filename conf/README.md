@@ -14,8 +14,6 @@ Directory of media files. The real path will be something like /var/www/html/med
 
 ## Security (be cautious)
 
--  "crossdomain": "true|false"
-Enable or disable CORS.
 
 -  "enablecleaninputs": "true"
 Should stay to true, for safety. When enabled, sanitize inputs.

@@ -9,7 +9,7 @@
   "uploadmaxfilesize": "10MB",
   "imagequality":97,
   "jwt": "customphp-jwt",
-  "crossdomain": "false",
+  
   "enablecleaninputs": "true",
 
 
