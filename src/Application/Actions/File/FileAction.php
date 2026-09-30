@@ -23,7 +23,7 @@ abstract class FileAction extends RestAction
      */
     protected $filesUmask = 0644;
     
-    protected $directoryUmask = 0750;
+    protected $directoryUmask = 0755;
 
     protected $files;
 
