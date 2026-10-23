@@ -20,6 +20,4 @@ final class StringUtilsTest extends ApiUtility
         $this->assertTrue(StringUtils::endsWith('foobar', 'bar'));
         $this->assertFalse(StringUtils::endsWith('foobar', 'foo'));
     }
-
-
 }

@@ -29,8 +29,6 @@ class ChangePasswordAction extends AuthAction
 
         $logindata = $this->getRequestBody();
 
-
-
         //TODO : user contains either email of name
 
         // free variables before response

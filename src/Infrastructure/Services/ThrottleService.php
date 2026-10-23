@@ -2,17 +2,16 @@
 
 namespace App\Infrastructure\Services;
 
-
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\NetUtils;
 
 /**
- * Control failed logins
+ * Control failed logins.
  */
 class ThrottleService
 {
     private const LOCKOUTS = [
-        5 => 60,
+        5  => 60,
         10 => 300,
         20 => 1800,
     ];
@@ -21,7 +20,6 @@ class ThrottleService
      * database directory.
      */
     private $databasedir;
-
 
     /**
      * Constructor.
@@ -84,8 +82,6 @@ class ThrottleService
             JsonUtils::writeJsonFile($file, json_decode('{"failed":[]}'));
         }
     }
-
-
 
     public function saveFailedLogin(string $user)
     {
@@ -155,7 +151,6 @@ class ThrottleService
             $failedList = [];
         }
 
-
         $history->{'failed'} = [];
         if (\count($failedList) === 0) {
             $history->{'archive'.date('YmdHis')} = $failedList;
@@ -167,10 +162,6 @@ class ThrottleService
 
         return $result;
     }
-
-
-   
-
 
     public function createFailedLoginRecord(string $user, ?string $ip = null)
     {

@@ -8,23 +8,19 @@ use App\Application\Actions\RestAction;
 
 abstract class AuthAction extends RestAction
 {
-
     public const LOGIN_USER = 'user';
-
-
 
     public function getUser($logindata): string
     {
         $result = null;
 
-            if (isset($logindata->{self::LOGIN_USER})) {
-                $result = $logindata->{self::LOGIN_USER};
-            } else {
-                // @codeCoverageIgnoreStart
-                throw new \Exception('no user data');
-                // @codeCoverageIgnoreEnd
-            }
-        
+        if (isset($logindata->{self::LOGIN_USER})) {
+            $result = $logindata->{self::LOGIN_USER};
+        } else {
+            // @codeCoverageIgnoreStart
+            throw new \Exception('no user data');
+            // @codeCoverageIgnoreEnd
+        }
 
         return $result;
     }

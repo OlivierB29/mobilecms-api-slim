@@ -142,7 +142,7 @@ class JwtToken
 
     public function initPayloadArray(string $username, string $email, string $role): array
     {
-        return [ "sub" => $email, "name" => $username, "role" => $role ];
+        return ['sub' => $email, 'name' => $username, 'role' => $role];
     }
 
     /**

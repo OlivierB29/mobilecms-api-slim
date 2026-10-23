@@ -52,8 +52,6 @@ abstract class AbstractService
         }
     }
 
-
-
     /**
      * Initialize a default Response object.
      *

@@ -22,7 +22,7 @@ abstract class FileAction extends RestAction
      * Default umask for directories and files.
      */
     protected $filesUmask = 0644;
-    
+
     protected $directoryUmask = 0755;
 
     protected $files;
@@ -275,20 +275,19 @@ abstract class FileAction extends RestAction
         return $response;
     }
 
-    protected function deleteThumbailFiles(stdClass $fileInRecord, string $datatype, string $id): bool {
-        
+    protected function deleteThumbailFiles(stdClass $fileInRecord, string $datatype, string $id): bool
+    {
+        if ($fileInRecord->thumbnails !== null) {
+            foreach ($fileInRecord->thumbnails as $thumbnailFile) {
+                $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
+                if (file_exists($thumbnailPath)) {
+                    if (!unlink($thumbnailPath)) {
+                        throw new \Exception('delete '.$thumbnailPath.' KO');
+                    }
+                }
+            }
+        }
 
-    if ($fileInRecord->thumbnails !== null) {
-                        foreach ($fileInRecord->thumbnails as $thumbnailFile) {
-                            $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
-                            if (file_exists($thumbnailPath)) {
-                                if (!unlink($thumbnailPath)) {
-                                    throw new \Exception('delete '.$thumbnailPath.' KO');
-                                }
-                            }
-                        }
-    }
-
-    return true;
+        return true;
     }
 }

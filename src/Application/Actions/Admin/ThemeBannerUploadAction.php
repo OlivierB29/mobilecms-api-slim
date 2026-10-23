@@ -46,8 +46,8 @@ class ThemeBannerUploadAction extends AdminAction
         JsonUtils::writeJsonFile($themeFile, $theme);
 
         return $this->respondWithData((object) [
-            'url' => $imageUrl,
-            'title' => $filename
+            'url'   => $imageUrl,
+            'title' => $filename,
         ]);
     }
 }

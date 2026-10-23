@@ -19,7 +19,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-    $this->seteditor();
+        $this->seteditor();
     }
 
     public function testOptions()
@@ -32,8 +32,6 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->printError($response);
         $this->assertEquals(200, $response->getCode());
     }
-
-   
 
     public function testResetPasswordOptions()
     {
@@ -67,8 +65,6 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertTrue($response != null);
     }
 
-
-
     public function testAuthByEmail()
     {
         $this->path = $this->getApi().'/authapi/authenticate';
@@ -82,7 +78,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertEquals(200, $response->getCode());
         $this->assertTrue($response != null);
 
-        $userObject  = $response->getResult();
+        $userObject = $response->getResult();
 
         $this->assertTrue($userObject->{'email'} === 'editor@example.com');
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
@@ -124,9 +120,6 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertEquals(401, $response->getCode());
     }
 
-   
-
-   
     public function testResetPassword()
     {
         $this->path = $this->getApi().'/authapi/resetpassword';
@@ -203,25 +196,24 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->assertTrue($userObject->{'email'} === $user);
         $this->assertTrue(strlen($userObject->{'token'}) > 150);
     }
-/*
-    public function testPublicInfoGet()
-    {
-        $this->path = $this->getApi().'/authapi/publicinfo/editor@example.com';
+    /*
+        public function testPublicInfoGet()
+        {
+            $this->path = $this->getApi().'/authapi/publicinfo/editor@example.com';
 
-        $response = $this->request('GET', $this->path);
+            $response = $this->request('GET', $this->path);
 
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        $this->assertTrue($response != null);
+            $this->printError($response);
+            $this->assertEquals(200, $response->getCode());
+            $this->assertTrue($response != null);
 
-        $userObject = $response->getResult();
+            $userObject = $response->getResult();
 
-        $this->assertTrue($userObject->{'name'} === 'editor@example.com');
-        $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
-        $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
-    }
-*/
-   
+            $this->assertTrue($userObject->{'name'} === 'editor@example.com');
+            $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
+            $this->assertTrue($userObject->{'newpasswordrequired'} === 'false');
+        }
+    */
 
     public function testEmptyBody()
     {

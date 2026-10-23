@@ -13,9 +13,7 @@ class ContentPostActionTest extends AuthApiUtility
         parent::setUp();
 
         $this->setEditor();
-
     }
-
 
     public function testPostGeneratesIdInResponse()
     {
@@ -30,5 +28,4 @@ class ContentPostActionTest extends AuthApiUtility
         $this->assertFileExists($file);
         unlink($file);
     }
-    
 }

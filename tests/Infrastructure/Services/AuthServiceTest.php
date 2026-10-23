@@ -8,7 +8,6 @@ use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Services\ThrottleService;
 use Tests\ApiUtility;
 
-
 final class AuthServiceTest extends ApiUtility
 {
     private $service;
@@ -22,7 +21,6 @@ final class AuthServiceTest extends ApiUtility
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-
     }
 
     public function testServiceCreateUser()
@@ -96,7 +94,6 @@ final class AuthServiceTest extends ApiUtility
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
 
-
         $result = $this->service->login('test@example.com', 'Sample#123456', null);
 
         $this->assertTrue('' === $result);
@@ -107,7 +104,6 @@ final class AuthServiceTest extends ApiUtility
         if (\file_exists($this->throttle->getLoginHistoryFileName('test@example.com'))) {
             \unlink($this->throttle->getLoginHistoryFileName('test@example.com'));
         }
-
 
         $result = $this->service->getToken('test@example.com', 'Sample#123456');
         $this->assertTrue($result->getCode() === 200);
@@ -134,7 +130,7 @@ final class AuthServiceTest extends ApiUtility
 
         $result = $this->service->verifyToken($user->{'token'}, 'editor');
 
-         $this->assertEquals(200, $result->getCode());
+        $this->assertEquals(200, $result->getCode());
     }
 
     public function testServiceVerifyWrongToken()
@@ -177,7 +173,6 @@ final class AuthServiceTest extends ApiUtility
         $user = $getTokenResponse->getResult();
 
         $result = $this->service->verifyToken($user->{'token'}, 'editor');
-
 
         $this->assertEquals(200, $result->getCode());
     }

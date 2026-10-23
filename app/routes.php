@@ -18,7 +18,6 @@ use App\Application\Actions\Auth\AuthenticateAction;
 use App\Application\Actions\Auth\ChangePasswordAction;
 use App\Application\Actions\Auth\PublicInfoAction;
 use App\Application\Actions\Auth\PublicInfoPostAction;
-use App\Application\Actions\Auth\RegisterAction;
 use App\Application\Actions\Auth\ResetPasswordAction;
 use App\Application\Actions\Cms\ContentDeleteByIdAction;
 use App\Application\Actions\Cms\ContentGetByIdAction;
@@ -45,12 +44,10 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;
     });
-
 
     $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('');
@@ -65,13 +62,12 @@ return function (App $app) {
 
     $app->group(ApiConstants::API.'/authapi', function (Group $group) {
         $group->get('/publicinfo', PublicInfoAction::class);
-      //  $group->options('/publicinfo', PublicInfoAction::class);
+        //  $group->options('/publicinfo', PublicInfoAction::class);
         $group->post('/publicinfo', PublicInfoPostAction::class);
         $group->post('/authenticate', AuthenticateAction::class);
 
         $group->post('/changepassword', ChangePasswordAction::class);
         $group->post('/resetpassword', ResetPasswordAction::class);
-
     });
 
     $app->group(ApiConstants::API.'/debugapi', function (Group $group) {
@@ -131,8 +127,7 @@ return function (App $app) {
 
     // authorize option in CustomJwtAuthentication
     $app->group(ApiConstants::API.'/webapi/content', function (Group $group) {
-            $group->get('/{type}/{id}', WebGetByIdAction::class);
-            $group->get('/{type}', WebGetListAction::class);
-
+        $group->get('/{type}/{id}', WebGetByIdAction::class);
+        $group->get('/{type}', WebGetListAction::class);
     });
 };

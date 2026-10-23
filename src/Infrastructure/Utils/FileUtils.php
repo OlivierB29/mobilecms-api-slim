@@ -91,17 +91,17 @@ class FileUtils
 
     /**
      * Concatenate two directories.
+     *
      * @param string $dir : source
-     * 
+     *
      * return string : concatenated directory
      */
-
     public function concatDirectories(string ...$dirs): string
     {
         $result = '';
         foreach ($dirs as $dir) {
             if (substr($result, -1) != '/' && substr($dir, 0, 1) != '/') {
-                $result .= '/' . $dir;
+                $result .= '/'.$dir;
             } else {
                 $result .= $dir;
             }

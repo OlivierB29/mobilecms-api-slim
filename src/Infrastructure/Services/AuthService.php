@@ -65,7 +65,6 @@ class AuthService
         $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
 
-
     /**
      * Authenticate
      * return an empty string if success.
@@ -87,15 +86,13 @@ class AuthService
 
         // user verification
         if (!empty($user)) {
+            if (password_verify($password, $user->{'password'})) {
+                $loginmsg = '';
 
-                if (password_verify($password, $user->{'password'})) {
-                    $loginmsg = '';
-
-                    $this->throttle->archiveOldFailed($user->{'email'});
-                } else {
-                    $loginmsg = 'Wrong password';
-                }
-
+                $this->throttle->archiveOldFailed($user->{'email'});
+            } else {
+                $loginmsg = 'Wrong password';
+            }
         } else {
             $loginmsg = 'Wrong user';
         }
@@ -113,8 +110,6 @@ class AuthService
      */
     public function getToken($emailParam, $password): Response
     {
-
-
         // initialize Response
         $response = new Response();
         $response->setCode(401);
@@ -137,9 +132,8 @@ class AuthService
         $user = $this->service->getJsonUser($email);
         // user verification
         if (!empty($user)) {
-
             // password
-            if ( password_verify($password, $user->{'password'})) {
+            if (password_verify($password, $user->{'password'})) {
                 $this->throttle->clearFailedLogins($email, $ip);
 
                 $token = null;
@@ -186,7 +180,6 @@ class AuthService
                 $userResponse->{'name'} = $user->{'name'};
                 $userResponse->{'username'} = $user->{'name'};
                 $userResponse->{'email'} = $user->{'email'};
- 
 
                 $response->setResult($userResponse);
             }
@@ -377,7 +370,6 @@ class AuthService
 
                 JsonUtils::copy($user, $info);
 
-
                 $response->setResult($info);
                 $response->setCode(200);
             }
@@ -385,7 +377,6 @@ class AuthService
 
         return $response;
     }
-
 
     /**
      * Generate a US-ASCII random string.

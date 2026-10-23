@@ -104,7 +104,7 @@ class UserService
                 throw new \Exception('empty user ');
             }
         } else {
-            throw new \Exception('user not found:'. $email);
+            throw new \Exception('user not found:'.$email);
         }
 
         return $result;

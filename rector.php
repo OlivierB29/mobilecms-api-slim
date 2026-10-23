@@ -6,11 +6,11 @@ use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/app',
-        __DIR__ . '/public',
-        __DIR__ . '/public-dev',
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__.'/app',
+        __DIR__.'/public',
+        __DIR__.'/public-dev',
+        __DIR__.'/src',
+        __DIR__.'/tests',
     ])
     // uncomment to reach your current PHP version
     // ->withPhpSets()

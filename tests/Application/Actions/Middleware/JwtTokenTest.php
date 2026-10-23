@@ -7,7 +7,6 @@ namespace Tests\Application\Actions\Middleware;
 use App\Infrastructure\Rest\JwtToken;
 use Tests\ApiUtility;
 
-
 final class JwtTokenTest extends ApiUtility
 {
     private $util;

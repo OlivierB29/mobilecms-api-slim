@@ -23,7 +23,7 @@ class NetUtils
             $ipaddress = $_SERVER['HTTP_FORWARDED'];
         } elseif (isset($_SERVER['REMOTE_ADDR'])) {
             $ipaddress = $_SERVER['REMOTE_ADDR'];
-        // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
         } else {
             $ipaddress = 'UNKNOWN';
         }

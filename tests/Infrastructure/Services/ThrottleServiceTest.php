@@ -46,7 +46,7 @@ final class ThrottleServiceTest extends TestCase
     {
         $throttle = new ThrottleService($this->directory);
 
-        for ($index = 0; $index < 5; ++$index) {
+        for ($index = 0; $index < 5; $index++) {
             $throttle->recordFailedLogin('user@example.com', '203.0.113.10');
         }
 
@@ -57,7 +57,7 @@ final class ThrottleServiceTest extends TestCase
 
     private function recordFailures(ThrottleService $throttle, string $user, string $ip, int $count): void
     {
-        for ($index = 0; $index < $count; ++$index) {
+        for ($index = 0; $index < $count; $index++) {
             $throttle->recordFailedLogin($user, $ip);
         }
     }

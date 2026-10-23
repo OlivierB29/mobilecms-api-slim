@@ -3,9 +3,8 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
-use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\JsonUtils;
-use App\Infrastructure\Utils\StringUtils;
+use App\Infrastructure\Utils\Properties;
 
 /**
  * Function used for sorting.
@@ -52,7 +51,6 @@ function compareIndexReverse(string $key)
         return $result;
     };
 }
-
 
 /**
  * Read and save data from JSON files.
@@ -378,23 +376,21 @@ class ContentService extends AbstractService
      */
     public function post(string $type, string $keyname, \stdClass $record)
     {
-
         $response = $this->getDefaultResponse();
 
         if (empty(get_object_vars($record))) {
             $response->setError(400, 'Empty object record');
+
             return $response;
         }
-
 
         $this->assignTimestampFields($type, $record);
         $isNewRecord = false;
         if (empty($record->{$keyname})) {
             $isNewRecord = true;
-            IdGeneratorUtils::assignGeneratedId($type, $keyname, $record,  $this->loadMetadata($type));
+            IdGeneratorUtils::assignGeneratedId($type, $keyname, $record, $this->loadMetadata($type));
         }
-        
-        
+
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
             $response->setResult($record);
 
@@ -445,7 +441,6 @@ class ContentService extends AbstractService
         );
     }
 
-  
     /**
      * @return array metadata fields
      */
