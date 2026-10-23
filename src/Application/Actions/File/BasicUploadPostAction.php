@@ -67,6 +67,7 @@ class BasicUploadPostAction extends FileAction
             $uploadError = $fileControl->getError();
             if ($uploadError !== UPLOAD_ERR_OK) {
                 $statusCode = in_array($uploadError, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? 413 : 400;
+
                 throw new HttpException($this->request, 'Upload error '.$uploadError, $statusCode);
             }
 
@@ -79,13 +80,11 @@ class BasicUploadPostAction extends FileAction
             }
         }
 
-
         foreach ($inputFiles['uploadfiles'] as $file) {
             if ($file !== null) {
                 $fileResult = $this->uploadFile($type, $id, $file);
                 array_push($result, $fileResult);
             }
-
         }
 
         return $result;
@@ -110,7 +109,7 @@ class BasicUploadPostAction extends FileAction
         return $size === null ? 0 : $size;
     }
 
-        /**
+    /**
      * Basic upload verification.
      *
      * @param string $file file name
@@ -127,7 +126,6 @@ class BasicUploadPostAction extends FileAction
         return $result;
     }
 
-
     private function writeStream(string $file, StreamInterface $s)
     {
         file_put_contents($file, $s->getContents());
@@ -141,7 +139,6 @@ class BasicUploadPostAction extends FileAction
         // create directory if it doesn't exist
         if (!file_exists($destdir)) {
             mkdir($destdir, $this->directoryUmask, true);
-            
         } else {
             chmod($destdir, $this->directoryUmask);
         }

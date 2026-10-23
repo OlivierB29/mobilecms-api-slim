@@ -82,6 +82,6 @@ class EventsActionGetAction extends CmsAction
 
     private static function escape(string $value): string
     {
-        return str_replace(["\\", ";", ",", "\r\n", "\r", "\n"], ["\\\\", "\\;", "\\,", '\\n', '\\n', '\\n'], $value);
+        return str_replace(['\\', ';', ',', "\r\n", "\r", "\n"], ['\\\\', '\\;', '\\,', '\\n', '\\n', '\\n'], $value);
     }
 }

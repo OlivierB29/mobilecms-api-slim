@@ -10,7 +10,6 @@ abstract class AuthApiUtility extends ApiUtility
     protected $token;
     protected $conf;
 
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,14 +19,13 @@ abstract class AuthApiUtility extends ApiUtility
         $this->conf = json_decode(file_get_contents('tests/conf.json'));
 
         $this->memory();
-
     }
 
     protected function setGuest()
     {
-                $service = new AuthService(realpath('tests-data').$this->conf->{'privatedir'}.'/users');
+        $service = new AuthService(realpath('tests-data').$this->conf->{'privatedir'}.'/users');
 
-                $response = $service->getToken('guest@example.com', 'Sample#123456');
+        $response = $service->getToken('guest@example.com', 'Sample#123456');
         $this->user = $response->getResult();
         $this->token = 'Bearer '.$this->user->{'token'};
         $this->headers['Authorization'] = $this->token;

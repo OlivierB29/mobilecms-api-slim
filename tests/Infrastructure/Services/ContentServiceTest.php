@@ -7,7 +7,6 @@ namespace Tests\Infrastructure\Services;
 use App\Infrastructure\Services\ContentService;
 use Tests\ApiUtility;
 
-
 final class ContentServiceTest extends ApiUtility
 {
     private $dir = 'tests-data/public';
@@ -51,8 +50,6 @@ final class ContentServiceTest extends ApiUtility
         $response = $service->post('', 'id', json_decode($recordStr));
     }
 
-
-
     public function testPostEmptyRecord()
     {
         $recordStr = '{}';
@@ -60,7 +57,7 @@ final class ContentServiceTest extends ApiUtility
         $response = $service->post('calendar', 'id', json_decode($recordStr));
 
         $file = $this->dir.'/calendar/10.json';
-        
+
         $this->assertEquals(400, $response->getCode());
     }
 
@@ -84,7 +81,6 @@ final class ContentServiceTest extends ApiUtility
         unlink($file);
         unlink($this->dir.'/news/2026-aaaaaaaaaa.json');
     }
-
 
     public function testPostKeepsClientIdWhenProvided()
     {
@@ -190,7 +186,7 @@ final class ContentServiceTest extends ApiUtility
             echo $response->getResult();
             echo $response->getMessage();
         }
-        
+
         $this->assertEquals(200, $response->getCode());
     }
 

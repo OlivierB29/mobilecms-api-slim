@@ -15,7 +15,7 @@ abstract class RestAction extends Action
 {
     protected $usepost = false;
 
-    protected $fileutils ;
+    protected $fileutils;
 
     /**
      * @param LoggerInterface $logger

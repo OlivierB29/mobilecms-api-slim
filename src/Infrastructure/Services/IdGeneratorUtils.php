@@ -2,8 +2,6 @@
 
 namespace App\Infrastructure\Services;
 
-use App\Infrastructure\Utils\StringUtils;
-
 /**
  * Utilities used to generate record identifiers from metadata.
  */
@@ -28,13 +26,12 @@ class IdGeneratorUtils
         return [];
     }
 
-     public static function assignGeneratedId(string $type, string $keyname, \stdClass $record, array $metadata): string
+    public static function assignGeneratedId(string $type, string $keyname, \stdClass $record, array $metadata): string
     {
         if (!empty($record->{$keyname})) {
             return $record->{$keyname};
         }
 
-        
         $sources = IdGeneratorUtils::getSources($metadata, $keyname);
         if ($sources === []) {
             throw new \Exception('No generated ID sources available');
@@ -83,6 +80,7 @@ class IdGeneratorUtils
         }
 */
         $record->{$keyname} = $id;
+
         return $id;
     }
 
@@ -100,10 +98,9 @@ class IdGeneratorUtils
         return self::slugify($value);
     }
 
-
     /**
      * Convert a value to a filename-safe slug.
-     * eg: "Été kendo 2026" -> "ete-kendo-2026"
+     * eg: "Été kendo 2026" -> "ete-kendo-2026".
      */
     public static function slugify(string $value): string
     {

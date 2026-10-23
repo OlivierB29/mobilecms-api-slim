@@ -10,7 +10,6 @@ use Tests\AuthApiUtility;
 
 final class CmsApiTest extends AuthApiUtility
 {
-    
     protected $requestparams = '?timestamp=1599654646';
 
     protected function setUp(): void

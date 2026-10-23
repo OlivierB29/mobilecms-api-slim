@@ -31,7 +31,6 @@ class AuthenticateAction extends AuthAction
                 throw new \Exception('no password data');
             }
 
-
             $service = new AuthService($this->getPrivateDirPath().'/users');
 
             $response = $service->getToken($this->getUser($logindata), $logindata->{'password'});

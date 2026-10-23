@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\Cms;
 
-use App\Application\Actions\ActionPayload;
-use App\Infrastructure\Utils\FileUtils;
 use Tests\AuthApiUtility;
 
 final class WebApiTest extends AuthApiUtility
@@ -17,7 +15,6 @@ final class WebApiTest extends AuthApiUtility
         parent::setUp();
         $this->setGuest();
     }
-
 
     public function testGetCalendarList()
     {
@@ -33,8 +30,6 @@ final class WebApiTest extends AuthApiUtility
 
         $this->assertTrue(strpos($response->getEncodedResult(), 'yet another seminar of activity') !== false);
     }
-
-
 
     public function testGetCalendarRecord()
     {
@@ -63,8 +58,4 @@ final class WebApiTest extends AuthApiUtility
 
         $this->assertEquals(404, $response->getCode());
     }
-
-
-
-
 }

@@ -49,24 +49,25 @@ final class CmsApiSecurityTest extends AuthApiUtility
 
         //TODO assert result without HTML
     }
-/*
-    public function testPostXssHtml3()
-    {
-        $this->path = $this->getApi().'/cmsapi/content/calendar';
 
-        $recordStr = file_get_contents('tests-data/security/htmlxss3.json');
-        $this->POST = ['requestbody' => $recordStr];
-        unset($recordStr);
-        $response = $this->request('POST', $this->path);
+    /*
+        public function testPostXssHtml3()
+        {
+            $this->path = $this->getApi().'/cmsapi/content/calendar';
 
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        // echo 'processAPI: ' . $this->memory();
-        $this->assertTrue($response->getResult() != null && $response->getResult() != '');
+            $recordStr = file_get_contents('tests-data/security/htmlxss3.json');
+            $this->POST = ['requestbody' => $recordStr];
+            unset($recordStr);
+            $response = $this->request('POST', $this->path);
 
-        //TODO assert result without HTML
-    }
-*/
+            $this->printError($response);
+            $this->assertEquals(200, $response->getCode());
+            // echo 'processAPI: ' . $this->memory();
+            $this->assertTrue($response->getResult() != null && $response->getResult() != '');
+
+            //TODO assert result without HTML
+        }
+    */
     public function testPostXssHtml4()
     {
         // TODO

@@ -9,7 +9,6 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Tests\ApiUtility;
 
-
 final class JWTTest extends ApiUtility
 {
     private $util;
