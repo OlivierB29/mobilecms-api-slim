@@ -37,4 +37,21 @@ class StringUtils
 
         return substr($haystack, -$length) === $needle;
     }
+
+    public static function isForbiddenParameterValue($param): bool
+    {
+        if (!is_string($param) && !is_int($param)) {
+            return true;
+        }
+
+        $param = (string) $param;
+
+        return strpos($param, '.')
+            || strpos($param, '..')
+            || strpos($param, '/')
+            || strpos($param, '\\')
+            || strpos($param, '$')
+            || strpos($param, '%')
+            || strpbrk($param, "/\\\0");
+    }
 }

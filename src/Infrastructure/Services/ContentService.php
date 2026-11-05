@@ -5,6 +5,7 @@ namespace App\Infrastructure\Services;
 use App\Infrastructure\Rest\Response;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\Properties;
+use App\Infrastructure\Utils\StringUtils;
 
 /**
  * Function used for sorting.
@@ -390,6 +391,12 @@ class ContentService extends AbstractService
             $isNewRecord = true;
             IdGeneratorUtils::assignGeneratedId($type, $keyname, $record, $this->loadMetadata($type));
         }
+        
+        if (StringUtils::isForbiddenParameterValue($record->{$keyname})) {
+            $response->setError(406, 'Invalid value. Not acceptable. At all.');
+            return $response;
+        }
+
 
         if (isset($record) && isset($record->{$keyname}) && $record->{$keyname} !== '') {
             $response->setResult($record);
@@ -734,6 +741,12 @@ class ContentService extends AbstractService
     public function deleteRecords(string $type, array $ids)
     {
         $response = $this->getDefaultResponse();
+        foreach ($ids as $id) {
+            if (StringUtils::isForbiddenParameterValue($id)) {
+                $response->setError(400, 'Invalid record id');
+                return $response;
+            }
+        }
 
         foreach ($ids as $id) {
             // Read the JSON file
@@ -752,4 +765,6 @@ class ContentService extends AbstractService
 
         return $response;
     }
+
+
 }

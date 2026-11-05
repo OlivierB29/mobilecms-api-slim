@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Actions;
 
 use App\Domain\DomainException\DomainRecordNotFoundException;
+use App\Infrastructure\Utils\StringUtils;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -109,7 +110,19 @@ abstract class Action
             throw new HttpBadRequestException($this->request, "Could not resolve argument `{$name}`.");
         }
 
+
+        if (StringUtils::isForbiddenParameterValue($this->args[$name])) {
+            throw new HttpBadRequestException($this->request, "Not acceptable value for argument");
+        }
+
         return $this->args[$name];
+    }
+
+    protected function ensureParamIsNotForbidden($param, string $paramName)
+    {
+        if (StringUtils::isForbiddenParameterValue($param)) {
+            throw new HttpBadRequestException($this->request, "Not acceptable value for argument {$paramName}");
+        }
     }
 
     /**
@@ -145,4 +158,6 @@ abstract class Action
     {
         return $this->request->getBody();
     }
+
+
 }
