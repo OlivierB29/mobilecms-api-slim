@@ -65,40 +65,7 @@ class AuthService
         $this->jwtImpl = Properties::getInstance()->getConf()->{'jwt'};
     }
 
-    /**
-     * Authenticate
-     * return an empty string if success.
-     *
-     * @param string $emailParam : email
-     * @param string $password   : pseudo clear password (must be hashed from client)
-     *
-     * @return string return an empty string if success.
-     */
-    public function login($emailParam, $password)
-    {
-        $loginmsg = 'default error message';
 
-        // if someone forgot to do this before
-        $email = strtolower($emailParam);
-
-        // return the existing user
-        $user = $this->service->getJsonUser($email);
-
-        // user verification
-        if (!empty($user)) {
-            if (password_verify($password, $user->{'password'})) {
-                $loginmsg = '';
-
-                $this->throttle->archiveOldFailed($user->{'email'});
-            } else {
-                $loginmsg = 'Wrong password';
-            }
-        } else {
-            $loginmsg = 'Wrong user';
-        }
-
-        return $loginmsg;
-    }
 
     /**
      * Authenticate and return a User object with a token.
@@ -124,6 +91,9 @@ class AuthService
         $retryAfter = $this->throttle->getRetryAfter($email, $ip);
         if ($retryAfter > 0) {
             $response->setError(429, 'Too many login attempts');
+            $error = $response->getResult();
+            $error->{'retryAfter'} = $retryAfter;
+            $response->setResult($error);
 
             return $response;
         }
