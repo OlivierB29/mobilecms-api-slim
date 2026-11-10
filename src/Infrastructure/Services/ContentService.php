@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\StringUtils;
@@ -84,6 +85,9 @@ class ContentService extends AbstractService
      */
     private function getItemFileName(string $type, string $id, \stdClass $record): string
     {
+        $type = FileUtils::validatePathSegment($type, 'type');
+        $id = FileUtils::validatePathSegment($id, 'id');
+
         $result = $this->getDatabaseDir().'/'.$type.'/';
         // conf "organizeby": "year"
         $conf = $this->getRecordConf($type);
@@ -103,6 +107,9 @@ class ContentService extends AbstractService
 
     private function getItemFileNameWithoutRecord(string $type, string $id): string
     {
+        $type = \App\Infrastructure\Utils\FileUtils::validatePathSegment($type, 'type');
+        $id = \App\Infrastructure\Utils\FileUtils::validatePathSegment($id, 'id');
+
         $result = $this->getDatabaseDir().'/'.$type.'/';
 
         $result .= $id.'.json';

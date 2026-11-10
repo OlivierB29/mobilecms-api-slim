@@ -125,6 +125,9 @@ abstract class FileAction extends RestAction
      */
     public function getRecordDirPath($type, $id): string
     {
+        $type = $this->fileutils->validatePathSegment((string) $type, 'type');
+        $id = $this->fileutils->validatePathSegment((string) $id, 'id');
+
         return $this->fileutils->concatDirectories($this->getMediaDirPath(), $type).'/'.$id;
     }
 

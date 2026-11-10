@@ -7,6 +7,20 @@ namespace App\Infrastructure\Utils;
  */
 class FileUtils
 {
+    public static function validatePathSegment(string $value, string $label): string
+    {
+        if ($value === '' || $value === '.' || $value === '..') {
+            throw new \InvalidArgumentException(sprintf('%s is invalid.', $label));
+        }
+
+        $normalized = str_replace('\\', '/', $value);
+        if (preg_match('#(^|/)\.\.?($|/)#', $normalized) === 1 || strpos($normalized, '/') !== false || strpos($normalized, '\\') !== false) {
+            throw new \InvalidArgumentException(sprintf('%s contains invalid path traversal data.', $label));
+        }
+
+        return $value;
+    }
+
     public function getMimeType(string $file)
     {
         $file_info = new \finfo(FILEINFO_MIME_TYPE);
@@ -98,15 +112,75 @@ class FileUtils
      */
     public function concatDirectories(string ...$dirs): string
     {
-        $result = '';
+        $segments = [];
+        $absolute = false;
+
         foreach ($dirs as $dir) {
-            if (substr($result, -1) != '/' && substr($dir, 0, 1) != '/') {
-                $result .= '/'.$dir;
-            } else {
-                $result .= $dir;
+            if ($dir === '') {
+                continue;
+            }
+
+            $normalized = str_replace('\\', '/', $dir);
+            if ($normalized === '/') {
+                $absolute = true;
+                continue;
+            }
+
+            $parts = preg_split('#/+#', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+            if ($parts === false) {
+                continue;
+            }
+
+            foreach ($parts as $part) {
+                if ($part === '.' || $part === '..') {
+                    throw new \InvalidArgumentException('Directory path contains traversal markers.');
+                }
+
+                $segments[] = $part;
+            }
+
+            if ($normalized !== '' && $normalized[0] === '/') {
+                $absolute = true;
             }
         }
 
-        return $result;
+        $result = implode('/', $segments);
+
+        return $absolute ? '/'.$result : $result;
+    }
+
+    public function concatDirectoriesNoTraversalCheck(string ...$dirs): string
+    {
+        $segments = [];
+        $absolute = false;
+
+        foreach ($dirs as $dir) {
+            if ($dir === '') {
+                continue;
+            }
+
+            $normalized = str_replace('\\', '/', $dir);
+            if ($normalized === '/') {
+                $absolute = true;
+                continue;
+            }
+
+            $parts = preg_split('#/+#', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+            if ($parts === false) {
+                continue;
+            }
+
+            foreach ($parts as $part) {
+                $segments[] = $part;
+            }
+
+            if ($normalized !== '' && $normalized[0] === '/') {
+                $absolute = true;
+            }
+        }
+
+        $result = implode('/', $segments);
+
+        return $absolute ? '/'.$result : $result;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\ImageUtils;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\PdfUtils;
@@ -94,6 +95,9 @@ class FileService extends AbstractService
     public function getRecordDirectory(string $mediadir, string $type, string $id, \stdClass $record): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
+            $type = FileUtils::validatePathSegment($type, 'type');
+            $id = FileUtils::validatePathSegment($id, 'id');
+
             $result = $mediadir.'/'.$type.'/';
             // conf "organizeby": "year"
             $conf = $this->getRecordConf($type);
@@ -122,6 +126,9 @@ class FileService extends AbstractService
     public function getRecordDirectoryWithoutRecord(string $mediadir, string $type, string $id): string
     {
         if (strlen($mediadir) > 0 && strlen($type) > 0 && strlen($id) > 0) {
+            $type = \App\Infrastructure\Utils\FileUtils::validatePathSegment($type, 'type');
+            $id = \App\Infrastructure\Utils\FileUtils::validatePathSegment($id, 'id');
+
             $result = $mediadir.'/'.$type.'/';
 
             $result .= $id;

@@ -63,7 +63,7 @@ abstract class RestAction extends Action
      */
     public function getPrivateDirPath(): string
     {
-        return $this->fileutils->concatDirectories($this->getRootDir(), $this->getConf()->{'privatedir'});
+        return $this->fileutils->concatDirectoriesNoTraversalCheck($this->getRootDir(), $this->getConf()->{'privatedir'});
     }
 
     /**
