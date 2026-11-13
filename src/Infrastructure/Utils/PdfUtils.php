@@ -35,7 +35,7 @@ class PdfUtils
 
         // create directory if necessary
         if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
+            mkdir($dir, 0755, true);
         }
 
         foreach ($sizes as $width) {

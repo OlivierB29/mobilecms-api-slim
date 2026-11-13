@@ -36,7 +36,7 @@ class ImageUtils
         // create directory if necessary
         if (!file_exists($dir)) {
             // @codeCoverageIgnoreStart
-            mkdir($dir, 0777, true);
+            mkdir($dir, 0755, true);
             // @codeCoverageIgnoreEnd
         }
 
@@ -103,7 +103,7 @@ class ImageUtils
 
             if (!file_exists(dirname($thumbFile))) {
                 // @codeCoverageIgnoreStart
-                mkdir(dirname($thumbFile), 0777, true);
+                mkdir(dirname($thumbFile), 0755, true);
                 // @codeCoverageIgnoreEnd
             }
 

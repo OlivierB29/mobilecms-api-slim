@@ -40,7 +40,7 @@ class FileUtils
     // {
     //     $path = pathinfo($s2);
     //     if (!file_exists($path['dirname'])) {
-    //         mkdir($path['dirname'], 0777, true);
+    //         mkdir($path['dirname'], 0755, true);
     //     }
     //     if (!copy($s1, $s2)) {
     //         throw new \Exception('copy failed ');

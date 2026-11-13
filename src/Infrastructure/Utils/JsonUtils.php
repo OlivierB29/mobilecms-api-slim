@@ -22,10 +22,12 @@ class JsonUtils
     /**
      * Read a JSON file.
      *
-     * @param string $file : file
-     *                     param  $data : JSON object
+     * @param string $file          : file
+     * @param mixed  $data          : JSON object
+     * @param int    $directoryMode : permissions for the directory
+     * @param int    $fileMode      : permissions for the file
      */
-    public static function writeJsonFile(string $file, $data)
+    public static function writeJsonFile(string $file, $data, int $directoryMode = 0755, int $fileMode = 0644)
     {
         $fh = null;
 
@@ -33,7 +35,8 @@ class JsonUtils
             $dir = dirname($file);
             if (!file_exists($dir)) {
                 //throw new \Exception('No such file or directory' . $dir);
-                mkdir($dir);
+                mkdir($dir, $directoryMode, true);
+                chmod($dir, $directoryMode);
             }
             if (file_exists($dir) && !is_writable($dir)) {
                 throw new \Exception('Access error to output dir'.$dir);
@@ -52,6 +55,7 @@ class JsonUtils
 
             fwrite($fh, json_encode($data, JSON_PRETTY_PRINT));
             fclose($fh);
+            chmod($file, $fileMode);
         } catch (\Exception $e) {
             if (isset($fh)) {
                 // @codeCoverageIgnoreStart

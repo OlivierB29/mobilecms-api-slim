@@ -23,6 +23,26 @@ final class JsonUtilsTest extends ApiUtility
         $this->assertTrue(file_exists('tests-data/newpath/test.json'));
     }
 
+    public function testWriteJsonFileWithCustomPermissions()
+    {
+        $directory = sys_get_temp_dir().'/jsonutils-'.uniqid('', true);
+        $file = $directory.'/custom-permissions.json';
+
+        try {
+            JsonUtils::writeJsonFile($file, \json_decode('{}'), 0700, 0600);
+
+            $this->assertSame(0700, fileperms($directory) & 0777);
+            $this->assertSame(0600, fileperms($file) & 0777);
+        } finally {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+            if (is_dir($directory)) {
+                rmdir($directory);
+            }
+        }
+    }
+
     /**
      * doesn't work in docker, since root is the owner of the file.
      */
