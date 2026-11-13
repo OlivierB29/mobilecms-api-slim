@@ -70,7 +70,6 @@ class FileService extends AbstractService
     {
         $finfo = finfo_open(FILEINFO_MIME_TYPE); // get mime type
         $mimetype = finfo_file($finfo, $destfile);
-        finfo_close($finfo);
 
         $filesize = filesize($destfile);
 

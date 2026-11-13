@@ -96,6 +96,52 @@ final class ContentServiceTest extends ApiUtility
         unlink($file);
     }
 
+    public function testPostPersistsMediaThumbnails()
+    {
+        $properties = \App\Infrastructure\Utils\Properties::getInstance();
+        $originalMediaDir = $properties->getConf()->media;
+        $mediaDir = __DIR__.'/../../../tests-data/media';
+        $recordMediaDir = $mediaDir.'/news/thumbnail-persistence-test';
+        $recordFile = $this->dir.'/news/thumbnail-persistence-test.json';
+        $sourceImage = $recordMediaDir.'/tennis.jpg';
+        $thumbnailDir = $recordMediaDir.'/thumbnails';
+
+        mkdir($recordMediaDir, 0755, true);
+        copy(__DIR__.'/../../../tests-data/media/calendar/2/tennis.jpg', $sourceImage);
+        $properties->getConf()->media = $mediaDir;
+
+        try {
+            $record = json_decode('{"id":"thumbnail-persistence-test","date":"2026-08-23","title":"thumbnail test","media":[{"url":"tennis.jpg"}]}');
+            $service = new ContentService($this->dir);
+            $response = $service->post('news', 'id', $record);
+
+            $this->assertEquals(200, $response->getCode());
+            $savedRecord = json_decode(file_get_contents($recordFile));
+            $this->assertIsArray($savedRecord->media[0]->thumbnails);
+            $this->assertNotEmpty($savedRecord->media[0]->thumbnails);
+            $this->assertSame('tennis-400.jpg', $savedRecord->media[0]->thumbnails[0]->url);
+        } finally {
+            $properties->getConf()->media = $originalMediaDir;
+            if (file_exists($recordFile)) {
+                unlink($recordFile);
+            }
+            if (is_dir($thumbnailDir)) {
+                foreach (scandir($thumbnailDir) as $thumbnail) {
+                    if ($thumbnail !== '.' && $thumbnail !== '..') {
+                        unlink($thumbnailDir.'/'.$thumbnail);
+                    }
+                }
+                rmdir($thumbnailDir);
+            }
+            if (file_exists($sourceImage)) {
+                unlink($sourceImage);
+            }
+            if (is_dir($recordMediaDir)) {
+                rmdir($recordMediaDir);
+            }
+        }
+    }
+
     public function testTimestampFieldsAreSetOnSave()
     {
         $service = new ContentService($this->dir);

@@ -414,9 +414,8 @@ class ContentService extends AbstractService
             // file name
             $file = $this->getItemFileName($type, $id, $record);
 
-            if (!$isNewRecord) {
-                $this->refreshThumbnails($type, $id, $record);
-            }
+
+            $this->refreshThumbnails($type, $id, $record);
 
             // write to file
             JsonUtils::writeJsonFile($file, $record);
@@ -442,7 +441,7 @@ class ContentService extends AbstractService
 
         $conf = $properties->getConf();
         $service = new FileService($this->getDatabaseDir());
-        $service->createThumbnails(
+        $thumbnailResponse = $service->createThumbnails(
             $conf->media,
             $type,
             $id,
@@ -453,6 +452,15 @@ class ContentService extends AbstractService
             80,
             $properties->getString('imagedriver') ?: 'gd'
         );
+
+        foreach ($thumbnailResponse->getResult() as $thumbnailFile) {
+            foreach ($record->media as $mediaFile) {
+                if (isset($mediaFile->url) && basename((string) $mediaFile->url) === $thumbnailFile->url) {
+                    $mediaFile->thumbnails = $thumbnailFile->thumbnails;
+                    break;
+                }
+            }
+        }
     }
 
     /**
