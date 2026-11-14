@@ -11,16 +11,25 @@ final class JsonUtilsTest extends ApiUtility
 {
     public function testCanRead()
     {
+        $data = JsonUtils::readJsonFile('tests-data/jsonutils/mini.json');
+
+        $this->assertInstanceOf(\stdClass::class, $data);
         $this->assertJsonStringEqualsJsonString(
             '{}',
-            json_encode(JsonUtils::readJsonFile('tests-data/jsonutils/mini.json'))
+            json_encode($data)
         );
+    }
+
+    public function testCanReadJsonArray()
+    {
+        $this->assertIsArray(JsonUtils::readJsonFile('tests-data/jsonutils/test.json'));
     }
 
     public function testNewDirectory()
     {
         JsonUtils::writeJsonFile('tests-data/newpath/test.json', \json_decode('{}'));
         $this->assertTrue(file_exists('tests-data/newpath/test.json'));
+        $this->assertInstanceOf(\stdClass::class, JsonUtils::readJsonFile('tests-data/newpath/test.json'));
     }
 
     public function testWriteJsonFileWithCustomPermissions()
