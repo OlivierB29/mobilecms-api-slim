@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\File;
 
+use App\Application\Actions\File\ThumbnailsAction;
 use App\Infrastructure\Utils\FileUtils;
 use Tests\AuthApiUtility;
 
@@ -136,6 +137,14 @@ final class FileApiTest extends AuthApiUtility
 
         // test deleted file
         $this->assertTrue(!file_exists($destfile));
+    }
+
+    public function testDeleteThumbnailFilesWithoutThumbnails()
+    {
+        $action = (new \ReflectionClass(ThumbnailsAction::class))->newInstanceWithoutConstructor();
+        $method = new \ReflectionMethod($action, 'deleteThumbailFiles');
+
+        $this->assertTrue($method->invoke($action, json_decode('{"url":"image.jpg"}'), 'calendar', '2'));
     }
 
     public function testGet()

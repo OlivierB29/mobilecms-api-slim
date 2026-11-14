@@ -442,7 +442,7 @@ class ContentService extends AbstractService
         $conf = $properties->getConf();
         $service = new FileService($this->getDatabaseDir());
         $thumbnailResponse = $service->createThumbnails(
-            $conf->media,
+            (new FileUtils())->concatDirectories($properties->getRootDir(), $conf->media),
             $type,
             $id,
             $record->media,

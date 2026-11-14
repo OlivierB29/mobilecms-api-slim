@@ -100,7 +100,7 @@ final class ContentServiceTest extends ApiUtility
     {
         $properties = \App\Infrastructure\Utils\Properties::getInstance();
         $originalMediaDir = $properties->getConf()->media;
-        $mediaDir = __DIR__.'/../../../tests-data/media';
+        $mediaDir = $properties->getRootDir().'/media';
         $recordMediaDir = $mediaDir.'/news/thumbnail-persistence-test';
         $recordFile = $this->dir.'/news/thumbnail-persistence-test.json';
         $sourceImage = $recordMediaDir.'/tennis.jpg';
@@ -108,7 +108,7 @@ final class ContentServiceTest extends ApiUtility
 
         mkdir($recordMediaDir, 0755, true);
         copy(__DIR__.'/../../../tests-data/media/calendar/2/tennis.jpg', $sourceImage);
-        $properties->getConf()->media = $mediaDir;
+        $properties->getConf()->media = '/media';
 
         try {
             $record = json_decode('{"id":"thumbnail-persistence-test","date":"2026-08-23","title":"thumbnail test","media":[{"url":"tennis.jpg"}]}');
