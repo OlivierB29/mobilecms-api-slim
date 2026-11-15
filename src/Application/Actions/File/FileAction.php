@@ -260,13 +260,13 @@ abstract class FileAction extends RestAction
                 $destfile = $destdir.'/'.basename($file->{'url'});
                 if (file_exists($destfile)) {
                     if (!unlink($destfile)) {
-                        throw new \Exception('delete '.$file['url'].' KO');
+                        throw new \Exception('delete '.$file->{'url'}.' KO');
                     }
                 } else {
                     // TODO add message
                 }
             } else {
-                throw new \Exception('wrong file '.$file['url'].' KO');
+                throw new \Exception('wrong file: missing url');
             }
         }
 
@@ -278,9 +278,9 @@ abstract class FileAction extends RestAction
         return $response;
     }
 
-    protected function deleteThumbailFiles(stdClass $fileInRecord, string $datatype, string $id): bool
+    protected function deleteThumbailFiles(\stdClass $fileInRecord, string $datatype, string $id): bool
     {
-        if ($fileInRecord->thumbnails !== null) {
+        if (!empty($fileInRecord->thumbnails)) {
             foreach ($fileInRecord->thumbnails as $thumbnailFile) {
                 $thumbnailPath = $this->getMediaDirPath().'/'.$datatype.'/'.$id.'/thumbnails'.'/'.$thumbnailFile->url;
                 if (file_exists($thumbnailPath)) {

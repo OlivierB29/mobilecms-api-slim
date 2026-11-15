@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Admin;
 
+use App\Infrastructure\Utils\ImageUtils;
 use App\Infrastructure\Utils\JsonUtils;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpBadRequestException;
@@ -22,7 +23,7 @@ class ThemeBannerUploadAction extends AdminAction
 
         $filename = basename((string) $file->getClientFilename());
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
         if ($filename === '' || !in_array($extension, $allowedExtensions, true)) {
             throw new HttpBadRequestException($this->request, 'Forbidden banner file type.');
         }
@@ -34,6 +35,22 @@ class ThemeBannerUploadAction extends AdminAction
 
         $file->moveTo($directory.'/'.$filename);
         $imageUrl = 'media/theme/banner/'.$filename;
+        $imagePath = $directory.'/'.$filename;
+        $thumbnailDirectory = $directory.'/thumbnails';
+        $thumbnails = [];
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            $thumbnailSizes = $this->getConf()->{'thumbnailsizes'} ?? [];
+            $imageUtils = new ImageUtils();
+            $imageUtils->setQuality($this->getProperties()->getInteger('imagequality', 100));
+            $imageDriver = $this->getProperties()->getString('imagedriver');
+            $imageUtils->setDriver($imageDriver !== '' ? $imageDriver : 'gd');
+            $thumbnails = $imageUtils->multipleResize(
+                $imagePath,
+                $thumbnailDirectory,
+                is_array($thumbnailSizes) ? $thumbnailSizes : []
+            );
+        }
+
         $themeFile = $this->getPublicDirPath().'/theme/theme.json';
         $theme = JsonUtils::readJsonFile($themeFile);
         if (!is_object($theme)) {
@@ -43,11 +60,13 @@ class ThemeBannerUploadAction extends AdminAction
             $theme->banner = new \stdClass();
         }
         $theme->banner->imageurl = $imageUrl;
+        $theme->banner->thumbnails = $thumbnails;
         JsonUtils::writeJsonFile($themeFile, $theme);
 
         return $this->respondWithData((object) [
-            'url'   => $imageUrl,
-            'title' => $filename,
+            'url'        => $imageUrl,
+            'title'      => $filename,
+            'thumbnails' => $thumbnails,
         ]);
     }
 }

@@ -41,34 +41,7 @@ final class JWTTest extends ApiUtility
         $this->assertTrue(strlen($phpjwtToken) > 100);
     }
 
-    /* TODO
-    public function testVerifyToken()
-    {
 
-        $username = 'test';
-        $email = 'test@example.com';
-        $role = 'guest';
-        $key = str_repeat('a', 64);
-        $alg = 'HS512';
-
-        $token = $this->util->createTokenFromUser($username, $email, $role, $key);
-
-
-        $payload = $this->util->initPayload($username, $email, $role);
-
-        $phpjwtToken = JWT::encode($payload, $key, $alg);
-
-
-        $this->assertTrue(
-            $this->util->verifyToken($token, $key)
-        );
-        //$jwt, $key, array $allowed_algs = array()
-        $jwtPayload = JWT::decode($phpjwtToken, $key, $this->allowed_algs);
-
-
-        $this->assertEquals($phpjwtToken, $jwtPayload);
-    }
-*/
     public function testVerifyWrongSecret()
     {
         $username = 'test';

@@ -133,12 +133,57 @@ class ImageUtils
                         \imagepng($image_p, $thumbFile);
 
                         break;
+                    case 'image/webp':
+                        if ($this->driver === 'imagick') {
+                            $this->resizeWebpImagick($fileName, $thumbFile, $width);
+                        } else {
+                            $this->resizeWebpGd($fileName, $thumbFile, $width, $height, $width_orig, $height_orig);
+                        }
+
+                        break;
                     default:
                 }
             }
         }
 
         return $result;
+    }
+
+    private function resizeWebpImagick(string $fileName, string $thumbFile, int $width)
+    {
+        if (empty(\Imagick::queryFormats('WEBP'))) {
+            throw new \RuntimeException('ImageMagick does not support WebP.');
+        }
+
+        $image = new \Imagick($fileName);
+
+        if ($image->getImageHeight() <= $image->getImageWidth()) {
+            $image->resizeImage($width, 0, \Imagick::FILTER_LANCZOS, 1);
+        } else {
+            $image->resizeImage(0, $width, \Imagick::FILTER_LANCZOS, 1);
+        }
+
+        $image->setImageFormat('WEBP');
+        $image->setImageCompressionQuality($this->quality);
+        $image->stripImage();
+        $image->writeImage($thumbFile);
+        $image->destroy();
+    }
+
+    private function resizeWebpGd(string $fileName, string $thumbFile, int $width, int $height, int $widthOrig, int $heightOrig)
+    {
+        if (!\function_exists('imagecreatefromwebp') || !\function_exists('imagewebp')) {
+            throw new \RuntimeException('GD does not support WebP.');
+        }
+
+        $image = \imagecreatefromwebp($fileName);
+        $resizedImage = \imagecreatetruecolor($width, $height);
+        \imagealphablending($resizedImage, false);
+        \imagesavealpha($resizedImage, true);
+        \imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $width, $height, $widthOrig, $heightOrig);
+        \imagewebp($resizedImage, $thumbFile, $this->quality);
+        \imagedestroy($image);
+        \imagedestroy($resizedImage);
     }
 
     /**
@@ -228,7 +273,7 @@ class ImageUtils
             $path_parts = pathinfo($file);
 
             $extension = $path_parts['extension'];
-            if (!empty($extension) && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif'])) {
+            if (!empty($extension) && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'webp'])) {
                 if (exif_imagetype($file) > 0) {
                     $result = true;
                 }

@@ -55,6 +55,44 @@ final class ImageUtilsTest extends ApiUtility
         $this->assertFalse(\file_exists($dest));
     }
 
+    public function testResizeWebp()
+    {
+        $tempFile = tempnam(sys_get_temp_dir(), 'mobilecms-webp-');
+        $src = $tempFile.'.webp';
+        $dest = $tempFile.'-resized.webp';
+        $image = \imagecreatetruecolor(20, 10);
+
+        try {
+            $this->assertTrue(\imagewebp($image, $src));
+            \imagedestroy($image);
+            unset($image);
+
+            $utils = new ImageUtils();
+            $this->assertTrue($utils->isImage($src));
+
+            foreach (['gd', 'imagick'] as $driver) {
+                $utils->setDriver($driver);
+                $result = $utils->resize($src, $dest, 10);
+
+                $this->assertNotEmpty($result);
+                $this->assertSame('image/webp', (new \finfo(FILEINFO_MIME_TYPE))->file($dest));
+                $this->assertSame(10, \getimagesize($dest)[0]);
+                \unlink($dest);
+            }
+        } finally {
+            if (isset($image) && $image instanceof \GdImage) {
+                \imagedestroy($image);
+            }
+            if (\file_exists($src)) {
+                \unlink($src);
+            }
+            if (\file_exists($dest)) {
+                \unlink($dest);
+            }
+            \unlink($tempFile);
+        }
+    }
+
     public function testCreateThumbnails()
     {
         $sizes = [150, 300, 672, 768, 1024];
