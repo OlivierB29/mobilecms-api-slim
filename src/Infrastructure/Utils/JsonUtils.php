@@ -2,9 +2,6 @@
 
 namespace App\Infrastructure\Utils;
 
-use JsonMachine\Items;
-use Violet\StreamingJsonEncoder\StreamJsonEncoder;
-
 /**
  * JSON utility for PHP.
  */
@@ -19,50 +16,7 @@ class JsonUtils
      */
     public static function readJsonFile(string $file)
     {
-        $stream = fopen($file, 'rb');
-        if ($stream === false) {
-            throw new \RuntimeException('Unable to open JSON file '.$file);
-        }
-
-        try {
-            $firstCharacter = '';
-            while (!feof($stream)) {
-                $character = fread($stream, 1);
-                if ($character === false) {
-                    throw new \RuntimeException('Unable to read JSON file '.$file);
-                }
-                if (trim($character) !== '') {
-                    $firstCharacter = $character;
-                    break;
-                }
-            }
-
-            if (rewind($stream) === false) {
-                throw new \RuntimeException('Unable to rewind JSON file '.$file);
-            }
-
-            if ($firstCharacter !== '{' && $firstCharacter !== '[') {
-                $contents = stream_get_contents($stream);
-                if ($contents === false) {
-                    throw new \RuntimeException('Unable to read JSON file '.$file);
-                }
-
-                return json_decode($contents);
-            }
-
-            $data = $firstCharacter === '{' ? new \stdClass() : [];
-            foreach (Items::fromStream($stream) as $key => $value) {
-                if ($data instanceof \stdClass) {
-                    $data->{$key} = $value;
-                } else {
-                    $data[$key] = $value;
-                }
-            }
-
-            return $data;
-        } finally {
-            fclose($stream);
-        }
+        return json_decode(file_get_contents($file));
     }
 
     /**
@@ -99,11 +53,7 @@ class JsonUtils
                 // @codeCoverageIgnoreEnd
             }
 
-            $encoder = new StreamJsonEncoder($data, static function (string $json) use ($fh): void {
-                fwrite($fh, $json);
-            });
-            $encoder->setOptions(JSON_PRETTY_PRINT);
-            $encoder->encode();
+            fwrite($fh, json_encode($data, JSON_PRETTY_PRINT));
             fclose($fh);
             chmod($file, $fileMode);
         } catch (\Exception $e) {
