@@ -38,7 +38,7 @@ class ThemeBannerUploadAction extends AdminAction
         $imagePath = $directory.'/'.$filename;
         $thumbnailDirectory = $directory.'/thumbnails';
         $thumbnails = [];
-        if (in_array($extension, ['jpg', 'jpeg', 'png'], true)) {
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {
             $thumbnailSizes = $this->getConf()->{'thumbnailsizes'} ?? [];
             $imageUtils = new ImageUtils();
             $imageUtils->setQuality($this->getProperties()->getInteger('imagequality', 100));
