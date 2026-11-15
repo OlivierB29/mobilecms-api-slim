@@ -224,6 +224,42 @@ final class FileApiTest extends AuthApiUtility
         unlink($mediaFile);
     }
 
+    public function testUploadFileWebp()
+    {
+        $record = '/calendar/3';
+        $this->path = $this->getApi().'/fileapi/basicupload'.$record;
+        $filename = 'testupload.webp';
+        $tempFile = tempnam(sys_get_temp_dir(), 'mobilecms-upload-webp-');
+        $mediaFile = $this->API->getMediaDirPath().$record.'/'.$filename;
+        $image = \imagecreatetruecolor(20, 10);
+
+        try {
+            $this->assertTrue(\imagewebp($image, $tempFile));
+            \imagedestroy($image);
+            unset($image);
+
+            $files = [
+                ['name'=>$filename, 'type'=>'image/webp', 'tmp_name'=>$tempFile, 'error'=>0, 'size'=>filesize($tempFile)],
+            ];
+            $response = $this->fileRequest('POST', $this->path, $files);
+
+            $this->assertEquals(200, $response->getCode());
+            $this->assertSame('image/webp', $response->getResult()[0]->mimetype);
+            $this->assertSame($filename, $response->getResult()[0]->url);
+            $this->assertTrue(file_exists($mediaFile));
+        } finally {
+            if (isset($image) && $image instanceof \GdImage) {
+                \imagedestroy($image);
+            }
+            if (file_exists($mediaFile)) {
+                unlink($mediaFile);
+            }
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+        }
+    }
+
     public function testUploadFileDoesNotExist()
     {
         // API request

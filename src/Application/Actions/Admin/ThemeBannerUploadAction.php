@@ -23,7 +23,7 @@ class ThemeBannerUploadAction extends AdminAction
 
         $filename = basename((string) $file->getClientFilename());
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
         if ($filename === '' || !in_array($extension, $allowedExtensions, true)) {
             throw new HttpBadRequestException($this->request, 'Forbidden banner file type.');
         }
