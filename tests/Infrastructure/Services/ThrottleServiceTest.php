@@ -14,7 +14,7 @@ final class ThrottleServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->directory = sys_get_temp_dir().'/mobilecms-throttle-'.uniqid('', true);
-        mkdir($this->directory.'/history', 0777, true);
+        mkdir($this->directory.'/history', 0755, true);
     }
 
     protected function tearDown(): void

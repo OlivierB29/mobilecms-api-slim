@@ -91,8 +91,8 @@ abstract class FileAction extends RestAction
 
         $units = ['B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3];
         $power = $units[strtoupper($matches[2] ?? 'B')];
-
-        return (int) round((float) $matches[1] * (1024 ** $power));
+        $result = (int) round((float) $matches[1] * (1024 ** $power));
+        return $result;
     }
 
     public function setFiles(array $files)
@@ -125,6 +125,9 @@ abstract class FileAction extends RestAction
      */
     public function getRecordDirPath($type, $id): string
     {
+        $type = $this->fileutils->validatePathSegment((string) $type, 'type');
+        $id = $this->fileutils->validatePathSegment((string) $id, 'id');
+
         return $this->fileutils->concatDirectories($this->getMediaDirPath(), $type).'/'.$id;
     }
 

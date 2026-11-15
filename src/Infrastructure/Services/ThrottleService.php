@@ -11,7 +11,7 @@ use App\Infrastructure\Utils\NetUtils;
 class ThrottleService
 {
     private const LOCKOUTS = [
-        5  => 60,
+        3  => 60,
         10 => 300,
         20 => 1800,
     ];

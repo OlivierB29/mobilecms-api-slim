@@ -354,7 +354,7 @@ class CustomJwtAuthentication implements MiddlewareInterface
             // CUSTOM : start
             $decoded = null;
 
-            $service = new AuthService(new FileUtils()->concatDirectories(
+            $service = new AuthService(new FileUtils()->concatDirectoriesNoTraversalCheck(
                 Properties::getInstance()->getRootDir(),
                 Properties::getInstance()->getConf()->{'privatedir'},
                 '/users'

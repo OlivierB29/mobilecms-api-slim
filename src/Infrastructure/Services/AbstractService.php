@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\Properties;
 
 abstract class AbstractService
@@ -50,6 +51,8 @@ abstract class AbstractService
         if (empty($type)) {
             throw new \Exception('empty type');
         }
+
+        FileUtils::validatePathSegment($type, 'type');
     }
 
     /**

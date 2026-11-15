@@ -11,16 +11,45 @@ final class JsonUtilsTest extends ApiUtility
 {
     public function testCanRead()
     {
+        $data = JsonUtils::readJsonFile('tests-data/jsonutils/mini.json');
+
+        $this->assertInstanceOf(\stdClass::class, $data);
         $this->assertJsonStringEqualsJsonString(
             '{}',
-            json_encode(JsonUtils::readJsonFile('tests-data/jsonutils/mini.json'))
+            json_encode($data)
         );
+    }
+
+    public function testCanReadJsonArray()
+    {
+        $this->assertIsArray(JsonUtils::readJsonFile('tests-data/jsonutils/test.json'));
     }
 
     public function testNewDirectory()
     {
         JsonUtils::writeJsonFile('tests-data/newpath/test.json', \json_decode('{}'));
         $this->assertTrue(file_exists('tests-data/newpath/test.json'));
+        $this->assertInstanceOf(\stdClass::class, JsonUtils::readJsonFile('tests-data/newpath/test.json'));
+    }
+
+    public function testWriteJsonFileWithCustomPermissions()
+    {
+        $directory = sys_get_temp_dir().'/jsonutils-'.uniqid('', true);
+        $file = $directory.'/custom-permissions.json';
+
+        try {
+            JsonUtils::writeJsonFile($file, \json_decode('{}'), 0700, 0600);
+
+            $this->assertSame(0700, fileperms($directory) & 0777);
+            $this->assertSame(0600, fileperms($file) & 0777);
+        } finally {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+            if (is_dir($directory)) {
+                rmdir($directory);
+            }
+        }
     }
 
     /**

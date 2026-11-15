@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dabdb1ba745ac338e1ebc0ba8337dd1a",
+    "content-hash": "c6df8cdb1dd2fc27041411c80ea6e54e",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -127,6 +127,68 @@
                 "source": "https://github.com/googleapis/php-jwt/tree/v7.1.0"
             },
             "time": "2026-06-11T17:54:14+00:00"
+        },
+        {
+            "name": "halaxa/json-machine",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/halaxa/json-machine.git",
+                "reference": "8bf0b0ff6ff60ab480778eaa5ad7d505b442c2d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/halaxa/json-machine/zipball/8bf0b0ff6ff60ab480778eaa5ad7d505b442c2d4",
+                "reference": "8bf0b0ff6ff60ab480778eaa5ad7d505b442c2d4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "7.2 - 8.5"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^8.0"
+            },
+            "suggest": {
+                "ext-json": "To run JSON Machine out of the box without custom decoders.",
+                "guzzlehttp/guzzle": "To run example with GuzzleHttp"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "JsonMachine\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "src/autoloader.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Filip Halaxa",
+                    "email": "filip@halaxa.cz"
+                }
+            ],
+            "description": "Efficient, easy-to-use and fast JSON pull parser",
+            "support": {
+                "issues": "https://github.com/halaxa/json-machine/issues",
+                "source": "https://github.com/halaxa/json-machine/tree/1.2.6"
+            },
+            "funding": [
+                {
+                    "url": "https://ko-fi.com/G2G57KTE4",
+                    "type": "other"
+                }
+            ],
+            "time": "2025-12-05T14:53:09+00:00"
         },
         {
             "name": "jimtools/jwt-auth",
@@ -732,16 +794,16 @@
         },
         {
             "name": "psr/http-message",
-            "version": "2.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
                 "shasum": ""
             },
             "require": {
@@ -750,7 +812,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -765,7 +827,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP messages",
@@ -779,9 +841,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/2.0"
+                "source": "https://github.com/php-fig/http-message/tree/1.1"
             },
-            "time": "2023-04-04T09:54:51+00:00"
+            "time": "2023-04-04T09:50:52+00:00"
         },
         {
             "name": "psr/http-server-handler",
@@ -1184,6 +1246,55 @@
                 }
             ],
             "time": "2026-09-01T17:11:05+00:00"
+        },
+        {
+            "name": "violet/streaming-json-encoder",
+            "version": "v1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/violet-php/streaming-json-encoder.git",
+                "reference": "5cc3d506ba7768f8db8ad3d21dcd251a64598805"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/violet-php/streaming-json-encoder/zipball/5cc3d506ba7768f8db8ad3d21dcd251a64598805",
+                "reference": "5cc3d506ba7768f8db8ad3d21dcd251a64598805",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Violet\\StreamingJsonEncoder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riikka Kalliomäki",
+                    "email": "riikka.kalliomaki@gmail.com",
+                    "homepage": "http://riimu.net"
+                }
+            ],
+            "description": "Library for iteratively encoding large JSON documents piece by piece",
+            "homepage": "http://violet.riimu.net",
+            "keywords": [
+                "encoder",
+                "json",
+                "psr-7",
+                "streaming"
+            ],
+            "support": {
+                "issues": "https://github.com/violet-php/streaming-json-encoder/issues",
+                "source": "https://github.com/violet-php/streaming-json-encoder/tree/v1.1.5"
+            },
+            "time": "2022-12-09T15:47:21+00:00"
         }
     ],
     "packages-dev": [

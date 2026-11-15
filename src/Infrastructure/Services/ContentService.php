@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\JsonUtils;
 use App\Infrastructure\Utils\Properties;
 use App\Infrastructure\Utils\StringUtils;
@@ -84,6 +85,9 @@ class ContentService extends AbstractService
      */
     private function getItemFileName(string $type, string $id, \stdClass $record): string
     {
+        $type = FileUtils::validatePathSegment($type, 'type');
+        $id = FileUtils::validatePathSegment($id, 'id');
+
         $result = $this->getDatabaseDir().'/'.$type.'/';
         // conf "organizeby": "year"
         $conf = $this->getRecordConf($type);
@@ -103,6 +107,9 @@ class ContentService extends AbstractService
 
     private function getItemFileNameWithoutRecord(string $type, string $id): string
     {
+        $type = \App\Infrastructure\Utils\FileUtils::validatePathSegment($type, 'type');
+        $id = \App\Infrastructure\Utils\FileUtils::validatePathSegment($id, 'id');
+
         $result = $this->getDatabaseDir().'/'.$type.'/';
 
         $result .= $id.'.json';
@@ -407,9 +414,8 @@ class ContentService extends AbstractService
             // file name
             $file = $this->getItemFileName($type, $id, $record);
 
-            if (!$isNewRecord) {
-                $this->refreshThumbnails($type, $id, $record);
-            }
+
+            $this->refreshThumbnails($type, $id, $record);
 
             // write to file
             JsonUtils::writeJsonFile($file, $record);
@@ -435,7 +441,7 @@ class ContentService extends AbstractService
 
         $conf = $properties->getConf();
         $service = new FileService($this->getDatabaseDir());
-        $service->createThumbnails(
+        $thumbnailResponse = $service->createThumbnails(
             $conf->media,
             $type,
             $id,
@@ -446,6 +452,15 @@ class ContentService extends AbstractService
             80,
             $properties->getString('imagedriver') ?: 'gd'
         );
+
+        foreach ($thumbnailResponse->getResult() as $thumbnailFile) {
+            foreach ($record->media as $mediaFile) {
+                if (isset($mediaFile->url) && basename((string) $mediaFile->url) === $thumbnailFile->url) {
+                    $mediaFile->thumbnails = $thumbnailFile->thumbnails;
+                    break;
+                }
+            }
+        }
     }
 
     /**

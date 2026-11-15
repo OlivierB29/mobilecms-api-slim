@@ -42,4 +42,10 @@ final class UserServiceTest extends ApiUtility
         $service = new UserService('');
         $service->getJsonUserFile('foo');
     }
+
+    public function testGetJsonUserFileRejectsPathTraversal()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->service->getJsonUserFile('../admin@example.com');
+    }
 }

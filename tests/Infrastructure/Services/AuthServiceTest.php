@@ -6,6 +6,7 @@ namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Services\ThrottleService;
+use App\Infrastructure\Utils\NetUtils;
 use Tests\ApiUtility;
 
 final class AuthServiceTest extends ApiUtility
@@ -114,6 +115,26 @@ final class AuthServiceTest extends ApiUtility
         $this->assertTrue($user->{'name'} === 'test@example.com');
         $this->assertTrue($user->{'email'} === 'test@example.com');
         $this->assertTrue(strlen($user->{'token'}) > 100);
+    }
+
+    public function testRateLimitedTokenIncludesRetryAfter()
+    {
+        $email = 'test@example.com';
+        $ip = NetUtils::getClientIp();
+        $this->throttle->clearFailedLogins($email, $ip);
+
+        try {
+            for ($attempt = 0; $attempt < 20; ++$attempt) {
+                $this->throttle->recordFailedLogin($email, $ip);
+            }
+
+            $result = $this->service->getToken($email, 'Sample#123456');
+
+            $this->assertSame(429, $result->getCode());
+            $this->assertGreaterThan(0, $result->getResult()->{'retryAfter'});
+        } finally {
+            $this->throttle->clearFailedLogins($email, $ip);
+        }
     }
 
     public function testServiceEmptyToken()

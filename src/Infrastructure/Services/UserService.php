@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Infrastructure\Rest\Response;
+use App\Infrastructure\Utils\FileUtils;
 use App\Infrastructure\Utils\JsonUtils;
 
 /*
@@ -75,11 +76,18 @@ class UserService
             throw new \Exception('getJsonUserFile()  empty conf');
         }
 
-        if (!empty($email)) {
-            return $this->databasedir.'/'.strtolower($email).'.json';
-        } else {
+        if (empty($email)) {
             throw new \Exception('getJsonUserFile()  empty email');
         }
+
+        $email = strtolower(trim($email));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('Invalid email address for user file lookup.');
+        }
+
+        FileUtils::validatePathSegment(str_replace('@', '', $email), 'email');
+
+        return $this->databasedir.'/'.strtolower($email).'.json';
     }
 
     /**
