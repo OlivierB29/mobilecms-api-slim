@@ -55,6 +55,19 @@ final class ThrottleServiceTest extends TestCase
         $this->assertSame(0, $throttle->getRetryAfter('user@example.com', '203.0.113.11'));
     }
 
+    public function testPasswordResetRequestsAreLimitedPerIp(): void
+    {
+        $throttle = new ThrottleService($this->directory);
+        $ip = '10.0.113.10';
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->assertSame(0, $throttle->registerPasswordResetRequest($ip));
+        }
+
+        $this->assertGreaterThan(0, $throttle->registerPasswordResetRequest($ip));
+        $this->assertSame(0, $throttle->registerPasswordResetRequest('10.0.113.11'));
+    }
+
     private function recordFailures(ThrottleService $throttle, string $user, string $ip, int $count): void
     {
         for ($index = 0; $index < $count; $index++) {

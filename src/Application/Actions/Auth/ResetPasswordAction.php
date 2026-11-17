@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Actions\Auth;
 
 use App\Infrastructure\Services\AuthService;
+use App\Infrastructure\Services\ThrottleService;
 use App\Infrastructure\Utils\MailUtils;
 use App\Infrastructure\Utils\NetUtils;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -24,6 +25,17 @@ class ResetPasswordAction extends AuthAction
 
         //throw error if wrong configuration, such as empty directory
         $this->checkConfiguration();
+
+        $throttle = new ThrottleService($this->getPrivateDirPath().'/users');
+        $retryAfter = $throttle->registerPasswordResetRequest(NetUtils::getClientIp());
+        if ($retryAfter > 0) {
+            $response->setError(429, 'Too many password reset attempts');
+            $error = $response->getResult();
+            $error->{'retryAfter'} = $retryAfter;
+            $response->setResult($error);
+
+            return $this->withResponse($response);
+        }
 
         $service = new AuthService($this->getPrivateDirPath().'/users');
 

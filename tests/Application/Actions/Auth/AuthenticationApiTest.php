@@ -127,29 +127,88 @@ final class AuthenticationApiTest extends AuthApiUtility
         $userFile = $user.'.json';
 
         copy($this->getPrivateDirPath().'/save/'.$userFile, $this->getPrivateDirPath().'/users/'.$userFile);
+        $ip = 'test-reset-success-'.bin2hex(random_bytes(8));
+        $throttleFile = $this->getPrivateDirPath().'/users/history/reset-'.hash('sha256', $ip).'.json';
+        $historyFile = $this->getPrivateDirPath().'/users/history/'.$user.'.json';
+        $originalIp = $_SERVER['REMOTE_ADDR'] ?? null;
+        $_SERVER['REMOTE_ADDR'] = $ip;
 
         $recordStr = '{ "user": "'.$user.'", "password":"Sample#123456", "newpassword":"Foobar!654321"}';
 
         $this->POST = ['requestbody' => $recordStr];
 
-        $response = $this->request('POST', $this->path);
+        try {
+            $response = $this->request('POST', $this->path);
 
-        $this->printError($response);
-        $this->assertEquals(200, $response->getCode());
-        $this->assertTrue($response != null);
+            $this->printError($response);
+            $this->assertEquals(200, $response->getCode());
+            $this->assertTrue($response != null);
 
-        $userObject = $response->getResult();
+            $userObject = $response->getResult();
 
-        $this->assertTrue($userObject->{'name'} === $user);
-        $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
-        $this->assertTrue($userObject->{'newpasswordrequired'} === 'true');
+            $this->assertTrue($userObject->{'name'} === $user);
+            $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
+            $this->assertTrue($userObject->{'newpasswordrequired'} === 'true');
 
-        $this->assertStringContainsString('password', $userObject->{'notification'});
-        $this->assertStringContainsString('connection info', $userObject->{'notification'});
-        $this->assertStringContainsString('date', $userObject->{'notification'});
+            $this->assertStringContainsString('password', $userObject->{'notification'});
+            $this->assertStringContainsString('connection info', $userObject->{'notification'});
+            $this->assertStringContainsString('date', $userObject->{'notification'});
+        } finally {
+            if (file_exists($throttleFile)) {
+                unlink($throttleFile);
+            }
+            if (file_exists($historyFile)) {
+                unlink($historyFile);
+            }
+            if (file_exists($this->getPrivateDirPath().'/users/'.$userFile)) {
+                unlink($this->getPrivateDirPath().'/users/'.$userFile);
+            }
+            if ($originalIp === null) {
+                unset($_SERVER['REMOTE_ADDR']);
+            } else {
+                $_SERVER['REMOTE_ADDR'] = $originalIp;
+            }
+        }
+    }
 
-        // delete file
-        unlink($this->getPrivateDirPath().'/users/'.$userFile);
+    public function testResetPasswordIsRateLimitedByIp(): void
+    {
+        $this->path = $this->getApi().'/authapi/resetpassword';
+        $user = 'resetpassword@example.com';
+        $userFile = $this->getPrivateDirPath().'/users/'.$user.'.json';
+        copy($this->getPrivateDirPath().'/save/'.$user.'.json', $userFile);
+
+        $ip = 'test-reset-'.bin2hex(random_bytes(8));
+        $throttleFile = $this->getPrivateDirPath().'/users/history/reset-'.hash('sha256', $ip).'.json';
+        $historyFile = $this->getPrivateDirPath().'/users/history/'.$user.'.json';
+        $originalIp = $_SERVER['REMOTE_ADDR'] ?? null;
+        $_SERVER['REMOTE_ADDR'] = $ip;
+        $this->POST = ['requestbody' => '{"user":"'.$user.'","password":"irrelevant"}'];
+
+        try {
+            for ($attempt = 0; $attempt < 5; $attempt++) {
+                $this->assertSame(200, $this->request('POST', $this->path)->getCode());
+            }
+
+            $response = $this->request('POST', $this->path);
+            $this->assertSame(429, $response->getCode());
+            $this->assertGreaterThan(0, $response->getResult()->{'retryAfter'});
+        } finally {
+            if (file_exists($throttleFile)) {
+                unlink($throttleFile);
+            }
+            if (file_exists($historyFile)) {
+                unlink($historyFile);
+            }
+            if (file_exists($userFile)) {
+                unlink($userFile);
+            }
+            if ($originalIp === null) {
+                unset($_SERVER['REMOTE_ADDR']);
+            } else {
+                $_SERVER['REMOTE_ADDR'] = $originalIp;
+            }
+        }
     }
 
     public function testChangePassword()

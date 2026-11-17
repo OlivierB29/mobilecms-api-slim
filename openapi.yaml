@@ -119,6 +119,7 @@ paths:
         '200': { $ref: '#/components/responses/AnyJson' }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
 
   /debugapi:
     get:
@@ -651,7 +652,7 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
     TooManyRequests:
-      description: Login throttled
+      description: Request rate limit exceeded
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }

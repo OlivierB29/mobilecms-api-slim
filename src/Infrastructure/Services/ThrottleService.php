@@ -10,6 +10,10 @@ use App\Infrastructure\Utils\NetUtils;
  */
 class ThrottleService
 {
+    private const PASSWORD_RESET_LIMIT = 2;
+
+    private const PASSWORD_RESET_WINDOW_SECONDS = 360;
+
     private const LOCKOUTS = [
         3  => 60,
         10 => 300,
@@ -80,6 +84,62 @@ class ThrottleService
         $file = $this->getLoginHistoryFileName($user, $ip);
         if (file_exists($file)) {
             JsonUtils::writeJsonFile($file, json_decode('{"failed":[]}'));
+        }
+    }
+
+    public function registerPasswordResetRequest(string $ip): int
+    {
+        $file = $this->databasedir.'/'.'history'.'/reset-'.hash('sha256', $ip).'.json';
+        $directory = dirname($file);
+        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Unable to create throttle directory '.$directory);
+        }
+
+        $handle = fopen($file, 'c+');
+        if ($handle === false) {
+            throw new \RuntimeException('Unable to open password reset throttle file '.$file);
+        }
+
+        try {
+            if (!flock($handle, LOCK_EX)) {
+                throw new \RuntimeException('Unable to lock password reset throttle file '.$file);
+            }
+
+            $contents = stream_get_contents($handle);
+            if ($contents === false) {
+                throw new \RuntimeException('Unable to read password reset throttle file '.$file);
+            }
+            $timestamps = $contents === '' ? [] : json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($timestamps) || !array_is_list($timestamps)) {
+                throw new \RuntimeException('Invalid password reset throttle data in '.$file);
+            }
+            foreach ($timestamps as $timestamp) {
+                if (!is_int($timestamp)) {
+                    throw new \RuntimeException('Invalid password reset timestamp in '.$file);
+                }
+            }
+
+            $now = time();
+            $timestamps = array_values(array_filter($timestamps, static function (int $timestamp) use ($now): bool {
+                return $timestamp > $now - self::PASSWORD_RESET_WINDOW_SECONDS && $timestamp <= $now;
+            }));
+
+            if (count($timestamps) >= self::PASSWORD_RESET_LIMIT) {
+                return max(1, $timestamps[0] + self::PASSWORD_RESET_WINDOW_SECONDS - $now);
+            }
+
+            $timestamps[] = $now;
+            $encoded = json_encode($timestamps, JSON_THROW_ON_ERROR);
+            if (!rewind($handle) || !ftruncate($handle, 0) || fwrite($handle, $encoded) !== strlen($encoded) || !fflush($handle)) {
+                throw new \RuntimeException('Unable to write password reset throttle file '.$file);
+            }
+
+            return 0;
+        } finally {
+            if (is_resource($handle)) {
+                flock($handle, LOCK_UN);
+                fclose($handle);
+            }
         }
     }
 
