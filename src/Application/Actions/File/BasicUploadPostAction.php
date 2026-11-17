@@ -145,7 +145,7 @@ class BasicUploadPostAction extends FileAction
 
         // upload
         if ($file->getClientFilename() !== null) {
-            $destfile = $destdir.'/'.$file->getClientFilename();
+            $destfile = $destdir.'/'.basename((string) $file->getClientFilename());
 
             if ($this->getExtension($file->getClientFilename()) === 'pdf') {
                 $this->writeStream($destfile, $file->getStream());
@@ -154,12 +154,12 @@ class BasicUploadPostAction extends FileAction
             }
 
             if (!file_exists($destfile)) {
-                throw new HttpInternalServerErrorException($this->request, 'Upload error '.$file->getClientFilename());
+                throw new HttpInternalServerErrorException($this->request, 'Upload error '.basename((string) $file->getClientFilename()));
             }
 
             chmod($destfile, $this->filesUmask);
-            $title = $file->getClientFilename();
-            $url = $file->getClientFilename();
+            $title = basename((string) $file->getClientFilename());
+            $url = basename((string) $file->getClientFilename());
 
             $result = $this->getFileResponse($destfile, $title, $url);
         }
