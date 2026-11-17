@@ -6,7 +6,9 @@ namespace Tests\Infrastructure\Services;
 
 use App\Infrastructure\Services\AuthService;
 use App\Infrastructure\Services\ThrottleService;
+use App\Infrastructure\Services\UserService;
 use App\Infrastructure\Utils\NetUtils;
+use App\Infrastructure\Utils\JsonUtils;
 use Tests\ApiUtility;
 
 final class AuthServiceTest extends ApiUtility
@@ -16,6 +18,7 @@ final class AuthServiceTest extends ApiUtility
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->service = new AuthService('tests-data/userservice');
         $this->throttle = new ThrottleService('tests-data/userservice');
 
@@ -232,6 +235,65 @@ final class AuthServiceTest extends ApiUtility
     {
         $this->expectException(\Exception::class);
         $this->service->resetPassword('FOOBAR@example.com', 'foo');
+    }
+
+    public function testPasswordResetRequiresValidSingleUseTokenAndDoesNotChangePasswordOnRequest()
+    {
+        $email = 'passwordreset@example.com';
+        $userService = new UserService('tests-data/userservice');
+        $file = $userService->getJsonUserFile($email);
+        $this->service->createUser($email, $email, 'old-password', 'create');
+
+        try {
+            $before = $userService->getJsonUser($email);
+            $token = $this->service->requestPasswordReset($email);
+
+            $this->assertNotNull($token);
+            $this->assertSame(64, strlen($token));
+            $pending = $userService->getJsonUser($email);
+            $this->assertSame($before->{'password'}, $pending->{'password'});
+            $this->assertSame($before->{'salt'}, $pending->{'salt'});
+            $this->assertNotSame($token, $pending->{'temporarypassword'});
+            $this->assertGreaterThan(time(), $pending->{'temporaryvalidity'});
+            $this->assertNull($this->service->requestPasswordReset($email));
+            $this->assertSame(200, $this->service->validateTemporaryLogin($email, $token)->getCode());
+
+            $completed = $this->service->completePasswordReset($email, $token, 'new-password');
+            $this->assertSame(200, $completed->getCode());
+            $updated = $userService->getJsonUser($email);
+            $this->assertNotSame($before->{'salt'}, $updated->{'salt'});
+            $this->assertSame('', $updated->{'temporarypassword'});
+            $this->assertSame(0, $updated->{'temporaryvalidity'});
+            $this->assertSame(401, $this->service->validateTemporaryLogin($email, $token)->getCode());
+            $this->assertSame(401, $this->service->getToken($email, 'old-password')->getCode());
+            $this->assertSame(200, $this->service->getToken($email, 'new-password')->getCode());
+        } finally {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+    }
+
+    public function testPasswordResetRejectsExpiredToken()
+    {
+        $email = 'expiredreset@example.com';
+        $userService = new UserService('tests-data/userservice');
+        $file = $userService->getJsonUserFile($email);
+        $this->service->createUser($email, $email, 'old-password', 'create');
+
+        try {
+            $token = $this->service->requestPasswordReset($email);
+            $user = $userService->getJsonUser($email);
+            $user->{'temporaryvalidity'} = time() - 1;
+            JsonUtils::writeJsonFile($file, $user);
+
+            $this->assertSame(401, $this->service->validateTemporaryLogin($email, $token)->getCode());
+            $this->assertSame(401, $this->service->completePasswordReset($email, $token, 'new-password')->getCode());
+        } finally {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
     }
 
     public function testModifyPassword()

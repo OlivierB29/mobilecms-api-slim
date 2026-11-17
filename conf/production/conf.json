@@ -20,6 +20,7 @@
 
   "enablemail": "true",
   "debugnotifications": "false",
+  "passwordreseturl": "https://myexample.org/adminpage/temporary-login",
   "enablesmtp":"false",
   "mailsender": "no-reply@mydomain.com",
   "smtphost": "YOUR_SMTP_HOST",
@@ -30,5 +31,5 @@
   "eventcalname": "@mydomain",
   "eventprodid": "-//mydomain//NONSGML v1.0//EN",
   "eventxwrcalname": "Calendrier mydomain",
-  "eventsiteprefix": "https://mydomain.com/#/calendrier/detail/"
+  "eventsiteprefix": "https://myexample.org/#/calendrier/detail/"
 }

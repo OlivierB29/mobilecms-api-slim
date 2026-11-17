@@ -16,6 +16,7 @@
   "debugapiexceptions": "true",
   "errorlog": "true",
   "enablemail": "false",
+  "passwordreseturl": "https://myexample.org/adminpage/temporary-login",
   "mailsender": "sendmail@example.org",
   "debugnotifications": "false",
   "eventcalname": "@mobilecms",

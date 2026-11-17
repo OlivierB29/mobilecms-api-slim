@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Application\Actions\Auth;
 
 use App\Infrastructure\Services\ThrottleService;
+use App\Infrastructure\Services\AuthService;
 use Tests\AuthApiUtility;
 
 final class AuthenticationApiTest extends AuthApiUtility
@@ -132,27 +133,21 @@ final class AuthenticationApiTest extends AuthApiUtility
         $historyFile = $this->getPrivateDirPath().'/users/history/'.$user.'.json';
         $originalIp = $_SERVER['REMOTE_ADDR'] ?? null;
         $_SERVER['REMOTE_ADDR'] = $ip;
-
-        $recordStr = '{ "user": "'.$user.'", "password":"Sample#123456", "newpassword":"Foobar!654321"}';
-
-        $this->POST = ['requestbody' => $recordStr];
+        $this->POST = ['requestbody' => '{"user":"'.$user.'"}'];
 
         try {
+            $userBefore = json_decode(file_get_contents($this->getPrivateDirPath().'/users/'.$userFile));
             $response = $this->request('POST', $this->path);
 
             $this->printError($response);
             $this->assertEquals(200, $response->getCode());
-            $this->assertTrue($response != null);
+            $this->assertSame('{}', $response->getEncodedResult());
 
-            $userObject = $response->getResult();
-
-            $this->assertTrue($userObject->{'name'} === $user);
-            $this->assertTrue($userObject->{'clientalgorithm'} === 'none');
-            $this->assertTrue($userObject->{'newpasswordrequired'} === 'true');
-
-            $this->assertStringContainsString('password', $userObject->{'notification'});
-            $this->assertStringContainsString('connection info', $userObject->{'notification'});
-            $this->assertStringContainsString('date', $userObject->{'notification'});
+            $pending = json_decode(file_get_contents($this->getPrivateDirPath().'/users/'.$userFile));
+            $this->assertSame($userBefore->{'password'}, $pending->{'password'});
+            $this->assertSame($userBefore->{'salt'}, $pending->{'salt'});
+            $this->assertNotEmpty($pending->{'temporarypassword'});
+            $this->assertGreaterThan(time(), $pending->{'temporaryvalidity'});
         } finally {
             if (file_exists($throttleFile)) {
                 unlink($throttleFile);
@@ -167,6 +162,79 @@ final class AuthenticationApiTest extends AuthApiUtility
                 unset($_SERVER['REMOTE_ADDR']);
             } else {
                 $_SERVER['REMOTE_ADDR'] = $originalIp;
+            }
+        }
+    }
+
+    public function testPasswordResetDoesNotRevealWhetherUserExists(): void
+    {
+        $this->path = $this->getApi().'/authapi/resetpassword';
+        $user = 'resetpassword@example.com';
+        $userFile = $this->getPrivateDirPath().'/users/'.$user.'.json';
+        copy($this->getPrivateDirPath().'/save/'.$user.'.json', $userFile);
+        $originalIp = $_SERVER['REMOTE_ADDR'] ?? null;
+
+        try {
+            $responses = [];
+            foreach ([$user, 'unknown-reset-user@example.com'] as $email) {
+                $_SERVER['REMOTE_ADDR'] = 'reset-enumeration-'.bin2hex(random_bytes(8));
+                $this->POST = ['requestbody' => json_encode(['user' => $email])];
+                $responses[] = $this->request('POST', $this->path);
+            }
+
+            $this->assertSame(200, $responses[0]->getCode());
+            $this->assertSame(200, $responses[1]->getCode());
+            $this->assertSame($responses[0]->getEncodedResult(), $responses[1]->getEncodedResult());
+        } finally {
+            if (file_exists($userFile)) {
+                unlink($userFile);
+            }
+            if ($originalIp === null) {
+                unset($_SERVER['REMOTE_ADDR']);
+            } else {
+                $_SERVER['REMOTE_ADDR'] = $originalIp;
+            }
+        }
+    }
+
+    public function testTemporaryLoginAndConfirmPasswordReset(): void
+    {
+        $user = 'resetpassword@example.com';
+        $userFile = $user.'.json';
+        $userPath = $this->getPrivateDirPath().'/users/'.$userFile;
+        copy($this->getPrivateDirPath().'/save/'.$userFile, $userPath);
+        $service = new AuthService($this->getPrivateDirPath().'/users');
+
+        try {
+            $before = json_decode(file_get_contents($userPath));
+            $token = $service->requestPasswordReset($user);
+            $pending = json_decode(file_get_contents($userPath));
+            $this->assertSame($before->{'password'}, $pending->{'password'});
+            $this->assertSame($before->{'salt'}, $pending->{'salt'});
+
+            $this->path = $this->getApi().'/authapi/temporarylogin';
+            $this->POST = ['requestbody' => json_encode(['user' => $user, 'token' => $token])];
+            $this->assertSame(200, $this->request('POST', $this->path)->getCode());
+
+            $this->path = $this->getApi().'/authapi/resetpassword/confirm';
+            $this->POST = ['requestbody' => json_encode([
+                'user' => $user,
+                'token' => $token,
+                'newpassword' => 'Foobar!654321',
+            ])];
+            $this->assertSame(200, $this->request('POST', $this->path)->getCode());
+
+            $updated = json_decode(file_get_contents($userPath));
+            $this->assertNotSame($before->{'salt'}, $updated->{'salt'});
+            $this->assertSame('', $updated->{'temporarypassword'});
+            $this->assertSame(0, $updated->{'temporaryvalidity'});
+
+            $this->path = $this->getApi().'/authapi/temporarylogin';
+            $this->POST = ['requestbody' => json_encode(['user' => $user, 'token' => $token])];
+            $this->assertSame(401, $this->request('POST', $this->path)->getCode());
+        } finally {
+            if (file_exists($userPath)) {
+                unlink($userPath);
             }
         }
     }
@@ -186,7 +254,7 @@ final class AuthenticationApiTest extends AuthApiUtility
         $this->POST = ['requestbody' => '{"user":"'.$user.'","password":"irrelevant"}'];
 
         try {
-            for ($attempt = 0; $attempt < 5; $attempt++) {
+            for ($attempt = 0; $attempt < 2; $attempt++) {
                 $this->assertSame(200, $this->request('POST', $this->path)->getCode());
             }
 

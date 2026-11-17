@@ -18,6 +18,7 @@
   "enablemail": "false",
   "mailsender": "sendmail@example.org",
   "debugnotifications": "false",
+  "passwordreseturl": "http://localhost:5173/temporary-login",
   "eventcalname": "@mobilecms",
   "eventprodid": "-//mobilecms//NONSGML v1.0//EN",
   "eventxwrcalname": "MobileCMS Agenda",

@@ -29,5 +29,10 @@ Enable error log on backend
 -  "enablemail": "true|false"
 Enable send mail for password reset
 
+-  "passwordreseturl": "https://example.org/adminpage/temporary-login"
+Absolute URL of the admin frontend's temporary-login page. Password reset links
+expire after 30 minutes. Use the frontend's production URL in production and
+the Vite development URL when testing locally.
+
 -  "debugnotifications": "true|false"
-Enable notifications in HTTP response.
+Legacy notification setting. Password reset links are never returned by the API.

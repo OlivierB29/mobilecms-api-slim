@@ -108,18 +108,52 @@ paths:
   /authapi/resetpassword:
     post:
       tags: [Auth]
-      summary: Reset a user's password
-      security: [{ bearerAuth: [] }]
+      summary: Request a password reset link
+      description: Returns the same response whether or not the user exists.
+      security: []
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/PasswordChangeRequest' }
+            schema: { $ref: '#/components/schemas/PasswordResetRequest' }
+      responses:
+        '200':
+          description: Reset request accepted
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /authapi/temporarylogin:
+    post:
+      tags: [Auth]
+      summary: Validate a password reset link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TemporaryLoginRequest' }
       responses:
         '200': { $ref: '#/components/responses/AnyJson' }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /authapi/resetpassword/confirm:
+    post:
+      tags: [Auth]
+      summary: Complete a password reset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PasswordResetConfirmationRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AnyJson' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
 
   /debugapi:
     get:
@@ -590,6 +624,24 @@ components:
       properties:
         user: { type: string, example: editor@example.com }
         password: { type: string, format: password }
+        newpassword: { type: string, format: password }
+    PasswordResetRequest:
+      type: object
+      required: [user]
+      properties:
+        user: { type: string, format: email, example: editor@example.com }
+    TemporaryLoginRequest:
+      type: object
+      required: [user, token]
+      properties:
+        user: { type: string, format: email }
+        token: { type: string }
+    PasswordResetConfirmationRequest:
+      type: object
+      required: [user, token, newpassword]
+      properties:
+        user: { type: string, format: email }
+        token: { type: string }
         newpassword: { type: string, format: password }
     PublicUser:
       type: object

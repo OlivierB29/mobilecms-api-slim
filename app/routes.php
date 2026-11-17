@@ -16,9 +16,11 @@ use App\Application\Actions\Admin\ThemeAction;
 use App\Application\Actions\Admin\ThemeBannerUploadAction;
 use App\Application\Actions\Auth\AuthenticateAction;
 use App\Application\Actions\Auth\ChangePasswordAction;
+use App\Application\Actions\Auth\ConfirmPasswordResetAction;
 use App\Application\Actions\Auth\PublicInfoAction;
 use App\Application\Actions\Auth\PublicInfoPostAction;
 use App\Application\Actions\Auth\ResetPasswordAction;
+use App\Application\Actions\Auth\TemporaryLoginAction;
 use App\Application\Actions\Cms\ContentDeleteByIdAction;
 use App\Application\Actions\Cms\ContentGetByIdAction;
 use App\Application\Actions\Cms\ContentGetListAction;
@@ -68,6 +70,8 @@ return function (App $app) {
 
         $group->post('/changepassword', ChangePasswordAction::class);
         $group->post('/resetpassword', ResetPasswordAction::class);
+        $group->post('/temporarylogin', TemporaryLoginAction::class);
+        $group->post('/resetpassword/confirm', ConfirmPasswordResetAction::class);
     });
 
     $app->group(ApiConstants::API.'/debugapi', function (Group $group) {

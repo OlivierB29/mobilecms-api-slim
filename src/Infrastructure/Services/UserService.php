@@ -140,6 +140,8 @@ class UserService
 
             if ($password != '') {
                 $jsonUser->{'password'} = $password;
+                $jsonUser->{'temporarypassword'} = '';
+                $jsonUser->{'temporaryvalidity'} = 0;
             }
 
             if ($salt != '') {
@@ -196,6 +198,8 @@ class UserService
             $jsonUser->{'password'} = $password;
             $jsonUser->{'salt'} = $salt;
             $jsonUser->{'role'} = $role;
+            $jsonUser->{'temporarypassword'} = '';
+            $jsonUser->{'temporaryvalidity'} = 0;
 
             $file = $this->getJsonUserFile($email);
             JsonUtils::writeJsonFile($file, $jsonUser);

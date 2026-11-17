@@ -19,6 +19,7 @@
 
   "enablemail": "false",
   "mailsender": "sendmail@example.org",
-  "debugnotifications": "true"
+  "debugnotifications": "true",
+  "passwordreseturl": "http://localhost:5173/temporary-login"
 
 }

@@ -51,6 +51,24 @@ class MailUtils
         return $message;
     }
 
+    public function getPasswordResetLink(string $subject, string $resetLink): string
+    {
+        $message = file_get_contents(__DIR__.'/mail/passwordreset.html');
+        $message = str_replace('%subject%', htmlspecialchars($subject, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $message);
+        $message = str_replace('%resetlink%', htmlspecialchars($resetLink, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $message);
+
+        return $message;
+    }
+
+    public function getTextPasswordResetLink(string $subject, string $resetLink): string
+    {
+        $message = file_get_contents(__DIR__.'/mail/passwordreset.txt');
+        $message = str_replace('%subject%', $subject, $message);
+        $message = str_replace('%resetlink%', $resetLink, $message);
+
+        return $message;
+    }
+
     /**
      * @param string $from mail address
      *

@@ -304,6 +304,8 @@ class AuthService
             $user = $this->service->getJsonUser($email);
             $user->{'clientalgorithm'} = 'none';
             $user->{'newpasswordrequired'} = 'true';
+            $user->{'temporarypassword'} = '';
+            $user->{'temporaryvalidity'} = 0;
 
             JsonUtils::writeJsonFile($this->service->getJsonUserFile($email), $user);
 
@@ -320,6 +322,112 @@ class AuthService
         }
 
         return $response;
+    }
+
+    /**
+     * Create a short-lived reset link token without changing the existing password.
+     *
+     * @return string|null Raw token when an email should be sent; null for an unknown user or active token
+     */
+    public function requestPasswordReset(string $emailParam): ?string
+    {
+        $email = strtolower(trim($emailParam));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        $file = $this->service->getJsonUserFile($email);
+        if (!file_exists($file)) {
+            return null;
+        }
+
+        $user = $this->service->getJsonUser($email);
+        if (!empty($user->{'temporarypassword'})
+            && isset($user->{'temporaryvalidity'})
+            && (int) $user->{'temporaryvalidity'} > time()) {
+            return null;
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $user->{'temporarypassword'} = hash('sha256', $token);
+        $user->{'temporaryvalidity'} = time() + 1800;
+        JsonUtils::writeJsonFile($file, $user);
+
+        return $token;
+    }
+
+    /**
+     * Validate a reset link without creating an authenticated session.
+     */
+    public function validateTemporaryLogin(string $emailParam, string $token): Response
+    {
+        $response = new Response();
+        $response->setCode(401);
+        $response->setResult(new \stdClass());
+
+        $email = strtolower(trim($emailParam));
+        if ($this->isValidTemporaryPassword($email, $token)) {
+            $response->setCode(200);
+            $response->setResult(new \stdClass());
+        } else {
+            $response->setError(401, 'Invalid or expired reset link');
+        }
+
+        return $response;
+    }
+
+    /**
+     * Complete a password reset using the one-time token.
+     */
+    public function completePasswordReset(string $emailParam, string $token, string $newPassword): Response
+    {
+        $response = new Response();
+        $response->setCode(401);
+        $response->setResult(new \stdClass());
+
+        $email = strtolower(trim($emailParam));
+        if (!$this->isValidTemporaryPassword($email, $token)) {
+            $response->setError(401, 'Invalid or expired reset link');
+
+            return $response;
+        }
+
+        $updateMsg = $this->createUser('', $email, $newPassword, 'update');
+        if (!empty($updateMsg)) {
+            $response->setError(500, 'Unable to update password');
+
+            return $response;
+        }
+
+        $user = $this->service->getJsonUser($email);
+        $user->{'clientalgorithm'} = 'hashmacbase64';
+        $user->{'newpasswordrequired'} = 'false';
+        $user->{'temporarypassword'} = '';
+        $user->{'temporaryvalidity'} = 0;
+        JsonUtils::writeJsonFile($this->service->getJsonUserFile($email), $user);
+
+        $response->setCode(200);
+        $response->setResult(new \stdClass());
+
+        return $response;
+    }
+
+    private function isValidTemporaryPassword(string $email, string $token): bool
+    {
+        if ($token === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $file = $this->service->getJsonUserFile($email);
+        if (!file_exists($file)) {
+            return false;
+        }
+
+        $user = $this->service->getJsonUser($email);
+
+        return isset($user->{'temporarypassword'}, $user->{'temporaryvalidity'})
+            && (int) $user->{'temporaryvalidity'} > time()
+            && hash_equals((string) $user->{'temporarypassword'}, hash('sha256', $token));
     }
 
     /**
