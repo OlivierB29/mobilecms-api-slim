@@ -11,8 +11,8 @@ class NetUtils
     {
         $ipaddress = '';
         // @codeCoverageIgnoreStart
-        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
         } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
@@ -21,8 +21,8 @@ class NetUtils
             $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
         } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
             $ipaddress = $_SERVER['HTTP_FORWARDED'];
-        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
             // @codeCoverageIgnoreEnd
         } else {
             $ipaddress = 'UNKNOWN';
