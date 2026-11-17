@@ -7,6 +7,8 @@ namespace App\Infrastructure\Rest;
  */
 class JwtToken
 {
+    private const TOKEN_LIFETIME_SECONDS = 86400;
+
     /**
      * algorithm see http://php.net/manual/en/function.hash-algos.php.
      */
@@ -67,7 +69,8 @@ class JwtToken
 
             $computedSignature = $this->createSignature($header, $payload, $secretKey);
 
-            $result = hash_equals($signatureFromToken, $computedSignature);
+            $result = hash_equals($signatureFromToken, $computedSignature)
+                && $this->hasValidExpiration($payload);
         }
 
         return $result;
@@ -89,6 +92,10 @@ class JwtToken
 
         if (!hash_equals($signatureFromToken, $computedSignature)) {
             throw new \Exception('Signature verification failed!');
+        }
+
+        if (!$this->hasValidExpiration($payload)) {
+            throw new \Exception('Token expired or missing expiration claim!');
         }
 
         return $tokenArray;
@@ -137,12 +144,36 @@ class JwtToken
      */
     public function initPayload(string $username, string $email, string $role): string
     {
-        return base64_encode('{ "sub": "'.$email.'", "name": "'.$username.'", "role": "'.$role.'"}');
+        return base64_encode(json_encode([
+            'sub' => $email,
+            'name' => $username,
+            'role' => $role,
+            'exp' => time() + self::TOKEN_LIFETIME_SECONDS,
+        ], JSON_THROW_ON_ERROR));
     }
 
     public function initPayloadArray(string $username, string $email, string $role): array
     {
-        return ['sub' => $email, 'name' => $username, 'role' => $role];
+        return [
+            'sub' => $email,
+            'name' => $username,
+            'role' => $role,
+            'exp' => time() + self::TOKEN_LIFETIME_SECONDS,
+        ];
+    }
+
+    private function hasValidExpiration(string $payload): bool
+    {
+        $decodedPayload = base64_decode($payload, true);
+        if (false === $decodedPayload) {
+            return false;
+        }
+
+        $payloadJson = json_decode($decodedPayload);
+
+        return isset($payloadJson->exp)
+            && is_numeric($payloadJson->exp)
+            && (int) $payloadJson->exp > time();
     }
 
     /**

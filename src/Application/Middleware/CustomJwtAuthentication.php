@@ -374,6 +374,9 @@ class CustomJwtAuthentication implements MiddlewareInterface
                 $jwtUtil = new JwtToken();
                 $decoded = $jwtUtil->decode($token, $jsonUser->{'salt'});
             }
+            if (!isset($decoded->exp) || !is_numeric($decoded->exp) || (int) $decoded->exp <= time()) {
+                throw new DomainException('Token expired or missing expiration claim');
+            }
             $jsonUser->{'decoded'} = (array) $decoded;
 
             // CUSTOM : end
