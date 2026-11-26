@@ -1,0 +1,17 @@
+{
+    "_hash": "c93ca0fd112cf1f41785a8ffd4f1f461f08d2c25f4eba075dabd130a78df56a0",
+    "patches": {
+        "violet/streaming-json-encoder": [
+            {
+                "package": "violet/streaming-json-encoder",
+                "description": "Declare nullable stream callback explicitly for PHP 8.4+",
+                "url": "patches/streaming-json-encoder-nullable-parameter.patch",
+                "sha256": "86602404df5802254825469ea5f5a93d135def6b202a5b02792950abc047958f",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}

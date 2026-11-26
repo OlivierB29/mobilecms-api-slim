@@ -10,9 +10,9 @@ use App\Infrastructure\Utils\NetUtils;
  */
 class ThrottleService
 {
-    private const PASSWORD_RESET_LIMIT = 2;
+    private const PASSWORD_RESET_LIMIT = 5;
 
-    private const PASSWORD_RESET_WINDOW_SECONDS = 360;
+    private const PASSWORD_RESET_WINDOW_SECONDS = 120;
 
     private const LOCKOUTS = [
         3  => 60,

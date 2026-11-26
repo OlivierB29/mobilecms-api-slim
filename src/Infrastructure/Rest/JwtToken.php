@@ -76,7 +76,7 @@ class JwtToken
         return $result;
     }
 
-    public function decode(string $token, string $secretKey): array
+    public function decode(string $token, string $secretKey): \stdClass
     {
         $tokenArray = explode('.', $token);
 
@@ -98,7 +98,12 @@ class JwtToken
             throw new \Exception('Token expired or missing expiration claim!');
         }
 
-        return $tokenArray;
+        $decodedPayload = json_decode(base64_decode($payload, true));
+        if (!$decodedPayload instanceof \stdClass) {
+            throw new \Exception('Invalid token payload!');
+        }
+
+        return $decodedPayload;
     }
 
     /**
